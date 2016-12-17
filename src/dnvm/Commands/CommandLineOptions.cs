@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -49,7 +50,7 @@ namespace DotNet.Commands
                 Out = new StringWriter(_helpText)
             };
 
-            _syntax.VersionOption("--version", "0.1.0");
+            _syntax.VersionOption("--version", GetVersion);
             _syntax.HelpOption();
 
             var optVerbose =
@@ -81,5 +82,14 @@ namespace DotNet.Commands
 
         public string GetErrorText() => _error.Message;
         public string GetHelpText() => _helpText.ToString().Trim(new [] { '\r', '\n' });
+
+        private static string GetVersion()
+        {
+            var assembly = typeof(Program).GetTypeInfo().Assembly;
+            var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                ?? assembly.GetName().Version.ToString();
+
+            return version;
+        }
     }
 }
