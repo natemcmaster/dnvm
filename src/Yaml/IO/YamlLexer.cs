@@ -38,7 +38,7 @@ namespace DotNet.Yaml.IO
                         TryRead(out char _); // consume space
                         while (TryPeek(out char next) && next == ' ')
                         {
-                            TryRead(out char _); // consume space
+                            TryRead(out char __); // consume space
                             count++;
                         }
                         return YamlToken.Spaces(count);
@@ -49,7 +49,7 @@ namespace DotNet.Yaml.IO
                         TryRead(out char _); // consume 
                         while (TryPeek(out char next) && next == '\t')
                         {
-                            TryRead(out char _); // consume
+                            TryRead(out char __); // consume
                             count++;
                         }
                         return YamlToken.Tabs(count);
@@ -61,13 +61,18 @@ namespace DotNet.Yaml.IO
                         {
                             throw ErrorAtCurrentPosition("Invalid line endings sequences");
                         }
-                        TryRead(out char _); // consume \n
+                        TryRead(out char __); // consume \n
                         return YamlToken.NewLine;
                     }
                 case '\n':
                     {
                         TryRead(out char _); // consume char
                         return YamlToken.NewLine;
+                    }
+                case ':':
+                    {
+                        TryRead(out char _); // consume char
+                        return YamlToken.SemiColon;
                     }
                 case '#':
                     {
@@ -76,7 +81,7 @@ namespace DotNet.Yaml.IO
                         while (TryPeek(out char next) && next != '\r' && next != '\n')
                         {
                             sb.Append(next);
-                            TryRead(out char _); // consume next
+                            TryRead(out char __); // consume next
                         }
                         return YamlToken.Comment(sb.ToString());
                     }
@@ -89,7 +94,7 @@ namespace DotNet.Yaml.IO
                             switch (next)
                             {
                                 case '\"':
-                                    TryRead(out char _); // consume quote
+                                    TryRead(out char __); // consume quote
                                     return YamlToken.String(sb.ToString());
                                 case '\\':
                                     {
