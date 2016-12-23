@@ -7,6 +7,7 @@
     <AssemblyName>dnvm</AssemblyName>
     <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <PackageTargetFallback>dotnet</PackageTargetFallback>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" />
@@ -16,5 +17,6 @@
     <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />
     <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc2" />
+    <PackageReference Include="YamlDotNet" Version="4.0.1-pre309" />
   </ItemGroup>
 </Project>
