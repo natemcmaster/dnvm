@@ -14,8 +14,9 @@ namespace DotNet.Packaging
         {
         }
 
-        public async Task FetchAsync(CancellationToken token = default(CancellationToken))
+        public Task FetchAsync(CancellationToken token = default(CancellationToken))
         {
+            return Task.CompletedTask;
         }
     }
 }

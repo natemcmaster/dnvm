@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup Label="Configuration">
-    <RootNamespace>DotNet.Test</RootNamespace>
+    <RootNamespace>DotNet.Yaml.Tests</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -15,5 +15,8 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20161216-01" />
     <PackageReference Include="xunit" Version="2.2.0-beta4-build3444" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta4-build1194" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Yaml\Yaml.csproj" />
   </ItemGroup>
 </Project>
