@@ -1,4 +1,3 @@
-using System;
 using DotNet.Assets;
 using Microsoft.Extensions.CommandLineUtils;
 

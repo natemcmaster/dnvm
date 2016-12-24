@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace DotNet.Reporting
 {
     public class IndentingReporter : IReporter

@@ -1,4 +1,3 @@
-using System;
 using DotNet.Commands;
 
 namespace DotNet.Reporting

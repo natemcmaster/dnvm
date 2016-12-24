@@ -1,11 +1,10 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using DotNet.Assets;
 
 namespace DotNet.Commands
 {
-    using System.Threading.Tasks;
-    using Environment = DotNet.Files.Environment;
     public class InstallCommand : ICommand
     {
         private readonly string _assetName;
