@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using DotNet.Assets;
+using DotNet.Reporting;
 
 namespace DotNet.Commands
 {
@@ -20,8 +21,10 @@ namespace DotNet.Commands
         {
             var asset = CreateAsset(context);
             Directory.CreateDirectory(context.Environment.Root);
+
             await asset.InstallAsync(context.CancellationToken);
 
+            context.Reporter.Output(ColorFormatter.Format("Done", ConsoleColor.Green));
             context.Result = Result.Done;
         }
 

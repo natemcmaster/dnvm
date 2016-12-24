@@ -29,15 +29,15 @@ namespace DotNet.Reporting
         }
 
         public override void Verbose(string message)
-            => Verbose(_verbose.Format(message));
+            => base.Verbose(_verbose.Format(message));
 
         public override void Output(string message)
-            => Output(_output.Format(message));
+            => base.Output(_output.Format(message));
 
         public override void Warn(string message)
-            => Warn(_warn.Format(message));
+            => base.Warn(_warn.Format(message));
 
         public override void Error(string message)
-            => Error(_error.Format(message));
+            => base.Error(_error.Format(message));
     }
 }

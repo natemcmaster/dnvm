@@ -39,6 +39,11 @@ namespace DotNet.Reporting
             _prefix = GetAnsiCode(color);
         }
 
+        public static string Format(string text, ConsoleColor color)
+            => text?.Length > 0
+                ? $"{GetAnsiCode(color)}{text}{ResetColor}"
+                : text;
+
         public string Format(string text)
             => text?.Length > 0
                 ? $"{_prefix}{text}{ResetColor}"

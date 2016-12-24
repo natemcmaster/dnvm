@@ -20,6 +20,7 @@ namespace DotNet.Assets
         const string AzureFeed = "https://dotnetcli.blob.core.windows.net/dotnet";
         const string LatestVersion = "1.1.0";
 
+        private readonly string _assetFullName;
         private readonly string _version;
         private readonly Environment _env;
         private readonly IReporter _reporter;
@@ -34,21 +35,23 @@ namespace DotNet.Assets
                 
             _reporter = reporter;
             _env = env;
+            _assetFullName = $"{Name}@{_version}";
         }
 
         public override async Task InstallAsync(CancellationToken cancellationToken)
         {
-            _reporter.Verbose($"Begin installation of {Name}@{_version} to '{_env.Root}'");
+            _reporter.Output($"Installing '{_assetFullName}'");
+            _reporter.Verbose($"Begin installation of {_assetFullName} to '{_env.Root}'");
             
             if (_env.Frameworks.Any(f => f.Name.Equals(Name, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
             {
-                _reporter.Verbose($"Skipping installation of {Name}@{_version}. Already installed.");
+                _reporter.Verbose($"Skipping installation of {_assetFullName}. Already installed.");
                 return;
             }
 
             var url = CreateDownloadUrl(_version);
 
-            _reporter.Verbose($"Downloading '{url}'");
+            _reporter.Verbose($"Downloading from '{url}'");
             
             var result = await DefaultHttpClient.GetAsync(url, cancellationToken);
             if (!result.IsSuccessStatusCode)
@@ -70,11 +73,11 @@ namespace DotNet.Assets
 
             if (success)
             {
-                _reporter.Output($"Installed {Name}@{_version}");
+                _reporter.Output($"Installed {_assetFullName}");
             }
             else
             {
-                _reporter.Error($"Failed to install {Name}@{_version}");
+                _reporter.Error($"Failed to install {_assetFullName}");
                 throw new InvalidOperationException("Installation failed");
             }
         }

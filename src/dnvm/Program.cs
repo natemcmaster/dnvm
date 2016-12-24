@@ -55,7 +55,10 @@ namespace DotNet
                 return ShowInfo;
             }
 
-            var context = CreateContext();
+            var context = CreateContext(options);
+
+            context.Reporter.Verbose($"Using environment '{context.Environment.Name}'");
+
             await options.Command.ExecuteAsync(context);
 
             if (context.Result == Result.Incomplete)
@@ -68,17 +71,26 @@ namespace DotNet
                 : Error;
         }
 
-        private CommandContext CreateContext()
+        private CommandContext CreateContext(CommandLineOptions options)
         {
             var context = new CommandContext();
             context.CancellationToken = _cts.Token;
-            context.Reporter = new DefaultReporter(_console);
+            context.Reporter = CreateReporter(options.IsVerbose);
             context.Settings = DnvmSettings.Load();
             context.Environment = new Environment(
                 FileConstants.GlobalEnvName,
                 new DirectoryInfo(Path.Combine(context.Settings.EnvRoot.FullName, FileConstants.GlobalEnvName)));
 
             return context;
+        }
+
+        private IReporter CreateReporter(bool verbose)
+        {
+            return new ReporterBuilder()
+                .WithConsole(_console)
+                .Verbose(c => c.WithColor(ConsoleColor.DarkGray).When(() => verbose))
+                .Error(c => c.WithColor(ConsoleColor.Red))
+                .Build();
         }
 
         [Conditional("DEBUG")]
