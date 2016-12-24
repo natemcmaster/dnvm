@@ -1,12 +1,12 @@
 using System.Linq;
-using DotNet.Files;
+using System.Threading.Tasks;
 using DotNet.Reporting;
 
 namespace DotNet.Commands
 {
     class InfoCommand : ICommand
     {
-        public void Execute(CommandContext context)
+        public Task ExecuteAsync(CommandContext context)
         {
             context.Reporter.Output($"Name     : {context.Environment.Name}");
             context.Reporter.Output($"Location : {context.Environment.Root}");
@@ -43,8 +43,8 @@ namespace DotNet.Commands
                 }
             }
 
-
             context.Result = Result.Done;
+            return Task.CompletedTask;
         }
     }
 }

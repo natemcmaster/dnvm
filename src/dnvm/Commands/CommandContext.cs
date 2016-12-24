@@ -1,10 +1,12 @@
+using System.Threading;
 using DotNet.Files;
 using DotNet.Reporting;
 
 namespace DotNet.Commands
 {
-    class CommandContext
+    public class CommandContext
     {
+        public CancellationToken CancellationToken { get; set; }
         public Result Result { get; set; }
         public Environment Environment { get; set; }
         public IReporter Reporter { get; set; }

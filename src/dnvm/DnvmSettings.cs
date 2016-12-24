@@ -1,11 +1,10 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using DotNet.Files;
 
 namespace DotNet
 {
-    class DnvmSettings
+    public class DnvmSettings
     {
         private DnvmSettings()
         {

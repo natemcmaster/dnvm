@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace DotNet.Commands
 {
-    interface ICommand
+    public interface ICommand
     {
-        void Execute(CommandContext context);
+        Task ExecuteAsync(CommandContext context);
     }
 }

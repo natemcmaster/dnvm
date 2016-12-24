@@ -1,18 +1,43 @@
-using DotNet.Packaging;
+using System;
+using System.IO;
+using DotNet.Assets;
 
 namespace DotNet.Commands
 {
-    class InstallCommand : ICommand
+    using System.Threading.Tasks;
+    using Environment = DotNet.Files.Environment;
+    public class InstallCommand : ICommand
     {
+        private readonly string _assetName;
+        private readonly string _version;
 
-        public InstallCommand()
+        public InstallCommand(string assetName, string version)
         {
+            _assetName = assetName;
+            _version = version;
         }
 
-        public void Execute(CommandContext context)
+        public async Task ExecuteAsync(CommandContext context)
         {
-            new Downloader(context.Reporter).FetchAsync().GetAwaiter().GetResult();
+            var asset = CreateAsset(context);
+            Directory.CreateDirectory(context.Environment.Root);
+            await asset.InstallAsync(context.CancellationToken);
+
             context.Result = Result.Done;
+        }
+
+        private Asset CreateAsset(CommandContext context)
+        {
+            if (_assetName.Equals(SharedFxAsset.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                return new SharedFxAsset(context.Reporter, context.Environment, _version);
+            }
+            else if(_assetName.Equals(CliAsset.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                return new CliAsset(_version);
+            }
+
+            throw new InvalidOperationException("Unrecognized asset name: " + _assetName);
         }
     }
 }

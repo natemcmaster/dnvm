@@ -2,19 +2,24 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using DotNet.Commands;
 using DotNet.Files;
 using DotNet.Reporting;
 
 namespace DotNet
 {
+    using System.Threading;
     using Environment = Files.Environment;
 
     class Program
     {
         static int Main(string[] args)
         {
-            return new Program(PhysicalConsole.Instance, Directory.GetCurrentDirectory()).Run(args);
+            return new Program(PhysicalConsole.Instance, Directory.GetCurrentDirectory())
+                .RunAsync(args)
+                .GetAwaiter()
+                .GetResult();
         }
 
         private const int OK = 0;
@@ -24,15 +29,19 @@ namespace DotNet
         private readonly IConsole _console;
         private readonly string _workingDir;
 
+        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
         public Program(IConsole console, string workingDir)
         {
             _console = console;
             _workingDir = workingDir;
         }
 
-        public int Run(string[] args)
+        public async Task<int> RunAsync(string[] args)
         {
             HandleDebugSwitch(ref args);
+
+            // TODO cancel _cts when CTRL+C
 
             var options = CommandLineOptions.Parse(args);
             if (options.IsError)
@@ -47,7 +56,7 @@ namespace DotNet
             }
 
             var context = CreateContext();
-            options.Command.Execute(context);
+            await options.Command.ExecuteAsync(context);
 
             if (context.Result == Result.Incomplete)
             {
@@ -62,7 +71,7 @@ namespace DotNet
         private CommandContext CreateContext()
         {
             var context = new CommandContext();
-
+            context.CancellationToken = _cts.Token;
             context.Reporter = new DefaultReporter(_console);
             context.Settings = DnvmSettings.Load();
             context.Environment = new Environment(
