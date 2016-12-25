@@ -11,5 +11,6 @@ namespace DotNet.Commands
         public DotNetEnv Environment { get; set; }
         public IReporter Reporter { get; set; }
         public DnvmSettings Settings { get; set; }
+        public ConfigFile ConfigFile { get; set; }
     }
 }

@@ -18,7 +18,7 @@ pushd artifacts
     dotnet restore ../dnvm.sln
     rm bin/dnvm || :
     rm -r pub/ || :
-    dotnet publish ../src/dnvm/dnvm.csproj -o $(pwd)/pub -r osx.10.10-x64
+    dotnet publish ../src/dnvm/dnvm.csproj -o $(pwd)/pub -r osx.10.10-x64 /nologo
     pushd bin
     ln -s ../pub/dnvm ./dnvm
     popd

@@ -10,8 +10,9 @@ namespace DotNet.Commands
         {
             context.Reporter.Output($"Name     : {context.Environment.Name}");
             context.Reporter.Output($"Location : {context.Environment.Root}");
+            context.Reporter.Output($"Config   : {context.ConfigFile?.FilePath ?? "<none>"}");
             context.Reporter.Output();
-            context.Reporter.Output(".NET Core SDK");
+            context.Reporter.Output(".NET Core CLI");
             context.Reporter.Output("-------------");
 
             if (!context.Environment.Clis.Any())
@@ -35,11 +36,19 @@ namespace DotNet.Commands
             context.Reporter.Output("Shared Frameworks");
             context.Reporter.Output("-----------------");
 
+            if (!context.Environment.Frameworks.Any())
+            {
+                using (context.Indent())
+                {
+                    context.Reporter.Output("<none>");
+                }
+            }
+
             foreach (var fx in context.Environment.Frameworks)
             {
                 using (context.Indent())
                 {
-                    context.Reporter.Output($"{fx.Name}/{fx.Version}");
+                    context.Reporter.Output($"{fx.Name}@{fx.Version}");
                 }
             }
 

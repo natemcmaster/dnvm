@@ -96,6 +96,7 @@ namespace DotNet
                 }
 
                 context.Environment = envFactory.CreateFromConfig(config);
+                context.ConfigFile = config;
             }
             else
             {

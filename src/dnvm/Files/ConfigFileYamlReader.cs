@@ -92,7 +92,7 @@ namespace DotNet.Files
                     {
                         if (node is YamlScalarNode cli)
                         {
-                            configFile.Environment = cli.Value;
+                            configFile.Cli = cli.Value;
                         }
                         else
                         {
