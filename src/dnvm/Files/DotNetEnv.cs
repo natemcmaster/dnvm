@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace DotNet.Files
 {
-    public class Environment
+    public class DotNetEnv
     {
-        private readonly DirectoryInfo _sdkRoot;
+        private readonly DirectoryInfo _cliRoot;
         private readonly DirectoryInfo _root;
         private readonly DirectoryInfo _sharedRoot;
 
-        public Environment(string name, DirectoryInfo root)
+        public DotNetEnv(string name, DirectoryInfo root)
         {
             Name = Ensure.NotNullOrEmpty(name, nameof(name));
             _root = Ensure.NotNull(root, nameof(root));
 
-            _sdkRoot = new DirectoryInfo(Path.Combine(_root.FullName, "sdk"));
+            _cliRoot = new DirectoryInfo(Path.Combine(_root.FullName, "sdk"));
             _sharedRoot = new DirectoryInfo(Path.Combine(_root.FullName, "shared"));
         }
 
@@ -36,16 +36,16 @@ namespace DotNet.Files
             }
         }
 
-        public IEnumerable<Sdk> Sdks
+        public IEnumerable<Cli> Clis
         {
             get
             {
-                _sdkRoot.Refresh();
-                if (!_sdkRoot.Exists)
+                _cliRoot.Refresh();
+                if (!_cliRoot.Exists)
                 {
-                    return Enumerable.Empty<Sdk>();
+                    return Enumerable.Empty<Cli>();
                 }
-                return _sdkRoot.GetDirectories().Select(d => new Sdk(d));
+                return _cliRoot.GetDirectories().Select(d => new Cli(d));
             }
         }
     }

@@ -9,12 +9,14 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PackageTargetFallback>dotnet</PackageTargetFallback>
     <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers>
+    <WarnAsErrors>true</WarnAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />
     <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc2" />
     <PackageReference Include="YamlDotNet" Version="4.0.1-pre309" />

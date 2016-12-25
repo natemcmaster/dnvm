@@ -10,20 +10,22 @@ using Xunit.Abstractions;
 
 namespace DotNet.Test
 {
-    public class SharedFxInstallTest : IDisposable
+    public class CliInstallTest : IDisposable
     {
         private readonly TempDir _tempDir = new TempDir();
         private readonly ITestOutputHelper _output;
 
         [Theory]
         // commented out to improve test time. Each test downloads ~50MB
-        // [InlineData("1.0.0")]
-        // [InlineData("1.0.1")]
-        [InlineData("1.0.3")]
-        [InlineData("1.1.0")]
-        public async Task InstallsFx(string version)
+        // [InlineData("1.0.0-preview2-003121", "1.0.0")]
+        // [InlineData("1.0.0-preview2-003131", "1.0.1")]
+        [InlineData("1.0.0-preview2-003156", "1.0.3")]
+        [InlineData("1.0.0-preview2-1-003177", "1.1.0")]
+        // [InlineData("1.0.0-preview3-004056", "1.0.1")]
+        [InlineData("1.0.0-preview4-004233", "1.0.1")]
+        public async Task InstallsCliWithSharedFx(string version, string fxVersion)
         {
-            var command = new InstallCommand(SharedFxAsset.Name, version);
+            var command = new InstallCommand(CliAsset.Name, version);
             var context = new CommandContext
             {
                 Reporter = new TestReporter(_output),
@@ -35,10 +37,11 @@ namespace DotNet.Test
             Directory.EnumerateFiles(_tempDir.Path)
                 .Should().Contain(f => Path.GetFileName(f) == "dotnet");
 
-            Directory.Exists(Path.Combine(_tempDir.Path, "shared", "Microsoft.NETCore.App", version)).Should().BeTrue();
+            Directory.Exists(Path.Combine(_tempDir.Path, "shared", "Microsoft.NETCore.App", fxVersion)).Should().BeTrue();
+            Directory.Exists(Path.Combine(_tempDir.Path, "sdk", version)).Should().BeTrue();
         }
 
-        public SharedFxInstallTest(ITestOutputHelper output)
+        public CliInstallTest(ITestOutputHelper output)
         {
             _output = output;
         }

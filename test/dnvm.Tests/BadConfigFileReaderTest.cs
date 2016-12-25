@@ -1,0 +1,79 @@
+using System;
+using System.IO;
+using DotNet.Files;
+using FluentAssertions;
+using Xunit;
+
+namespace DotNet.Test
+{
+    public class BadConfigFileReaderTest
+    {
+        [Fact]
+        public void MissingEnvKey()
+        {
+            Read(@"")
+                .ShouldThrow<FormatException>()
+                .WithMessage(ConfigFileErrors.MissingEnvKey);
+        }
+
+        [Theory]
+        [InlineData("env:\n  subkey: 1")]
+        [InlineData("env:\n  - item\n  - item2")]
+        public void EnvIsNotScalar(string doc)
+        {
+            Read(doc)
+                .ShouldThrow<FormatException>()
+                .WithMessage(ConfigFileErrors.EnvIsNotScalar);
+        }
+
+        [Theory]
+        [InlineData("cli:\n  subkey: 1")]
+        [InlineData("cli:\n  - item\n  - item2")]
+        public void CliIsNotScalar(string doc)
+        {
+            Read(doc)
+                .ShouldThrow<FormatException>()
+                .WithMessage(ConfigFileErrors.CliIsNotScalar);
+        }
+
+        [Fact]
+        public void FxIsAMap()
+        {
+            Read(@"---
+env: value
+fx: 
+  sub: item")
+                .ShouldThrow<FormatException>()
+                .WithMessage(ConfigFileErrors.FxMustBeListOrScalar);
+        }
+
+        [Fact]
+        public void FxItemIsAMap()
+        {
+            Read(@"---
+env: value
+fx: 
+   - sub: item")
+                .ShouldThrow<FormatException>()
+                .WithMessage(ConfigFileErrors.FxSequenceItemIsNotScalar);
+        }
+
+        [Fact]
+        public void MissingMultipleDoc()
+        {
+            Read(@"---
+env: value
+---
+env: value2")
+                .ShouldThrow<FormatException>()
+                .WithMessage(ConfigFileErrors.MultipleDocuments);
+        }
+
+        private Action Read(string doc)
+            => () =>
+            {
+                var reader = new StringReader(doc);
+                new ConfigFileYamlReader().Read(reader);
+            };
+    }
+}

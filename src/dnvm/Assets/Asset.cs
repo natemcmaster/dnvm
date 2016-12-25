@@ -5,6 +5,6 @@ namespace DotNet.Assets
 {
     public abstract class Asset
     {
-        public abstract Task InstallAsync(CancellationToken cancellationToken);
+        public abstract Task<bool> InstallAsync(CancellationToken cancellationToken);
     }
 }

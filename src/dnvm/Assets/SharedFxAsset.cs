@@ -1,94 +1,66 @@
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using DotNet.Utils;
+using System.Linq;
+using DotNet.Reporting;
 using NuGet.Versioning;
+using DotNetEnv = DotNet.Files.DotNetEnv;
 
 namespace DotNet.Assets
 {
-    using System.Linq;
-    using DotNet.Reporting;
-    using Environment = DotNet.Files.Environment;
-
-    public class SharedFxAsset : Asset
+    public class SharedFxAsset : DotNetAssetBase
     {
         public const string DefaultVersion = "latest";
         public const string Name = "Microsoft.NETCore.App";
 
-        const string AzureFeed = "https://dotnetcli.blob.core.windows.net/dotnet";
         const string LatestVersion = "1.1.0";
 
         private readonly string _assetFullName;
         private readonly string _version;
-        private readonly Environment _env;
-        private readonly IReporter _reporter;
+        private readonly DotNetEnv _env;
 
         private static readonly HttpClient DefaultHttpClient = new HttpClient();
 
-        public SharedFxAsset(IReporter reporter, Environment env, string version)
+        public SharedFxAsset(IReporter reporter, DotNetEnv env, string version)
+            : base(reporter)
         {
             _version = version == DefaultVersion
                 ? LatestVersion
                 : version;
-                
-            _reporter = reporter;
+
             _env = env;
             _assetFullName = $"{Name}@{_version}";
         }
 
-        public override async Task InstallAsync(CancellationToken cancellationToken)
+        public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-            _reporter.Output($"Installing '{_assetFullName}'");
-            _reporter.Verbose($"Begin installation of {_assetFullName} to '{_env.Root}'");
-            
+            Reporter.Output($"Installing '{_assetFullName}'");
+            Reporter.Verbose($"Begin installation of {_assetFullName} to '{_env.Root}'");
+
             if (_env.Frameworks.Any(f => f.Name.Equals(Name, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
             {
-                _reporter.Verbose($"Skipping installation of {_assetFullName}. Already installed.");
-                return;
+                Reporter.Verbose($"Skipping installation of {_assetFullName}. Already installed.");
+                return true;
             }
 
             var url = CreateDownloadUrl(_version);
 
-            _reporter.Verbose($"Downloading from '{url}'");
-            
-            var result = await DefaultHttpClient.GetAsync(url, cancellationToken);
-            if (!result.IsSuccessStatusCode)
+            Reporter.Output($"Downloading {_assetFullName}");
+            if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
             {
-                _reporter.Error($"Failed to download '{url}'");
-                throw new InvalidOperationException("Installation failed");
+                Reporter.Error($"Failed to install {_assetFullName}");
+                return false;
             }
 
-            var filename = Path.GetFileName(url);
-            bool success;
-            using (var tmp = new TempFile())
-            using (var stream = new FileStream(tmp.Path, FileMode.Create))
-            {
-                await result.Content.CopyToAsync(stream);
-
-                _reporter.Verbose($"Extracting '{filename}' to '{_env.Root}'");
-                success = TarballExtractor.Extract(tmp.Path, _env.Root, gzipped: true);
-            }
-
-            if (success)
-            {
-                _reporter.Output($"Installed {_assetFullName}");
-            }
-            else
-            {
-                _reporter.Error($"Failed to install {_assetFullName}");
-                throw new InvalidOperationException("Installation failed");
-            }
+            return true;
         }
 
         public static string CreateDownloadUrl(string version)
         {
-            const string arch = "x64";
-            const string osname = "osx";
             var channel = MapChannel(version);
 
-            return $"{AzureFeed}/{channel}/Binaries/{version}/dotnet-{osname}-{arch}.{version}.tar.gz";
+            return $"{AzureFeed}/{channel}/Binaries/{version}/dotnet-{GetRid()}.{version}.tar.gz";
         }
 
         private static string MapChannel(string version)

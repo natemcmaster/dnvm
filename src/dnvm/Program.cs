@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DotNet.Commands;
 using DotNet.Files;
@@ -9,9 +10,6 @@ using DotNet.Reporting;
 
 namespace DotNet
 {
-    using System.Threading;
-    using Environment = Files.Environment;
-
     class Program
     {
         static int Main(string[] args)
@@ -57,6 +55,8 @@ namespace DotNet
 
             var context = CreateContext(options);
 
+            if (context == null) return Error;
+
             context.Reporter.Verbose($"Using environment '{context.Environment.Name}'");
 
             await options.Command.ExecuteAsync(context);
@@ -77,9 +77,30 @@ namespace DotNet
             context.CancellationToken = _cts.Token;
             context.Reporter = CreateReporter(options.IsVerbose);
             context.Settings = DnvmSettings.Load();
-            context.Environment = new Environment(
-                FileConstants.GlobalEnvName,
-                new DirectoryInfo(Path.Combine(context.Settings.EnvRoot.FullName, FileConstants.GlobalEnvName)));
+
+            var envFactory = new DotNetEnvFactory(context.Settings);
+            var configFileFactory = new ConfigFileFactory();
+            var configFile = configFileFactory.FindFile(_workingDir);
+
+            if (configFile != null)
+            {
+                ConfigFile config;
+                try
+                {
+                    config = configFileFactory.Create(configFile);
+                }
+                catch (FormatException ex)
+                {
+                    context.Reporter.Error($"Config file '{configFile}' has an invalid format. {ex.Message}");
+                    return null;
+                }
+
+                context.Environment = envFactory.CreateFromConfig(config);
+            }
+            else
+            {
+                context.Environment = envFactory.CreateDefault();
+            }
 
             return context;
         }

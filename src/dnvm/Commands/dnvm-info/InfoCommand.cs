@@ -14,7 +14,7 @@ namespace DotNet.Commands
             context.Reporter.Output(".NET Core SDK");
             context.Reporter.Output("-------------");
 
-            if (!context.Environment.Sdks.Any())
+            if (!context.Environment.Clis.Any())
             {
                 using (context.Indent())
                 {
@@ -22,7 +22,7 @@ namespace DotNet.Commands
                 }
             }
 
-            foreach (var sdk in context.Environment.Sdks)
+            foreach (var sdk in context.Environment.Clis)
             {
                 using (context.Indent())
                 {

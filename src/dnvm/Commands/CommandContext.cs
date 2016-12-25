@@ -8,7 +8,7 @@ namespace DotNet.Commands
     {
         public CancellationToken CancellationToken { get; set; }
         public Result Result { get; set; }
-        public Environment Environment { get; set; }
+        public DotNetEnv Environment { get; set; }
         public IReporter Reporter { get; set; }
         public DnvmSettings Settings { get; set; }
     }

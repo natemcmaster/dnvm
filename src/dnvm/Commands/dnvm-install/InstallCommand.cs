@@ -36,7 +36,7 @@ namespace DotNet.Commands
             }
             else if(_assetName.Equals(CliAsset.Name, StringComparison.OrdinalIgnoreCase))
             {
-                return new CliAsset(_version);
+                return new CliAsset(context.Reporter, context.Environment, _version);
             }
 
             throw new InvalidOperationException("Unrecognized asset name: " + _assetName);
