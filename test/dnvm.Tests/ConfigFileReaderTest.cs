@@ -15,14 +15,14 @@ env: myenvname
 fx:
  - 1.0.1
  - 1.2.3
-cli: 1.0.0-preview3-003131 ");
+sdk: 1.0.0-preview3-003131 ");
 
             file.Should().NotBeNull();
             file.Environment.Should().Equals("myenvname");
             file.SharedFx.Should()
                 .HaveCount(2)
                 .And.Contain(new[] { "1.0.1", "1.2.3" });
-            file.Cli.Should().Equals("1.0.0-preview3-003131");
+            file.Sdk.Should().Equals("1.0.0-preview3-003131");
         }
 
         [Fact]

@@ -26,7 +26,7 @@ namespace DotNet.Test
         [InlineData("1.0.0-preview4-004233", "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/1.0.0-preview4-004233/dotnet-dev-osx-x64.1.0.0-preview4-004233.tar.gz")]
         public void CreatesCliDownloadUrl(string version, string expectedUrl)
         {
-            CliAsset.CreateDownloadUrl(version).Should().Be(expectedUrl);
+            SdkAsset.CreateDownloadUrl(version).Should().Be(expectedUrl);
         }
     }
 }

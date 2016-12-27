@@ -6,7 +6,7 @@ using DotNet.Reporting;
 
 namespace DotNet.Assets
 {
-    public class CliAsset : DotNetAssetBase
+    public class SdkAsset : DotNetAssetBase
     {
         public const string Name = "DotNetCli";
         public const string DefaultVersion = "latest";
@@ -18,7 +18,7 @@ namespace DotNet.Assets
         private readonly DotNetEnv _env;
         private readonly string _version;
 
-        public CliAsset(IReporter reporter, DotNetEnv env, string version)
+        public SdkAsset(IReporter reporter, DotNetEnv env, string version)
             : base(reporter)
         {
             _version = version == DefaultVersion

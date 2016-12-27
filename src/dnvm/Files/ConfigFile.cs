@@ -8,7 +8,7 @@ namespace DotNet.Files
 
         public string Environment { get; set; }
 
-        public string Cli { get; set; }
+        public string Sdk { get; set; }
 
         public IList<string> SharedFx { get; } = new List<string>();
     }

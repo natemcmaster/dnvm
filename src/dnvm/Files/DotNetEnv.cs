@@ -6,7 +6,7 @@ namespace DotNet.Files
 {
     public class DotNetEnv
     {
-        private readonly DirectoryInfo _cliRoot;
+        private readonly DirectoryInfo _sdkRoot;
         private readonly DirectoryInfo _root;
         private readonly DirectoryInfo _sharedRoot;
 
@@ -15,7 +15,7 @@ namespace DotNet.Files
             Name = Ensure.NotNullOrEmpty(name, nameof(name));
             _root = Ensure.NotNull(root, nameof(root));
 
-            _cliRoot = new DirectoryInfo(Path.Combine(_root.FullName, "sdk"));
+            _sdkRoot = new DirectoryInfo(Path.Combine(_root.FullName, "sdk"));
             _sharedRoot = new DirectoryInfo(Path.Combine(_root.FullName, "shared"));
         }
 
@@ -40,12 +40,12 @@ namespace DotNet.Files
         {
             get
             {
-                _cliRoot.Refresh();
-                if (!_cliRoot.Exists)
+                _sdkRoot.Refresh();
+                if (!_sdkRoot.Exists)
                 {
                     return Enumerable.Empty<Cli>();
                 }
-                return _cliRoot.GetDirectories().Select(d => new Cli(d));
+                return _sdkRoot.GetDirectories().Select(d => new Cli(d));
             }
         }
     }

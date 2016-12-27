@@ -25,7 +25,7 @@ namespace DotNet.Test
         [InlineData("1.0.0-preview4-004233", "1.0.1")]
         public async Task InstallsCliWithSharedFx(string version, string fxVersion)
         {
-            var command = new InstallCommand(CliAsset.Name, version);
+            var command = new InstallCommand(SdkAsset.Name, version);
             var context = new CommandContext
             {
                 Reporter = new TestReporter(_output),

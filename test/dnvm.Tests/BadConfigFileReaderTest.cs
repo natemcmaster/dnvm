@@ -27,13 +27,13 @@ namespace DotNet.Test
         }
 
         [Theory]
-        [InlineData("cli:\n  subkey: 1")]
-        [InlineData("cli:\n  - item\n  - item2")]
+        [InlineData("sdk:\n  subkey: 1")]
+        [InlineData("sdk:\n  - item\n  - item2")]
         public void CliIsNotScalar(string doc)
         {
             Read(doc)
                 .ShouldThrow<FormatException>()
-                .WithMessage(ConfigFileErrors.CliIsNotScalar);
+                .WithMessage(ConfigFileErrors.SdkIsNotScalar);
         }
 
         [Fact]

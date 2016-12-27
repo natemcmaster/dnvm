@@ -16,22 +16,30 @@ This file can be placed anywhere in the filesystem to control directory-specific
 This file is in YAML.
 
 ```yml
-# cli  = dotnet-cli
+# env = environment name
+# REQUIRED
+env: env_name
+
+# sdk  = dotnet-sdk
 # format
-cli: cli_version
+sdk: sdk_version
 
 # fx = shared frameworks
-# a list of frameworks to install.
-# Item formats:
-#   fx_name@version
-# If fx_name is absent, it is inferred to be Microsoft.NETCore.App
-fx:
- - fx_name@version1
- - fx_name@version2
- - version3
+# the shared runtime frameworks
+fx: version
 
- # examples (both are equivalent)
- - Microsoft.NETCore.App@1.0.1
- - 1.0.1
- - SomeCustom.SharedFramework@99.99.99
+# Can also be a list of multiple versions frameworks to install.
+fx:
+ - version1
+ - version2
+```
+
+Example:
+
+```yml
+env: myapp
+sdk: 1.0.0-preview4-004233
+fx:
+  - 1.0.1
+  - 1.1.0
 ```

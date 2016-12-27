@@ -1,5 +1,5 @@
 env: default
-cli: 1.0.0-preview4-004215
+sdk: 1.0.0-preview4-004215
 fx:
   - 1.0.1
   - 1.1.0

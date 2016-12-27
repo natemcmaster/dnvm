@@ -34,9 +34,9 @@ namespace DotNet.Commands
             {
                 return new SharedFxAsset(context.Reporter, context.Environment, _version);
             }
-            else if(_assetName.Equals(CliAsset.Name, StringComparison.OrdinalIgnoreCase))
+            else if(_assetName.Equals(SdkAsset.Name, StringComparison.OrdinalIgnoreCase))
             {
-                return new CliAsset(context.Reporter, context.Environment, _version);
+                return new SdkAsset(context.Reporter, context.Environment, _version);
             }
 
             throw new InvalidOperationException("Unrecognized asset name: " + _assetName);

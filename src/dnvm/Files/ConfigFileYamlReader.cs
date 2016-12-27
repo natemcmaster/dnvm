@@ -8,7 +8,7 @@ namespace DotNet.Files
     public static class ConfigFileErrors
     {
         public const string EnvIsNotScalar = "The value for 'env' must be a single, scalar value.";
-        public const string CliIsNotScalar = "The value for 'cli' must be a single, scalar value.";
+        public const string SdkIsNotScalar = "The value for 'sdk' must be a single, scalar value.";
         public const string FxSequenceItemIsNotScalar = "Items in the 'fx' section must only be scalar values.";
         public const string FxMustBeListOrScalar = "The 'fx' section must be a single value or a sequence of scalar values.";
         public const string MissingEnvKey = "Missing the required 'env' key.";
@@ -88,15 +88,15 @@ namespace DotNet.Files
                         ReadFx(node, configFile);
                     }
                     break;
-                case "cli":
+                case "sdk":
                     {
-                        if (node is YamlScalarNode cli)
+                        if (node is YamlScalarNode sdk)
                         {
-                            configFile.Cli = cli.Value;
+                            configFile.Sdk = sdk.Value;
                         }
                         else
                         {
-                            throw new FormatException(ConfigFileErrors.CliIsNotScalar);
+                            throw new FormatException(ConfigFileErrors.SdkIsNotScalar);
                         }
                     }
                     break;

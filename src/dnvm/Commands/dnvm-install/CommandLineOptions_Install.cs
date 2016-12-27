@@ -9,21 +9,22 @@ namespace DotNet.Commands
         {
             _syntax.Command("install", "Install things", c =>
             {
-                c.Command("fx", "Install a shared framework", ConfigureFxCommand);
+                c.Command("fx", "Install a .NET Core runtime framework", ConfigureFxCommand);
 
-                c.Command("cli", "Install a .NET Core CLI", ConfigureCliCommand);
+                c.Command("sdk", "Install a .NET Core SDK", ConfigureCliCommand);
 
                 c.OnExecute(() =>
                 {
                     this.Command = new InstallFromFileCommand();
                 });
 
+                var dnvm = Files.FileConstants.Config;
                 c.ExtendedHelpText = $@"
 Additional Information:
   If executed without arguments, the 'install' command will search for the 
-  dnvm config file (named '{Files.FileConstants.Config}') and attempt to install 
-  any assets specified in the file.
-";
+  dnvm config file (named '{dnvm}') and attempt to install any assets 
+  specified in the file.
+"; // TODO add dnvm-config with help about the file structure of the .dnvm file
             });
         }
 
@@ -38,13 +39,13 @@ Additional Information:
             });
         }
 
-        private void ConfigureCliCommand(CommandLineApplication cli)
+        private void ConfigureCliCommand(CommandLineApplication sdk)
         {
-            var argVersion = cli.Argument("version", $"Version of the CLI install. Defaults to '{CliAsset.DefaultVersion}'");
+            var argVersion = sdk.Argument("version", $"Version of the CLI install. Defaults to '{SdkAsset.DefaultVersion}'");
 
-            cli.OnExecute(() =>
+            sdk.OnExecute(() =>
             {
-                this.Command = new InstallCommand(CliAsset.Name, argVersion.Value ?? CliAsset.DefaultVersion);
+                this.Command = new InstallCommand(SdkAsset.Name, argVersion.Value ?? SdkAsset.DefaultVersion);
             });
         }
     }

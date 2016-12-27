@@ -16,12 +16,13 @@
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />
     <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc2" />
     <PackageReference Include="YamlDotNet" Version="4.0.1-pre309" />
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="System.AppContext" Version="4.3.0" />
     <PackageReference Include="System.Console" Version="4.3.0" />
     <PackageReference Include="System.IO" Version="4.3.0" />
@@ -32,5 +33,5 @@
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.0" />
-  </ItemGroup>
+  </ItemGroup>-->
 </Project>

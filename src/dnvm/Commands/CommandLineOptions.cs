@@ -59,6 +59,7 @@ namespace DotNet.Commands
 
             InfoCommand();
             InstallCommand();
+            ListCommand();
 
             _syntax.OnExecute(() =>
             {
