@@ -18,7 +18,6 @@ namespace DotNet.Commands
         private CommandLineOptions()
         { }
 
-        private CommandLineApplication _syntax;
         private Exception _error;
 
         public bool IsError
@@ -43,33 +42,34 @@ namespace DotNet.Commands
 
         private void Global(string[] args)
         {
-            _syntax = new CommandLineApplication
+            var app = new CommandLineApplication
             {
                 Name = "dnvm",
                 FullName = ".NET Core Version Manager",
                 Out = new StringWriter(_helpText)
             };
 
-            _syntax.VersionOption("--version", GetVersion);
-            _syntax.HelpOption();
+            app.VersionOption("--version", GetVersion);
+            app.HelpOption();
 
             var optVerbose =
-                _syntax.Option("-v|--verbose", "Use verbose output",
+                app.Option("-v|--verbose", "Use verbose output",
                 CommandOptionType.NoValue, inherited: true);
 
-            InfoCommand();
-            InstallCommand();
-            ListCommand();
+            InitCommand(app);
+            InfoCommand(app);
+            InstallCommand(app);
+            ListCommand(app);
 
-            _syntax.OnExecute(() =>
+            app.OnExecute(() =>
             {
                 _helpText.AppendLine(Logo);
-                _syntax.ShowHelp();
+                app.ShowHelp();
             });
 
             try
             {
-                _syntax.Execute(args);
+                app.Execute(args);
             }
             catch (CommandParsingException ex)
             {
@@ -78,7 +78,7 @@ namespace DotNet.Commands
             }
 
             IsVerbose = optVerbose.HasValue();
-            IsHelp = _syntax.IsShowingInformation;
+            IsHelp = app.IsShowingInformation;
         }
 
         public string GetErrorText() => _error.Message;

@@ -12,10 +12,17 @@ namespace DotNet
 
         public TextWriter Out => Console.Out;
         public TextWriter Error => Console.Error;
+        public TextReader In => Console.In;
 
         public IConsole WriteLine(string line)
         {
             Console.WriteLine(line);
+            return this;
+        }
+
+        public IConsole Write(string text)
+        {
+            Console.Write(text);
             return this;
         }
     }

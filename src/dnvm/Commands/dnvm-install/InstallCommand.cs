@@ -26,7 +26,7 @@ namespace DotNet.Commands
                 return;
             }
 
-            context.Result = Result.Done;
+            context.Result = Result.Okay;
         }
     }
 }

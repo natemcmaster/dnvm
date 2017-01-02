@@ -4,9 +4,9 @@ namespace DotNet.Commands
 {
     partial class CommandLineOptions
     {
-        private void ListCommand()
+        private void ListCommand(CommandLineApplication app)
         {
-            _syntax.Command("list", "Show available versions", c =>
+            app.Command("list", "Show available versions", c =>
             {
                 c.Command("fx", "Show available versions of .NET Core runtime frameworks", fx =>
                 {

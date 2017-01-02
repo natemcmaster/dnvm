@@ -14,6 +14,9 @@ namespace DotNet.Commands
 
         public ConfigFile ConfigFile { get; set; }
 
+        public IConsole Console { get; set; }
+        public string WorkingDir { get; set; }
+
         public IServiceProvider Services { get; set; }
 
         private IReporter _reporter;

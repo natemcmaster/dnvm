@@ -67,7 +67,7 @@ namespace DotNet
                 throw new InvalidOperationException($"Command finished without setting the {nameof(CommandContext)}.{nameof(CommandContext.Result)} value");
             }
 
-            return context.Result == Result.Done
+            return context.Result == Result.Okay
                 ? OK
                 : Error;
         }
@@ -77,6 +77,8 @@ namespace DotNet
             var context = new CommandContext
             {
                 CancellationToken = _cts.Token,
+                Console = _console,
+                WorkingDir = _workingDir
             };
 
             var settings = DnvmSettings.Load();

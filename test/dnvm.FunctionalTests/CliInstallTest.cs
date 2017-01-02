@@ -37,7 +37,7 @@ namespace DotNet.Test
 
             await command.ExecuteAsync(context).OrTimeout(90);
 
-            context.Result.Should().Be(Result.Done);
+            context.Result.Should().Be(Result.Okay);
 
             Directory.EnumerateFiles(_tempDir.Path)
                 .Should().Contain(f => Path.GetFileName(f) == "dotnet");

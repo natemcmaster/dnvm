@@ -4,9 +4,9 @@ namespace DotNet.Commands
 {
     partial class CommandLineOptions
     {
-        private void InfoCommand()
+        private void InfoCommand(CommandLineApplication app)
         {
-            _syntax.Command("info", "Display information about the current dotnet environment", c =>
+            app.Command("info", "Display information about the current dotnet environment", c =>
             {
                 c.OnExecute(() =>
                 {

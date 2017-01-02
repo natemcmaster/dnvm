@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using DotNet.Files;
 
 namespace DotNet.Commands
 {
-    public class EditConfigCommand : ICommand
+    public class EditConfigCommand : SyncCommand
     {
         public enum EditAction
         {
@@ -27,14 +25,14 @@ namespace DotNet.Commands
             _action = action;
         }
 
-        public Task ExecuteAsync(CommandContext context)
+        protected override void Execute(CommandContext context)
         {
             if (context.ConfigFile == null)
             {
                 context.Result = Result.Error;
                 context.Reporter.Error("Could not find a config file to edit.");
                 context.Reporter.Output("Try executing `dnvm init` to create a config file.");
-                return Task.CompletedTask;
+                return;
             }
 
             switch (_section.ToLowerInvariant())
@@ -76,9 +74,7 @@ namespace DotNet.Commands
                 new ConfigFileYamlWriter().Write(writer, context.ConfigFile);
             }
 
-            context.Result = Result.Done;
-            return Task.CompletedTask;
-
+            context.Result = Result.Okay;
         }
     }
 }

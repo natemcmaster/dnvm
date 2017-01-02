@@ -6,9 +6,9 @@ namespace DotNet.Commands
 {
     partial class CommandLineOptions
     {
-        private void InstallCommand()
+        private void InstallCommand(CommandLineApplication app)
         {
-            _syntax.Command("install", "Install things", c =>
+            app.Command("install", "Install things", c =>
             {
                 c.Command("fx", "Install a .NET Core runtime framework", ConfigureFxCommand);
 
