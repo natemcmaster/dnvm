@@ -3,20 +3,17 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using DotNet.Files;
 using DotNet.Reporting;
-using NuGet.Versioning;
-using DotNetEnv = DotNet.Files.DotNetEnv;
+using System.IO;
 
 namespace DotNet.Assets
 {
     public class SharedFxAsset : DotNetAssetBase
     {
         public const string DefaultVersion = "latest";
-        public const string Name = "Microsoft.NETCore.App";
+        private const string AssetName = "Microsoft.NETCore.App";
 
-        const string LatestVersion = "1.1.0";
-
-        private readonly string _assetFullName;
         private readonly string _version;
         private readonly DotNetEnv _env;
 
@@ -26,65 +23,60 @@ namespace DotNet.Assets
             : base(reporter)
         {
             _version = version == DefaultVersion
-                ? LatestVersion
+                ? Repo.GetLatestVersion(AssetName)
                 : version;
 
             _env = env;
-            _assetFullName = $"{Name}@{_version}";
         }
 
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-            Reporter.Output($"Installing '{_assetFullName}'");
-            Reporter.Verbose($"Begin installation of {_assetFullName} to '{_env.Root}'");
 
-            if (_env.Frameworks.Any(f => f.Name.Equals(Name, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
+            var assetFullName = $"{AssetName}@{_version}";
+            Reporter.Output($"Installing '{assetFullName}'");
+            Reporter.Verbose($"Begin installation of {assetFullName} to '{_env.Root}'");
+
+            var dest = Path.Combine(_env.Root, "shared", AssetName, _version);
+            Directory.CreateDirectory(dest);
+
+#if __MACOS__
+            var openssl = new OpenSslAsset(dest);
+            Reporter.Verbose($"Linking OpenSSL from Homebrew into {assetFullName}");
+            if (!await openssl.InstallAsync(cancellationToken))
             {
-                Reporter.Verbose($"Skipping installation of {_assetFullName}. Already installed.");
+                Reporter.Warn($"Failed to install OpenSSL into {assetFullName}. Try running `brew install openssl` first and re-run this command.");
+            }
+#endif
+
+            if (_env.Frameworks.Any(f => f.Name.Equals(AssetName, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
+            {
+                Reporter.Verbose($"Skipping installation of {assetFullName}. Already installed.");
                 return true;
             }
 
-            var url = CreateDownloadUrl(_version);
+            var url = Repo.GetDownloadUrl(AssetName, _version);
 
-            Reporter.Output($"Downloading {_assetFullName}");
+            Reporter.Output($"Downloading {assetFullName}");
             if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
             {
-                Reporter.Error($"Failed to install {_assetFullName}");
+                Reporter.Error($"Failed to install {assetFullName}");
+
+                if (Directory.EnumerateFiles(dest).Any())
+                {
+                    try
+                    {
+                        Directory.Delete(dest, recursive: true);
+                    }
+                    catch
+                    {
+                        Reporter.Verbose($"Failed to delete {dest}");
+                    }
+                }
+
                 return false;
             }
 
             return true;
-        }
-
-        public static string CreateDownloadUrl(string version)
-        {
-            var channel = MapChannel(version);
-
-            return $"{AzureFeed}/{channel}/Binaries/{version}/dotnet-{GetRid()}.{version}.tar.gz";
-        }
-
-        private static string MapChannel(string version)
-        {
-            const string Default = "master";
-            if (!SemanticVersion.TryParse(version, out var semver))
-            {
-                return Default;
-            }
-
-            switch (semver.Major)
-            {
-                case 1:
-                    switch (semver.Minor)
-                    {
-                        case 0:
-                            return "preview";
-                        case 1:
-                            return "release/1.1.0";
-                    }
-                    goto default;
-                default:
-                    return Default;
-            }
         }
     }
 }

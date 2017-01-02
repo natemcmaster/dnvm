@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DotNet.Commands;
 using DotNet.Files;
 using DotNet.Reporting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNet
 {
@@ -73,12 +74,13 @@ namespace DotNet
 
         private CommandContext CreateContext(CommandLineOptions options)
         {
-            var context = new CommandContext();
-            context.CancellationToken = _cts.Token;
-            context.Reporter = CreateReporter(options.IsVerbose);
-            context.Settings = DnvmSettings.Load();
+            var context = new CommandContext
+            {
+                CancellationToken = _cts.Token,
+            };
 
-            var envFactory = new DotNetEnvFactory(context.Settings);
+            var settings = DnvmSettings.Load();
+            var envFactory = new DotNetEnvFactory(settings);
             var configFileFactory = new ConfigFileFactory();
             var configFile = configFileFactory.FindFile(_workingDir);
 
@@ -103,6 +105,17 @@ namespace DotNet
                 context.Environment = envFactory.CreateDefault();
             }
 
+            var services = new ServiceCollection();
+
+            services
+                .AddDnvm()
+                .AddSingleton(context.Environment)
+                .AddSingleton(settings)
+                .AddSingleton<IReporter>(_ => CreateReporter(options.IsVerbose));
+
+            context.Services = services.BuildServiceProvider();
+
+
             return context;
         }
 
@@ -111,6 +124,7 @@ namespace DotNet
             return new ReporterBuilder()
                 .WithConsole(_console)
                 .Verbose(c => c.WithColor(ConsoleColor.DarkGray).When(() => verbose))
+                .Warn(c => c.WithColor(ConsoleColor.Yellow))
                 .Error(c => c.WithColor(ConsoleColor.Red))
                 .Build();
         }

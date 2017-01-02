@@ -5,14 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using DotNet.Reporting;
 using DotNet.Utils;
-using Microsoft.DotNet.PlatformAbstractions;
 
 namespace DotNet.Assets
 {
-
     public abstract class DotNetAssetBase : Asset
     {
-        protected const string AzureFeed = "https://dotnetcli.blob.core.windows.net/dotnet";
+        protected IAssetRepository Repo = new StableReleasesAssetRepository();
 
         private static readonly HttpClient DefaultHttpClient = new HttpClient();
         protected IReporter Reporter { get; }
@@ -26,7 +24,17 @@ namespace DotNet.Assets
         {
             Reporter.Verbose($"Downloading from '{url}'");
 
-            var result = await DefaultHttpClient.GetAsync(url, cancellationToken);
+            HttpResponseMessage result;
+            try
+            {
+                result = await DefaultHttpClient.GetAsync(url, cancellationToken);
+            }
+            catch (HttpRequestException ex)
+            {
+                Reporter.Error($"Downloading asset failed: {ex.Message}");
+                return false;
+            }
+
             if (!result.IsSuccessStatusCode)
             {
                 Reporter.Error($"Failed to download '{url}'");
@@ -41,24 +49,8 @@ namespace DotNet.Assets
 
                 Reporter.Verbose($"Extracting '{filename}' to '{destination}'");
 
-                if (filename.EndsWith(".tar.gz") || filename.EndsWith(".tgz"))
-                {
-                    return TarballExtractor.Extract(tmp.Path, destination, gzipped: true);
-                }
-                else
-                {
-                    throw new InvalidOperationException("Unrecognized file extension");
-                }
+                return ArchiveUtility.Extract(tmp.Path, destination);
             }
-        }
-
-        protected static string GetRid()
-        {
-            if (RuntimeEnvironment.OperatingSystemPlatform == Platform.Darwin)
-            {
-                return "osx-x64"; // RID includes OS version, but shared fx is not version specific
-            }
-            return RuntimeEnvironment.GetRuntimeIdentifier();
         }
     }
 }

@@ -4,17 +4,19 @@ using Xunit;
 
 namespace DotNet.Test
 {
-    public class DotNetAssetTest
+    public class AssetRepositoryTest
     {
         [Theory]
         [InlineData("1.0.0", "https://dotnetcli.blob.core.windows.net/dotnet/preview/Binaries/1.0.0/dotnet-osx-x64.1.0.0.tar.gz")]
         [InlineData("1.0.1", "https://dotnetcli.blob.core.windows.net/dotnet/preview/Binaries/1.0.1/dotnet-osx-x64.1.0.1.tar.gz")]
         [InlineData("1.0.3", "https://dotnetcli.blob.core.windows.net/dotnet/preview/Binaries/1.0.3/dotnet-osx-x64.1.0.3.tar.gz")]
-        [InlineData("1.1.0-preview1-001100-00", "https://dotnetcli.blob.core.windows.net/dotnet/release/1.1.0/Binaries/1.1.0-preview1-001100-00/dotnet-osx-x64.1.1.0-preview1-001100-00.tar.gz")]
         [InlineData("1.1.0", "https://dotnetcli.blob.core.windows.net/dotnet/release/1.1.0/Binaries/1.1.0/dotnet-osx-x64.1.1.0.tar.gz")]
         public void CreatesSharedFxDownloadUrl(string version, string expectedUrl)
         {
-            SharedFxAsset.CreateDownloadUrl(version).Should().Be(expectedUrl);
+            new StableReleasesAssetRepository()
+                .GetDownloadUrl("Microsoft.NETCore.App", version)
+                .Should()
+                .Be(expectedUrl);
         }
 
         [Theory]
@@ -26,7 +28,21 @@ namespace DotNet.Test
         [InlineData("1.0.0-preview4-004233", "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/1.0.0-preview4-004233/dotnet-dev-osx-x64.1.0.0-preview4-004233.tar.gz")]
         public void CreatesCliDownloadUrl(string version, string expectedUrl)
         {
-            SdkAsset.CreateDownloadUrl(version).Should().Be(expectedUrl);
+            new StableReleasesAssetRepository()
+                .GetDownloadUrl("Microsoft.DotNet.Cli.osx-x64", version)
+                .Should()
+                .Be(expectedUrl);
+        }
+
+        [Theory]
+        [InlineData("Microsoft.NETCore.App", "1.1.0")]
+        [InlineData("Microsoft.DotNet.Cli.osx-x64", "1.0.0-preview4-004233")]
+        public void GetsLatestVersion(string assetId, string version)
+        {
+            new StableReleasesAssetRepository()
+                .GetLatestVersion(assetId)
+                .Should()
+                .Be(version);
         }
     }
 }

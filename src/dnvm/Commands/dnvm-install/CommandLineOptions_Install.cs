@@ -35,7 +35,7 @@ Additional Information:
 
             fx.OnExecute(() =>
             {
-                this.Command = new InstallCommand(SharedFxAsset.Name, argVersion.Value ?? SharedFxAsset.DefaultVersion);
+                this.Command = new InstallCommand<SharedFxAsset>(argVersion.Value ?? SharedFxAsset.DefaultVersion);
             });
         }
 
@@ -45,7 +45,7 @@ Additional Information:
 
             sdk.OnExecute(() =>
             {
-                this.Command = new InstallCommand(SdkAsset.Name, argVersion.Value ?? SdkAsset.DefaultVersion);
+                this.Command = new InstallCommand<SdkAsset>(argVersion.Value ?? SdkAsset.DefaultVersion);
             });
         }
     }

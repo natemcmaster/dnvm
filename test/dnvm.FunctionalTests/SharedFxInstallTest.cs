@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using DotNet.Assets;
 using DotNet.Commands;
+using DotNet.Files;
 using DotNet.Utils;
 using FluentAssertions;
 using Xunit;
@@ -23,14 +24,16 @@ namespace DotNet.Test
         [InlineData("1.1.0")]
         public async Task InstallsFx(string version)
         {
-            var command = new InstallCommand(SharedFxAsset.Name, version);
+            var command = new InstallCommand<SharedFxAsset>(version);
             var context = new CommandContext
             {
                 Reporter = new TestReporter(_output),
-                Environment = new Files.DotNetEnv("test", new DirectoryInfo(_tempDir.Path))
+                Environment = new DotNetEnv("test", new DirectoryInfo(_tempDir.Path))
             };
 
             await command.ExecuteAsync(context).OrTimeout(90);
+
+            context.Result.Should().Be(Result.Done);
 
             Directory.EnumerateFiles(_tempDir.Path)
                 .Should().Contain(f => Path.GetFileName(f) == "dotnet");

@@ -8,30 +8,29 @@
     <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PackageTargetFallback>dotnet</PackageTargetFallback>
+
     <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers>
+    <!--<RuntimeIdentifier>osx.10.10-x64</RuntimeIdentifier>-->
+    <!--<MacOS Condition="'$(RuntimeIdentifier)' != '' AND $(RuntimeIdentifier.StartsWith('osx'))">true</MacOS>-->
+    <MacOS>true</MacOS>
+
+    <DefineConstants Condition="$(MacOS)">$(DefineConstants);__MACOS__</DefineConstants>
     <WarnAsErrors>true</WarnAsErrors>
   </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="**\*.cs" />
+    <Compile Include="**\*.cs" Exclude="**\*.macos.cs" />
+    <Compile Include="**\*.macos.cs" Condition="$(MacOS)" />
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc2" />
     <PackageReference Include="YamlDotNet" Version="4.0.1-pre309" />
   </ItemGroup>
-  <!--<ItemGroup>
-    <PackageReference Include="System.AppContext" Version="4.3.0" />
-    <PackageReference Include="System.Console" Version="4.3.0" />
-    <PackageReference Include="System.IO" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="1.1.0" />
-    <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
-    <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.0" />
-  </ItemGroup>-->
+  
 </Project>
