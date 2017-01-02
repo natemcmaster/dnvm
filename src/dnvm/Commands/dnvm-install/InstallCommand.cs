@@ -1,8 +1,6 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using DotNet.Assets;
-using DotNet.Reporting;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNet.Commands
@@ -28,7 +26,6 @@ namespace DotNet.Commands
                 return;
             }
 
-            context.Reporter.Output(ColorFormatter.Format("Done", ConsoleColor.Green));
             context.Result = Result.Done;
         }
     }

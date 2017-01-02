@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using DotNet.Assets;
 
 namespace DotNet.Commands
 {
@@ -15,7 +17,20 @@ namespace DotNet.Commands
             }
             else
             {
-                
+                var commands = new List<ICommand>();
+                if (!string.IsNullOrEmpty(context.ConfigFile.Sdk))
+                {
+                    commands.Add(new InstallCommand<SdkAsset>(context.ConfigFile.Sdk));
+                }
+
+                foreach (var fx in context.ConfigFile.SharedFx)
+                {
+                    commands.Add(new InstallCommand<SharedFxAsset>(fx));
+                }
+
+                var composite = new CompositeCommand(commands);
+
+                await composite.ExecuteAsync(context);
             }
         }
     }
