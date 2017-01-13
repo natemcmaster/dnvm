@@ -2,7 +2,7 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace DotNet.Commands
 {
-    partial class CommandLineOptions
+    partial class CommandLine
     {
         private void ListCommand(CommandLineApplication app)
         {

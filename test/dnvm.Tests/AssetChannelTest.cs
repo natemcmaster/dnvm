@@ -4,7 +4,7 @@ using Xunit;
 
 namespace DotNet.Test
 {
-    public class AssetRepositoryTest
+    public class AssetChannelTest
     {
         [Theory]
         [InlineData("1.0.0", "https://dotnetcli.blob.core.windows.net/dotnet/preview/Binaries/1.0.0/dotnet-osx-x64.1.0.0.tar.gz")]
@@ -13,7 +13,7 @@ namespace DotNet.Test
         [InlineData("1.1.0", "https://dotnetcli.blob.core.windows.net/dotnet/release/1.1.0/Binaries/1.1.0/dotnet-osx-x64.1.1.0.tar.gz")]
         public void CreatesSharedFxDownloadUrl(string version, string expectedUrl)
         {
-            new StableReleasesAssetRepository()
+            new StableAssetChannel()
                 .GetDownloadUrl("Microsoft.NETCore.App", version)
                 .Should()
                 .Be(expectedUrl);
@@ -28,7 +28,7 @@ namespace DotNet.Test
         [InlineData("1.0.0-preview4-004233", "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/1.0.0-preview4-004233/dotnet-dev-osx-x64.1.0.0-preview4-004233.tar.gz")]
         public void CreatesCliDownloadUrl(string version, string expectedUrl)
         {
-            new StableReleasesAssetRepository()
+            new StableAssetChannel()
                 .GetDownloadUrl("Microsoft.DotNet.Cli.osx-x64", version)
                 .Should()
                 .Be(expectedUrl);
@@ -39,7 +39,7 @@ namespace DotNet.Test
         [InlineData("Microsoft.DotNet.Cli.osx-x64", "1.0.0-preview4-004233")]
         public void GetsLatestVersion(string assetId, string version)
         {
-            new StableReleasesAssetRepository()
+            new StableAssetChannel()
                 .GetLatestVersion(assetId)
                 .Should()
                 .Be(version);

@@ -8,8 +8,7 @@ namespace DotNet.Assets
 {
     public class SdkAsset : DotNetAssetBase
     {
-        public const string DefaultVersion = "latest";
-
+        public const string DefaultVersion = "stable";
         private const string AssetId = "Microsoft.DotNet.Cli.osx-x64";
         private readonly DotNetEnv _env;
         private readonly string _version;
@@ -18,7 +17,7 @@ namespace DotNet.Assets
             : base(reporter)
         {
             _version = version == DefaultVersion
-                ? Repo.GetLatestVersion(AssetId)
+                ? Channel.GetLatestVersion(AssetId)
                 : version;
             _env = env;
         }
@@ -32,7 +31,7 @@ namespace DotNet.Assets
                 return true;
             }
 
-            var url = Repo.GetDownloadUrl(AssetId, _version);
+            var url = Channel.GetDownloadUrl(AssetId, _version);
             Reporter.Output($"Downloading .NET Core CLI {_version}");
             if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
             {

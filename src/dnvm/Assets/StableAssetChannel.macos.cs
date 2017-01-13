@@ -5,7 +5,7 @@ namespace DotNet.Assets
 {
     // TODO make this info available remotely so it can be updated without re-installing dnvm
     // TODO add windows, linux, etc.
-    partial class StableReleasesAssetRepository : IAssetRepository
+    partial class StableAssetChannel : IAssetChannel
     {
         private IDictionary<string, AssetInfo> _assets
             = new Dictionary<string, AssetInfo>(StringComparer.OrdinalIgnoreCase)

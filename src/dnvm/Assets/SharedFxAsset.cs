@@ -11,7 +11,7 @@ namespace DotNet.Assets
 {
     public class SharedFxAsset : DotNetAssetBase
     {
-        public const string DefaultVersion = "latest";
+        public const string DefaultVersion = "stable";
         private const string AssetName = "Microsoft.NETCore.App";
 
         private readonly string _version;
@@ -23,7 +23,7 @@ namespace DotNet.Assets
             : base(reporter)
         {
             _version = version == DefaultVersion
-                ? Repo.GetLatestVersion(AssetName)
+                ? Channel.GetLatestVersion(AssetName)
                 : version;
 
             _env = env;
@@ -49,7 +49,7 @@ namespace DotNet.Assets
 
             await EnsureAssetsLinkedIntoFramework(dest, cancellationToken);
 
-            var url = Repo.GetDownloadUrl(AssetName, _version);
+            var url = Channel.GetDownloadUrl(AssetName, _version);
 
             Reporter.Output($"Downloading {assetFullName}");
             if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))

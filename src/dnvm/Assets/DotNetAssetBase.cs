@@ -10,7 +10,7 @@ namespace DotNet.Assets
 {
     public abstract class DotNetAssetBase : Asset
     {
-        protected IAssetRepository Repo = new StableReleasesAssetRepository();
+        protected IAssetChannel Channel { get; } = new StableAssetChannel();
 
         private static readonly HttpClient DefaultHttpClient = new HttpClient();
         protected IReporter Reporter { get; }
@@ -45,7 +45,7 @@ namespace DotNet.Assets
             var ext = filename.EndsWith(".tar.gz", StringComparison.OrdinalIgnoreCase)
                 ? ".tar.gz"
                 : Path.GetExtension(filename);
-                
+
             using (var tmp = new TempFile(ext))
             using (var stream = new FileStream(tmp.Path, FileMode.Create))
             {

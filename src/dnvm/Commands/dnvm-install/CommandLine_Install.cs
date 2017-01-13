@@ -4,7 +4,7 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace DotNet.Commands
 {
-    partial class CommandLineOptions
+    partial class CommandLine
     {
         private void InstallCommand(CommandLineApplication app)
         {
@@ -12,7 +12,7 @@ namespace DotNet.Commands
             {
                 c.Command("fx", "Install a .NET Core runtime framework", ConfigureFxCommand);
 
-                c.Command("sdk", "Install a .NET Core SDK", ConfigureCliCommand);
+                c.Command("sdk", "Install a .NET Core SDK", ConfigureSdkCommand);
 
                 c.OnExecute(() =>
                 {
@@ -24,10 +24,10 @@ namespace DotNet.Commands
                 // TODO add dnvm-config with help about the file structure of the .dnvm file
                 c.ExtendedHelpText = $@"
 Additional Information:
-  If executed without arguments, the 'install' command will search for the 
-  dnvm config file (named '{dnvm}') and attempt to install any assets 
+  If executed without arguments, the 'install' command will search for the
+  dnvm config file (named '{dnvm}') and attempt to install any assets
   specified in the file.
-"; 
+";
             });
         }
 
@@ -56,9 +56,9 @@ Additional Information:
             });
         }
 
-        private void ConfigureCliCommand(CommandLineApplication sdk)
+        private void ConfigureSdkCommand(CommandLineApplication sdk)
         {
-            var argVersion = sdk.Argument("version", $"Version of the CLI install. Defaults to '{SdkAsset.DefaultVersion}'");
+            var argVersion = sdk.Argument("version", $"Version of the .NET Core SDK to install. Defaults to '{SdkAsset.DefaultVersion}'");
             var optSave = sdk.Option("-s|--save", $"Save as the value of 'sdk' in the '{FileConstants.Config}' config file", CommandOptionType.NoValue);
 
             sdk.OnExecute(() =>

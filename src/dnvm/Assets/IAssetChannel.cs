@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace DotNet.Assets
 {
-    public interface IAssetRepository
+    public interface IAssetChannel
     {
         IEnumerable<string> ListAvailableVersions(string assetId);
         string GetLatestVersion(string assetId);

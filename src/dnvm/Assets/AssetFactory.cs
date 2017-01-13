@@ -7,9 +7,9 @@ namespace DotNet.Assets
     {
         private readonly IServiceProvider _services;
 
-        public AssetFactory(IServiceProvider serivces)
+        public AssetFactory(IServiceProvider services)
         {
-            _services = serivces;
+            _services = services;
         }
 
         public TAsset Create<TAsset>(string version) where TAsset : Asset

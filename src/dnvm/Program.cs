@@ -42,7 +42,7 @@ namespace DotNet
 
             // TODO cancel _cts when CTRL+C
 
-            var options = CommandLineOptions.Parse(args);
+            var options = CommandLine.Parse(args);
             if (options.IsError)
             {
                 _console.WriteLine(options.GetErrorText());
@@ -60,19 +60,27 @@ namespace DotNet
 
             context.Reporter.Verbose($"Using environment '{context.Environment.Name}'");
 
-            await options.Command.ExecuteAsync(context);
-
-            if (context.Result == Result.Incomplete)
+            try
             {
-                throw new InvalidOperationException($"Command finished without setting the {nameof(CommandContext)}.{nameof(CommandContext.Result)} value");
-            }
+                await options.Command.ExecuteAsync(context);
 
-            return context.Result == Result.Okay
-                ? OK
-                : Error;
+                if (context.Result == Result.Incomplete)
+                {
+                    throw new InvalidOperationException($"Command finished without setting the {nameof(CommandContext)}.{nameof(CommandContext.Result)} value");
+                }
+
+                return context.Result == Result.Okay
+                    ? OK
+                    : Error;
+            }
+            catch (Exception ex)
+            {
+                context.Reporter.Error(ex.ToString());
+                return Error;
+            }
         }
 
-        private CommandContext CreateContext(CommandLineOptions options)
+        private CommandContext CreateContext(CommandLine options)
         {
             var context = new CommandContext
             {

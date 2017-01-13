@@ -6,7 +6,7 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace DotNet.Commands
 {
-    partial class CommandLineOptions
+    partial class CommandLine
     {
         private const string Logo = @"
    ___  _  ___   ____  ___
@@ -15,7 +15,7 @@ namespace DotNet.Commands
 /____/_/|_/ |___/_/  /_/
         ";
 
-        private CommandLineOptions()
+        private CommandLine()
         { }
 
         private Exception _error;
@@ -31,9 +31,9 @@ namespace DotNet.Commands
         public bool IsHelp { get; private set; }
         public ICommand Command { get; private set; }
 
-        public static CommandLineOptions Parse(string[] args)
+        public static CommandLine Parse(string[] args)
         {
-            var options = new CommandLineOptions();
+            var options = new CommandLine();
 
             options.Global(args);
 

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DotNet.Assets
 {
-    public partial class StableReleasesAssetRepository : IAssetRepository
+    public partial class StableAssetChannel : IAssetChannel
     {
         public string GetDownloadUrl(string assetId, string version)
         {
