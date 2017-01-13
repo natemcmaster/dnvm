@@ -1,40 +1,39 @@
 using System.IO;
-using YamlDotNet.RepresentationModel;
 
 namespace DotNet.Files
 {
     public class ConfigFileYamlWriter
     {
         // TODO currently overwrites the file...which removes comments
-        // TODO suppress the trailing '...' added to each file
+        // TODO consider using real yaml serializer. Couldn't figure out how to make YamlDotNet suppress trailing '...' at EOD
         public void Write(TextWriter writer, ConfigFile config)
         {
-            var stream = new YamlStream();
-
-            var root = new YamlMappingNode();
-
             if (!string.IsNullOrEmpty(config.Environment))
             {
-                root.Add("env", config.Environment);
+                writer.Write($"env: {config.Environment}\n");
             }
 
             if (!string.IsNullOrEmpty(config.Sdk))
             {
-                root.Add("sdk", config.Sdk);
+                writer.Write($"sdk: {config.Sdk}\n");
             }
 
             if (config.SharedFx.Count > 0)
             {
-                var frameworks = new YamlSequenceNode();
-                foreach (var fx in config.SharedFx)
+                writer.Write("fx:");
+                if (config.SharedFx.Count == 1)
                 {
-                    frameworks.Add(fx);
+                    writer.Write($" {config.SharedFx[0]}\n");
                 }
-                root.Add("fx", frameworks);
+                else
+                {
+                    writer.Write("\n");
+                    foreach (var fx in config.SharedFx)
+                    {
+                        writer.Write($"  - {fx}\n");
+                    }
+                }
             }
-
-            stream.Add(new YamlDocument(root));
-            stream.Save(writer, assignAnchors: false);
         }
     }
 }
