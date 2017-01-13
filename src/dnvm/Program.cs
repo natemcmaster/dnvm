@@ -103,7 +103,7 @@ namespace DotNet
                 }
                 catch (FormatException ex)
                 {
-                    context.Reporter.Error($"Config file '{configFile}' has an invalid format. {ex.Message}");
+                    CreateReporter(options.IsVerbose).Error($"Config file '{configFile}' has an invalid format. {ex.Message}");
                     return null;
                 }
 
@@ -124,7 +124,6 @@ namespace DotNet
                 .AddSingleton<IReporter>(_ => CreateReporter(options.IsVerbose));
 
             context.Services = services.BuildServiceProvider();
-
 
             return context;
         }

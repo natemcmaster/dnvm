@@ -5,7 +5,7 @@
 #include "corehost_error_codes.h"
 
 static pal::string_t s_own_path;
-static pal::string_t s_global_env_name = _X("default");
+static pal::string_t s_default_env_name = _X("default");
 
 bool find_config_file(pal::string_t &cwd, pal::string_t *recv)
 {
@@ -38,7 +38,7 @@ bool resolve_env_root(const pal::string_t &env_name, pal::string_t *path)
         trace::error(_X("Detected invalid environment name '%s'"), env_name.c_str());
         return false;
     }
-    // TODO consider adding a .dnvmrc file to move this. May be required on machines 
+    // TODO consider adding a .dnvmrc file to move this. May be required on machines
     // where users don't have sudo access
     pal::string_t env_path = _X("/usr/local/share/dnvm/environments");
     trace::verbose(_X("Probing for dotnet environment '%s' in [%s]"), env_name.c_str(), env_path.c_str());
@@ -63,6 +63,11 @@ void find_muxer_for_env(const pal::string_t &env_name, pal::string_t *muxer)
         muxer->assign(get_executable(root));
         return;
     }
+}
+
+void find_global_muxer(pal::string_t *muxer)
+{
+    find_muxer_for_env(s_default_env_name, muxer);
 }
 
 bool resolve_env_name(pal::ifstream_t &file, pal::string_t *name)
@@ -107,12 +112,9 @@ void find_muxer_from_config(pal::string_t &config, pal::string_t *muxer, pal::st
     {
         trace::error(_YELLOW_X("warn: Could not resolve environment name from '%s'."), config.c_str());
         trace::error(_YELLOW_X("      Falling back to environment 'default'."));
+        env_name->assign(s_default_env_name);
+        find_global_muxer(muxer);
     }
-}
-
-void find_global_muxer(pal::string_t *muxer)
-{
-    find_muxer_for_env(s_global_env_name, muxer);
 }
 
 int main(const int argc, pal::char_t *argv[])

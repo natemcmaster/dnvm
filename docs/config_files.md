@@ -1,16 +1,9 @@
 Config files
 ============
 
-## `$HOME/.dnvmrc`
-
-This is an .ini file that contains the following settings for how dnvm is configured.
-
 ### Settings
 
-feeds
-
-
-## `.dotnet`
+## `.dnvm`
 
 This file can be placed anywhere in the filesystem to control directory-specific settings.
 This file is in YAML.
