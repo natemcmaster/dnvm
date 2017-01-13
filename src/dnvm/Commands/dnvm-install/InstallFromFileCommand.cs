@@ -33,7 +33,7 @@ namespace DotNet.Commands
                     context.Reporter.Warn("Nothing will be installed because the config file does not list assets.");
                 }
 
-                var composite = new CompositeCommand(commands);
+                var composite = CommonCommands.Sequence(commands);
 
                 await composite.ExecuteAsync(context);
 

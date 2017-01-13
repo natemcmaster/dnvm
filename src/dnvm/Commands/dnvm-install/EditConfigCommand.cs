@@ -27,14 +27,6 @@ namespace DotNet.Commands
 
         protected override void Execute(CommandContext context)
         {
-            if (context.ConfigFile == null)
-            {
-                context.Result = Result.Error;
-                context.Reporter.Error("Could not find a config file to edit.");
-                context.Reporter.Output("Try executing `dnvm init` to create a config file.");
-                return;
-            }
-
             switch (_section.ToLowerInvariant())
             {
                 case "sdk":

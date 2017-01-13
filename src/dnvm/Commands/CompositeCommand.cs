@@ -5,9 +5,9 @@ namespace DotNet.Commands
 {
     public class CompositeCommand : ICommand
     {
-        private readonly ICollection<ICommand> _commands;
+        private readonly IEnumerable<ICommand> _commands;
 
-        public CompositeCommand(ICollection<ICommand> commands)
+        public CompositeCommand(IEnumerable<ICommand> commands)
         {
             _commands = commands;
         }

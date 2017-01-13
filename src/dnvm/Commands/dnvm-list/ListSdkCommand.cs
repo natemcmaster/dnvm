@@ -1,4 +1,3 @@
-
 using System.Linq;
 using DotNet.Assets;
 using DotNet.Reporting;

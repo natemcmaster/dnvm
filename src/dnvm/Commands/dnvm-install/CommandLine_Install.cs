@@ -38,18 +38,17 @@ Additional Information:
             fx.OnExecute(() =>
             {
                 var version = argVersion.Value ?? SharedFxAsset.DefaultVersion;
-                ICommand command = new InstallCommand<SharedFxAsset>(version);
+                ICommand install = new InstallCommand<SharedFxAsset>(version);
 
                 if (optSave.HasValue())
                 {
-                    command = new CompositeCommand(new[]
-                    {
-                        command,
-                        new EditConfigCommand("fx", version, EditConfigCommand.EditAction.Append)
-                    });
+                    install = CommonCommands.Sequence(
+                        CommonCommands.EnsureConfigFileExists,
+                        install,
+                        new EditConfigCommand("fx", version, EditConfigCommand.EditAction.Append));
                 }
 
-                this.Command = command;
+                this.Command = install;
             });
         }
 
@@ -61,17 +60,16 @@ Additional Information:
             sdk.OnExecute(() =>
             {
                 var version = argVersion.Value ?? SdkAsset.DefaultVersion;
-                ICommand command = new InstallCommand<SdkAsset>(version);
+                ICommand install = new InstallCommand<SdkAsset>(version);
                 if (optSave.HasValue())
                 {
-                    command = new CompositeCommand(new[]
-                    {
-                        command,
-                        new EditConfigCommand("sdk", version, EditConfigCommand.EditAction.Set)
-                    });
+                    install = CommonCommands.Sequence(
+                        CommonCommands.EnsureConfigFileExists,
+                        install,
+                        new EditConfigCommand("sdk", version, EditConfigCommand.EditAction.Set));
                 }
 
-                this.Command = command;
+                this.Command = install;
             });
         }
     }
