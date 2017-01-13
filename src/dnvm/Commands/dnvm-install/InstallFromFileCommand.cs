@@ -28,9 +28,19 @@ namespace DotNet.Commands
                     commands.Add(new InstallCommand<SharedFxAsset>(fx));
                 }
 
+                if (commands.Count == 0)
+                {
+                    context.Reporter.Warn("Nothing will be installed because the config file does not list assets.");
+                }
+
                 var composite = new CompositeCommand(commands);
 
                 await composite.ExecuteAsync(context);
+
+                if (context.Result != Result.Error)
+                {
+                    context.Result = Result.Okay;
+                }
             }
         }
     }

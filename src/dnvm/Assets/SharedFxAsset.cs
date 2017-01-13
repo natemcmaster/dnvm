@@ -37,22 +37,17 @@ namespace DotNet.Assets
             Reporter.Verbose($"Begin installation of {assetFullName} to '{_env.Root}'");
 
             var dest = Path.Combine(_env.Root, "shared", AssetName, _version);
-            Directory.CreateDirectory(dest);
-
-#if __MACOS__
-            var openssl = new OpenSslAsset(dest);
-            Reporter.Verbose($"Linking OpenSSL from Homebrew into {assetFullName}");
-            if (!await openssl.InstallAsync(cancellationToken))
-            {
-                Reporter.Warn($"Failed to install OpenSSL into {assetFullName}. Try running `brew install openssl` first and re-run this command.");
-            }
-#endif
 
             if (_env.Frameworks.Any(f => f.Name.Equals(AssetName, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
             {
+                await EnsureAssetsLinkedIntoFramework(dest, cancellationToken);
                 Reporter.Verbose($"Skipping installation of {assetFullName}. Already installed.");
                 return true;
             }
+
+            Directory.CreateDirectory(dest);
+
+            await EnsureAssetsLinkedIntoFramework(dest, cancellationToken);
 
             var url = Repo.GetDownloadUrl(AssetName, _version);
 
@@ -77,6 +72,18 @@ namespace DotNet.Assets
             }
 
             return true;
+        }
+
+        private async Task EnsureAssetsLinkedIntoFramework(string dest, CancellationToken cancellationToken)
+        {
+#if __MACOS__
+            var openssl = new OpenSslAsset(dest);
+            Reporter.Verbose($"Linking OpenSSL from Homebrew into '{dest}'");
+            if (!await openssl.InstallAsync(cancellationToken))
+            {
+                Reporter.Warn($"Failed to install OpenSSL into {AssetName}@{_version}. Try running `brew install openssl` first and re-run this command.");
+            }
+#endif
         }
     }
 }

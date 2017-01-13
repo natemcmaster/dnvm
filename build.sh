@@ -19,6 +19,8 @@ pushd artifacts
     rm bin/dnvm || :
     rm -r pub/ || :
     dotnet publish ../src/dnvm/dnvm.csproj -o $(pwd)/pub -r osx.10.10-x64 /nologo
+    ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib ./pub/
+    ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib ./pub/
     pushd bin
     ln -s ../pub/dnvm ./dnvm
     popd

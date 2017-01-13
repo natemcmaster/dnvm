@@ -6,8 +6,13 @@ namespace DotNet.Utils
     public class TempFile : IDisposable
     {
         public TempFile()
+            :this(extension: null)
         {
-            Path = System.IO.Path.GetTempFileName();
+        }
+
+        public TempFile(string extension)
+        {
+            Path = System.IO.Path.GetTempFileName() + extension;
         }
 
         public string Path { get; }

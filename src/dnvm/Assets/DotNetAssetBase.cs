@@ -42,7 +42,11 @@ namespace DotNet.Assets
             }
 
             var filename = Path.GetFileName(url);
-            using (var tmp = new TempFile())
+            var ext = filename.EndsWith(".tar.gz", StringComparison.OrdinalIgnoreCase)
+                ? ".tar.gz"
+                : Path.GetExtension(filename);
+                
+            using (var tmp = new TempFile(ext))
             using (var stream = new FileStream(tmp.Path, FileMode.Create))
             {
                 await result.Content.CopyToAsync(stream);

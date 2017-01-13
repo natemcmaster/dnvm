@@ -23,11 +23,13 @@ namespace DotNet.Commands
                 context.Reporter.Warn("Adding the new config file here will override this file's settings.");
             }
 
-            context.Console.Write("Environment name (default): ");
+            var defaultName = Path.GetFileName(context.WorkingDir);
+            context.Console.Write($"Environment name ({defaultName}): ");
 
             var name = context.Console.In.ReadLine()?.Trim();
+            
             name = string.IsNullOrEmpty(name)
-                ? "default"
+                ? defaultName
                 : name;
 
             var config = new ConfigFile

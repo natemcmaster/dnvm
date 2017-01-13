@@ -18,7 +18,7 @@ namespace DotNet.Files
                 }
                 current = current.Parent;
             }
-            return file.FullName;
+            return file?.FullName;
         }
 
         public ConfigFile Create(string filePath)
