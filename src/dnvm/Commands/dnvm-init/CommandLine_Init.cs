@@ -1,19 +1,14 @@
-using DotNet.Files;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace DotNet.Commands
 {
     partial class CommandLine
     {
-        private void InitCommand(CommandLineApplication app)
+        private void InitCommand(CommandLineApplication c)
         {
-            app.Command("init", init =>
+            c.OnExecute(() =>
             {
-                init.Description = $"Initializes a new '{FileConstants.Config}' config file in the current directory.";
-                init.OnExecute(() =>
-                {
-                    this.Command = new InitConfigInteractiveCommand();
-                });
+                this.Command = new InitConfigInteractiveCommand();
             });
         }
     }

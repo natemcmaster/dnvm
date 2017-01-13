@@ -4,30 +4,27 @@ namespace DotNet.Commands
 {
     partial class CommandLine
     {
-        private void ListCommand(CommandLineApplication app)
+        private void ListCommand(CommandLineApplication c)
         {
-            app.Command("list", "Show available versions", c =>
+            c.Command("fx", "Show available versions of .NET Core runtime frameworks", fx =>
             {
-                c.Command("fx", "Show available versions of .NET Core runtime frameworks", fx =>
+                fx.OnExecute(() =>
                 {
-                    fx.OnExecute(() =>
-                    {
-                        this.Command = new ListFxCommand();
-                    });
+                    this.Command = new ListFxCommand();
                 });
+            });
 
-                c.Command("sdk", "Show available versions of .NET Core SDKs", sdk =>
+            c.Command("sdk", "Show available versions of .NET Core SDKs", sdk =>
+            {
+                sdk.OnExecute(() =>
                 {
-                    sdk.OnExecute(() =>
-                    {
-                        this.Command = new ListSdkCommand();
-                    });
+                    this.Command = new ListSdkCommand();
                 });
+            });
 
-                c.OnExecute(() =>
-                {
-                    c.ShowHelp();
-                });
+            c.OnExecute(() =>
+            {
+                c.ShowHelp();
             });
         }
     }

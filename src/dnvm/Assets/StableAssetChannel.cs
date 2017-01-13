@@ -24,7 +24,7 @@ namespace DotNet.Assets
             return info.Versions.Last().Key;
         }
 
-        public IEnumerable<string> ListAvailableVersions(string assetId)
+        public IEnumerable<string> GetAvailableVersions(string assetId)
         {
             if (!_assets.TryGetValue(assetId, out var info))
             {
@@ -40,7 +40,7 @@ namespace DotNet.Assets
             public string GetDownloadUrl(string version)
                 => Versions[version];
 
-            public IEnumerable<string> GetVersions() 
+            public IEnumerable<string> GetVersions()
                 => Versions.Keys;
         }
     }

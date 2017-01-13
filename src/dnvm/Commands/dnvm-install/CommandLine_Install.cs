@@ -6,32 +6,29 @@ namespace DotNet.Commands
 {
     partial class CommandLine
     {
-        private void InstallCommand(CommandLineApplication app)
+        private void InstallCommand(CommandLineApplication c)
         {
-            app.Command("install", "Install things", c =>
+            c.Command("fx", "Install a .NET Core runtime framework", InstallFxCommand);
+
+            c.Command("sdk", "Install a .NET Core SDK", InstallSdkCommand);
+
+            c.OnExecute(() =>
             {
-                c.Command("fx", "Install a .NET Core runtime framework", ConfigureFxCommand);
+                this.Command = new InstallFromFileCommand();
+            });
 
-                c.Command("sdk", "Install a .NET Core SDK", ConfigureSdkCommand);
+            var dnvm = FileConstants.Config;
 
-                c.OnExecute(() =>
-                {
-                    this.Command = new InstallFromFileCommand();
-                });
-
-                var dnvm = FileConstants.Config;
-
-                // TODO add dnvm-config with help about the file structure of the .dnvm file
-                c.ExtendedHelpText = $@"
+            // TODO add dnvm-config with help about the file structure of the .dnvm file
+            c.ExtendedHelpText = $@"
 Additional Information:
   If executed without arguments, the 'install' command will search for the
   dnvm config file (named '{dnvm}') and attempt to install any assets
   specified in the file.
 ";
-            });
         }
 
-        private void ConfigureFxCommand(CommandLineApplication fx)
+        private void InstallFxCommand(CommandLineApplication fx)
         {
             var argVersion = fx.Argument("version",
                     $"Version of the shared framework to install. Defaults to '{SharedFxAsset.DefaultVersion}'");
@@ -56,7 +53,7 @@ Additional Information:
             });
         }
 
-        private void ConfigureSdkCommand(CommandLineApplication sdk)
+        private void InstallSdkCommand(CommandLineApplication sdk)
         {
             var argVersion = sdk.Argument("version", $"Version of the .NET Core SDK to install. Defaults to '{SdkAsset.DefaultVersion}'");
             var optSave = sdk.Option("-s|--save", $"Save as the value of 'sdk' in the '{FileConstants.Config}' config file", CommandOptionType.NoValue);

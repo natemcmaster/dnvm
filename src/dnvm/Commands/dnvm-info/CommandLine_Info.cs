@@ -4,14 +4,11 @@ namespace DotNet.Commands
 {
     partial class CommandLine
     {
-        private void InfoCommand(CommandLineApplication app)
+        private void InfoCommand(CommandLineApplication c)
         {
-            app.Command("info", "Display information about the current dotnet environment", c =>
+            c.OnExecute(() =>
             {
-                c.OnExecute(() =>
-                {
-                    this.Command = new InfoCommand();
-                });
+                this.Command = new InfoCommand();
             });
         }
     }

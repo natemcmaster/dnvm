@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -6,11 +7,13 @@ using System.Threading.Tasks;
 namespace DotNet.Assets
 {
     /// <summary>
-    /// Represents the linking of openssl into installations of Microsoft.NETCore.App on macOS. 
+    /// Represents the linking of openssl into installations of Microsoft.NETCore.App on macOS.
     /// </summary>
     public class OpenSslAsset : Asset
     {
         private readonly string _symlinkDest;
+
+        public override string DisplayName { get; } = "OpenSSL (from Homebrew)";
 
         /// <summary>
         /// </summary>
@@ -44,5 +47,10 @@ namespace DotNet.Assets
 
         [DllImport("libc", CallingConvention = CallingConvention.Cdecl)]
         private extern static void symlink(string src, string dest);
+
+        public override bool Uninstall()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

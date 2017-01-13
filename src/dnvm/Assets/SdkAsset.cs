@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace DotNet.Assets
     public class SdkAsset : DotNetAssetBase
     {
         public const string DefaultVersion = "stable";
-        private const string AssetId = "Microsoft.DotNet.Cli.osx-x64";
+        public const string AssetId = "Microsoft.DotNet.Cli.osx-x64";
         private readonly DotNetEnv _env;
         private readonly string _version;
 
@@ -20,6 +21,15 @@ namespace DotNet.Assets
                 ? Channel.GetLatestVersion(AssetId)
                 : version;
             _env = env;
+            DisplayName = $".NET Core SDK {_version}";
+        }
+
+        public override string DisplayName { get; }
+
+        public override bool Uninstall()
+        {
+            var path = Path.Combine(_env.Root, "sdk", _version);
+            return UninstallFolder(path);
         }
 
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)

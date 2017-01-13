@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using DotNet.Files;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace DotNet.Commands
@@ -56,10 +57,11 @@ namespace DotNet.Commands
                 app.Option("-v|--verbose", "Use verbose output",
                 CommandOptionType.NoValue, inherited: true);
 
-            InitCommand(app);
-            InfoCommand(app);
-            InstallCommand(app);
-            ListCommand(app);
+            app.Command("init", $"Initializes a new '{FileConstants.Config}' config file in the current directory.", InitCommand);
+            app.Command("info", "Display information about the current dotnet environment", InfoCommand);
+            app.Command("install", "Install things", InstallCommand);
+            app.Command("list", "Show available versions", ListCommand);
+            app.Command("rm", "Removes installed things", RemoveCommand);
 
             app.OnExecute(() =>
             {
@@ -82,7 +84,7 @@ namespace DotNet.Commands
         }
 
         public string GetErrorText() => _error.Message;
-        public string GetHelpText() => _helpText.ToString().Trim(new [] { '\r', '\n' });
+        public string GetHelpText() => _helpText.ToString().Trim(new[] { '\r', '\n' });
 
         private static string GetVersion()
         {
