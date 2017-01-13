@@ -39,6 +39,22 @@ dnvm install fx stable
 dnvm install fx 1.1.0
 ```
 
+Install a .NET Core CLI tool
+
+```sh
+# install the most recent stable .NET Core CLI tool
+# these commands are equivalent
+dnvm install tool watch
+dnvm install tool watch stable
+
+# install a specific version
+dnvm install tool watch 1.0.0
+
+# using this tool after it is installed
+# these tools are installed globally, not just to a specific project
+dotnet watch
+```
+
 List versions that could be installed
 ```sh
 # list all known versions of .NET Core runtime
@@ -76,6 +92,11 @@ sdk: 1.0.0-preview4-004233
 fx:
   - 1.0.1
   - 1.1.0
+  - stable
+# optional: list of .NET Core CLI tools to install
+tool:
+  ef: 1.0.0-alpha
+  watch: stable
 ```
 
 It will define the 'environment' for all `dotnet` and `dnvm` commands

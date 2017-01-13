@@ -23,8 +23,13 @@ fx: version
 
 # Can also be a list of multiple versions frameworks to install.
 fx:
- - version1
- - version2
+  - version1
+  - version2
+
+# tool = .NET Core tools
+tool:
+  name: version
+
 ```
 
 Example:
@@ -35,4 +40,8 @@ sdk: 1.0.0-preview4-004233
 fx:
   - 1.0.1
   - 1.1.0
+tool:
+  watch: 1.0.0
+  ef: 1.1.0 # can be a specific version
+  user-secrets: stable # can reference a version alias, like 'stable'
 ```
