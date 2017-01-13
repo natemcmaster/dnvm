@@ -5,6 +5,7 @@ namespace DotNet.Commands
 {
     partial class CommandLine
     {
+        // TODO implement --save
         private void RemoveCommand(CommandLineApplication c)
         {
             c.Command("fx", "Remove a .NET Core runtime framework", fx =>
@@ -30,6 +31,22 @@ namespace DotNet.Commands
                     this.Command = new RemoveCommand<SdkAsset>(version.IfNotNullOrEmpty(), force.HasValue());
                 });
             });
+
+            c.Command("tool", "Remove a .NET Core tool", tool =>
+           {
+               var name = tool.Argument("name", "The name of tool to remove");
+               var version = tool.Argument("version", "The version of tool to remove");
+               var force = tool.Option("-f|--force", "Uninstall without asking questions",
+                       CommandOptionType.NoValue);
+
+               tool.OnExecute(() =>
+               {
+                    this.Command = new RemoveToolCommand(
+                        name.IfNotNullOrEmpty(),
+                        version.IfNotNullOrEmpty(),
+                        force.HasValue());
+               });
+           });
 
             c.OnExecute(() =>
             {

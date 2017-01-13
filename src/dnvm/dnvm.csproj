@@ -15,7 +15,7 @@
     <MacOS>true</MacOS>
 
     <DefineConstants Condition="$(MacOS)">$(DefineConstants);__MACOS__</DefineConstants>
-    <WarnAsErrors>true</WarnAsErrors>
+    <WarningsAsErrors>true</WarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +32,7 @@
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc2" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="YamlDotNet" Version="4.0.1-pre309" />
   </ItemGroup>
 

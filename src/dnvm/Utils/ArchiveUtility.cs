@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace DotNet.Utils
 {
@@ -6,9 +7,17 @@ namespace DotNet.Utils
     {
         public static bool Extract(string filename, string destination)
         {
-            if (filename.EndsWith(".tar.gz") || filename.EndsWith(".tgz"))
+            Directory.CreateDirectory(destination);
+
+            if (filename.EndsWith(".tar.gz", StringComparison.OrdinalIgnoreCase)
+                || filename.EndsWith(".tgz", StringComparison.OrdinalIgnoreCase))
             {
                 return TarballExtractor.Extract(filename, destination, gzipped: true);
+            }
+            else if (filename.EndsWith(".nupkg", StringComparison.OrdinalIgnoreCase)
+                || filename.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+            {
+                return ZipExtractor.Extract(filename, destination);
             }
             else
             {

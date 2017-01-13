@@ -28,7 +28,7 @@ namespace DotNet.Assets
 
         public override bool Uninstall()
         {
-            var path = Path.Combine(_env.Root, "sdk", _version);
+            var path = Path.Combine(_env.SdkRoot, _version);
             return UninstallFolder(path);
         }
 

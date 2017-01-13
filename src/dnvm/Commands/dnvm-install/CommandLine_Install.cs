@@ -12,6 +12,8 @@ namespace DotNet.Commands
 
             c.Command("sdk", "Install a .NET Core SDK", InstallSdkCommand);
 
+            c.Command("tool", "Install a .NET Core CLI tool", InstallToolCommand);
+
             c.OnExecute(() =>
             {
                 this.Command = new InstallFromFileCommand();
@@ -31,9 +33,9 @@ Additional Information:
         private void InstallFxCommand(CommandLineApplication fx)
         {
             var argVersion = fx.Argument("version",
-                    $"Version of the shared framework to install. Defaults to '{SharedFxAsset.DefaultVersion}'");
+                    $"Version of the shared framework to install. Defaults to '{SharedFxAsset.DefaultVersion}'.");
 
-            var optSave = fx.Option("-s|--save", $"Save to the 'fx' version of the '{FileConstants.Config}' config file", CommandOptionType.NoValue);
+            var optSave = fx.Option("-s|--save", $"Save to the 'fx' version of the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
 
             fx.OnExecute(() =>
             {
@@ -54,8 +56,8 @@ Additional Information:
 
         private void InstallSdkCommand(CommandLineApplication sdk)
         {
-            var argVersion = sdk.Argument("version", $"Version of the .NET Core SDK to install. Defaults to '{SdkAsset.DefaultVersion}'");
-            var optSave = sdk.Option("-s|--save", $"Save as the value of 'sdk' in the '{FileConstants.Config}' config file", CommandOptionType.NoValue);
+            var argVersion = sdk.Argument("version", $"Version of the .NET Core SDK to install. Defaults to '{SdkAsset.DefaultVersion}'.");
+            var optSave = sdk.Option("-s|--save", $"Save as the value of 'sdk' in the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
 
             sdk.OnExecute(() =>
             {
@@ -70,6 +72,21 @@ Additional Information:
                 }
 
                 this.Command = install;
+            });
+        }
+
+        private void InstallToolCommand(CommandLineApplication tool)
+        {
+            var argName = tool.Argument("name", $"Name of the tool. Required.");
+            var argVersion = tool.Argument("version", $"The version of the tool. Defaults to '{ToolAsset.DefaultVersion}'.");
+
+            // TODO save
+
+            tool.OnExecute(() =>
+            {
+                this.Command = new InstallToolCommand(
+                        argName.IfNotNullOrEmpty(),
+                        argVersion.Value ?? ToolAsset.DefaultVersion);
             });
         }
     }

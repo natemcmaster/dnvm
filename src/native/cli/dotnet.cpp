@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "colors.h"
 #include "corehost_error_codes.h"
+#include <stdlib.h>
 
 static pal::string_t s_own_path;
 static pal::string_t s_default_env_name = _X("default");
@@ -185,6 +186,11 @@ int main(const int argc, pal::char_t *argv[])
         {
             trace::verbose(_X("Using default dotnet dnvironment"));
         }
+
+        pal::string_t local_bin = get_directory(muxer);
+        append_path(&local_bin, _X("bin"));
+        pal::string_t pathext = local_bin + PATH_SEPARATOR + ::getenv("PATH");
+        ::setenv("PATH", pathext.c_str(), 1);
 
         int rc = pal::exec_process(muxer, argc, argv);
         trace::verbose(_X("Sub-process returned %d"), rc);

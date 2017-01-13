@@ -35,7 +35,7 @@ namespace DotNet.Assets
 
         public override bool Uninstall()
         {
-            var path = Path.Combine(_env.Root, "shared", AssetId, _version);
+            var path = Path.Combine(_env.FxRoot, AssetId, _version);
             return UninstallFolder(path);
         }
 
@@ -46,7 +46,7 @@ namespace DotNet.Assets
             Reporter.Output($"Installing '{assetFullName}'");
             Reporter.Verbose($"Begin installation of {assetFullName} to '{_env.Root}'");
 
-            var dest = Path.Combine(_env.Root, "shared", AssetId, _version);
+            var dest = Path.Combine(_env.FxRoot, AssetId, _version);
 
             if (_env.Frameworks.Any(f => f.Name.Equals(AssetId, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
             {

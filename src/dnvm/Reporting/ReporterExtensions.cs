@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DotNet.Commands;
 
 namespace DotNet.Reporting
@@ -12,6 +13,12 @@ namespace DotNet.Reporting
         public static IndentReportingScope Indent(this CommandContext context)
         {
             return new IndentReportingScope(context, spaces: 2);
+        }
+
+        [Conditional("DEBUG")]
+        public static void Debug(this IReporter reporter, string message)
+        {
+            reporter.Verbose(message);
         }
     }
 }

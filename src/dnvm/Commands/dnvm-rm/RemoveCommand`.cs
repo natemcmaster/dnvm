@@ -17,7 +17,7 @@ namespace DotNet.Commands
 
         protected override void Execute(CommandContext context)
         {
-            var asset = context.Services.GetRequiredService<IAssetFactory>().Create<TAsset>(_version);
+            var asset = CreateAsset(context);
 
             if (!_force)
             {
@@ -34,5 +34,8 @@ namespace DotNet.Commands
                 ? Result.Okay
                 : Result.Error;
         }
+
+        protected virtual TAsset CreateAsset(CommandContext context)
+            => context.Services.GetRequiredService<IAssetFactory>().Create<TAsset>(_version);
     }
 }

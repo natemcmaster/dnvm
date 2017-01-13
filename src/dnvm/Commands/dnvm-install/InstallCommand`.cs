@@ -17,7 +17,7 @@ namespace DotNet.Commands
 
         public async Task ExecuteAsync(CommandContext context)
         {
-            var asset = context.Services.GetRequiredService<IAssetFactory>().Create<TAsset>(_version);
+            var asset = CreateAsset(context);
             Directory.CreateDirectory(context.Environment.Root);
 
             if (!await asset.InstallAsync(context.CancellationToken))
@@ -27,6 +27,11 @@ namespace DotNet.Commands
             }
 
             context.Result = Result.Okay;
+        }
+
+        protected virtual TAsset CreateAsset(CommandContext context)
+        {
+            return context.Services.GetRequiredService<IAssetFactory>().Create<TAsset>(_version);
         }
     }
 }

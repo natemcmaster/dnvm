@@ -6,33 +6,41 @@ namespace DotNet.Files
 {
     public class DotNetEnv
     {
+        private readonly DirectoryInfo _binRoot;
         private readonly DirectoryInfo _sdkRoot;
         private readonly DirectoryInfo _root;
-        private readonly DirectoryInfo _sharedRoot;
+        private readonly DirectoryInfo _fxRoot;
+        private readonly DirectoryInfo _toolsRoot;
 
         public DotNetEnv(string name, DirectoryInfo root)
         {
             Name = Ensure.NotNullOrEmpty(name, nameof(name));
             _root = Ensure.NotNull(root, nameof(root));
 
+            _binRoot = new DirectoryInfo(Path.Combine(_root.FullName, "bin"));
             _sdkRoot = new DirectoryInfo(Path.Combine(_root.FullName, "sdk"));
-            _sharedRoot = new DirectoryInfo(Path.Combine(_root.FullName, "shared"));
+            _fxRoot = new DirectoryInfo(Path.Combine(_root.FullName, "shared"));
+            _toolsRoot = new DirectoryInfo(Path.Combine(_root.FullName, "tools"));
         }
 
         // can have mixed case, but should always be .ToLower()-ed when checking the disk
         public string Name { get; }
         public string Root => _root.FullName;
+        public string BinRoot => _binRoot.FullName;
+        public string FxRoot => _fxRoot.FullName;
+        public string SdkRoot => _sdkRoot.FullName;
+        public string ToolsRoot => _toolsRoot.FullName;
 
         public IEnumerable<Framework> Frameworks
         {
             get
             {
-                _sharedRoot.Refresh();
-                if (!_sharedRoot.Exists)
+                _fxRoot.Refresh();
+                if (!_fxRoot.Exists)
                 {
                     return Enumerable.Empty<Framework>();
                 }
-                return _sharedRoot.GetDirectories().SelectMany(d => d.GetDirectories().Select(ds => new NetCoreFramework(ds)));
+                return _fxRoot.GetDirectories().SelectMany(d => d.GetDirectories().Select(ds => new NetCoreFramework(ds)));
             }
         }
 
