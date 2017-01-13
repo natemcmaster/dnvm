@@ -11,7 +11,7 @@ namespace DotNet.Reporting
 
         public static IndentReportingScope Indent(this CommandContext context)
         {
-            return new IndentReportingScope(context, spaces: 4);
+            return new IndentReportingScope(context, spaces: 2);
         }
     }
 }

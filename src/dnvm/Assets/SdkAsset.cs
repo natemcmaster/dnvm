@@ -35,7 +35,7 @@ namespace DotNet.Assets
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
             Reporter.Output($"Installing .NET Core CLI {_version}");
-            if (_env.Clis.Any(c => c.Version == _version))
+            if (_env.Sdks.Any(c => c.Version == _version))
             {
                 Reporter.Verbose($"Skipping installation of CLI {_version}. Already installed.");
                 return true;

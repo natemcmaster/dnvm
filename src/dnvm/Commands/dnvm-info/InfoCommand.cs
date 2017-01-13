@@ -5,24 +5,26 @@ namespace DotNet.Commands
 {
     class InfoCommand : SyncCommand
     {
+        private const string None = "<none>";
+
         protected override void Execute(CommandContext context)
         {
             context.Reporter.Output($"Name     : {context.Environment.Name}");
             context.Reporter.Output($"Location : {context.Environment.Root}");
-            context.Reporter.Output($"Config   : {context.ConfigFile?.FilePath ?? "<none>"}");
+            context.Reporter.Output($"Config   : {context.ConfigFile?.FilePath ?? None}");
             context.Reporter.Output();
-            context.Reporter.Output(".NET Core CLI");
+            context.Reporter.Output(".NET Core SDK");
             context.Reporter.Output("-------------");
 
-            if (!context.Environment.Clis.Any())
+            if (!context.Environment.Sdks.Any())
             {
                 using (context.Indent())
                 {
-                    context.Reporter.Output("<none>");
+                    context.Reporter.Output(None);
                 }
             }
 
-            foreach (var sdk in context.Environment.Clis)
+            foreach (var sdk in context.Environment.Sdks)
             {
                 using (context.Indent())
                 {
@@ -39,7 +41,7 @@ namespace DotNet.Commands
             {
                 using (context.Indent())
                 {
-                    context.Reporter.Output("<none>");
+                    context.Reporter.Output(None);
                 }
             }
 

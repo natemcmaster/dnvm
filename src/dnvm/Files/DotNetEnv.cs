@@ -36,7 +36,7 @@ namespace DotNet.Files
             }
         }
 
-        public IEnumerable<Cli> Clis
+        public IEnumerable<Cli> Sdks
         {
             get
             {

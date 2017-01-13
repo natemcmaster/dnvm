@@ -1,4 +1,6 @@
+using System.Linq;
 using DotNet.Assets;
+using DotNet.Reporting;
 
 namespace DotNet.Commands
 {
@@ -6,14 +8,26 @@ namespace DotNet.Commands
     {
         protected override void Execute(CommandContext context)
         {
-            var channel = new StableAssetChannel();
-            var stable = channel.GetLatestVersion(SharedFxAsset.AssetId);
-            foreach (var version in channel.GetAvailableVersions(SharedFxAsset.AssetId))
+            context.Reporter.Output("*=installed");
+            context.Reporter.Output();
+
+            using (context.Indent())
             {
-                var line = version == stable
-                  ? $"{version} ({SdkAsset.DefaultVersion})"
-                  : version;
-                context.Reporter.Output(line);
+                var channel = new StableAssetChannel();
+                var stable = channel.GetLatestVersion(SharedFxAsset.AssetId);
+                foreach (var version in channel.GetAvailableVersions(SharedFxAsset.AssetId))
+                {
+                    var line = version == stable
+                    ? $"{version} ({SdkAsset.DefaultVersion})"
+                    : version;
+                    var installed = context.Environment
+                        .Frameworks
+                        .Any(f => f.Name == SharedFxAsset.AssetId && f.Version.Equals(version))
+                        ? "*"
+                        : " ";
+
+                    context.Reporter.Output($"{installed} {line}");
+                }
             }
 
             context.Result = Result.Okay;

@@ -1,5 +1,7 @@
 
+using System.Linq;
 using DotNet.Assets;
+using DotNet.Reporting;
 
 namespace DotNet.Commands
 {
@@ -7,14 +9,26 @@ namespace DotNet.Commands
     {
         protected override void Execute(CommandContext context)
         {
-            var channel = new StableAssetChannel();
-            var stable = channel.GetLatestVersion(SdkAsset.AssetId);
-            foreach (var version in channel.GetAvailableVersions(SdkAsset.AssetId))
+            context.Reporter.Output("*=installed");
+            context.Reporter.Output();
+
+            using (context.Indent())
             {
-                var line = version == stable
+                var channel = new StableAssetChannel();
+                var stable = channel.GetLatestVersion(SdkAsset.AssetId);
+                foreach (var version in channel.GetAvailableVersions(SdkAsset.AssetId))
+                {
+                    var line = version == stable
                     ? $"{version} ({SdkAsset.DefaultVersion})"
                     : version;
-                context.Reporter.Output(line);
+                    var installed = context.Environment
+                        .Sdks
+                        .Any(s => s.Version.Equals(version))
+                        ? "*"
+                        : " ";
+
+                    context.Reporter.Output($"{installed} {line}");
+                }
             }
 
             context.Result = Result.Okay;

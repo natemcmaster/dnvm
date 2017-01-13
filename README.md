@@ -2,7 +2,7 @@
 
 dotnet environment manager
 
-### Getting started
+## Getting started
 
 ```sh
 brew install dnvm
@@ -13,12 +13,13 @@ dotnet restore
 dotnet run
 ```
 
-### Usage
+## Usage
 
 Install .NET Core SDK
 
 ```sh
-# installs most recent, stable .NET Core SDK
+# install the most recent, stable .NET Core SDK.
+# these commands are equivalent
 dnvm install sdk
 dnvm install sdk stable
 
@@ -29,19 +30,20 @@ dnvm install sdk 1.0.0-preview4-004233
 Install a .NET Core runtime
 
 ```sh
-# installs to installing most recent stable
+# install the most recent stable .NET Core runtime
+# these commands are equivalent
 dnvm install fx
 dnvm install fx stable
 
-# install a specific version of .NET Core
+# install a specific version of .NET Core runtime
 dnvm install fx 1.1.0
 ```
 
-List available versions
+List versions that could be installed
 ```sh
-# list versions of .NET Core runtime
+# list all known versions of .NET Core runtime
 dnvm list fx
-# list versions of .NET Core SDK
+# list all known versions of .NET Core SDK
 dnvm list sdk
 ```
 
@@ -50,7 +52,15 @@ Show what is installed
 dnvm info
 ```
 
-### The dnvm config file (optional)
+Remove stuff
+```sh
+# uninstalls the .NET Core SDK
+dnvm rm sdk 1.0.0-preview4-004233
+# uninstalls the .NET Core runtime
+dnvm rm fx 1.0.0
+```
+
+## The dnvm config file (optional)
 
 A file named `.dnvm` can be placed in a project to configure
 the versions of .NET Core runtimes, SDKs, and tools that should be installed.
@@ -60,8 +70,9 @@ Example:
 ```yaml
 # required: specify an environment name
 env: default
-# optional: list for
+# optional: list the .NET Core SDK to install
 sdk: 1.0.0-preview4-004233
+# optional: list versions of .NET Core to install
 fx:
   - 1.0.1
   - 1.1.0
@@ -70,4 +81,20 @@ fx:
 It will define the 'environment' for all `dotnet` and `dnvm` commands
 executed in the directory containing the file, or any subdirectories.
 
-Executing `dnvm install` will install all items in the effective `.dnvm` file.
+Executing `dnvm install` will install all items in the effective `.dnv`m` file.
+
+### Creating the file
+
+```sh
+# creates a .dnvm file in the current folder
+dnvm init
+```
+
+### Modifying the file
+```sh
+# installs .NET Core SDK and saves the version to the .dnvm file
+dnvm install sdk --save
+
+# installs .NET Core runtime and saves the version to the .dnvm file
+dnvm install fx 1.1.0 --save
+```
