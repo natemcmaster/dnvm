@@ -1,0 +1,64 @@
+<Project DefaultTargets="Publish">
+  <Import Project="version.props" />
+  <Import Project="build\git.targets" />
+
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <ArtifactsDir>$(MSBuildThisFileDirectory)artifacts\</ArtifactsDir>
+    <PublishDir>$(ArtifactsDir)$(Configuration)\</PublishDir>
+    <PackageFileExtension>tar.gz</PackageFileExtension>
+    <Version>$(VersionPrefix)</Version>
+    <Version Condition="'$(VersionSuffix)'!=''">$(Version)-$(VersionSuffix)</Version>
+    <RuntimeOs>osx-x64</RuntimeOs>
+    <PackageFile>$(ArtifactsDir)dnvm.$(RuntimeOs).$(Version).$(PackageFileExtension)</PackageFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SourceProjects Include="src\*\*.*proj" />
+    <TestProjects Include="test\*\*.Tests.csproj" />
+    <TestProjects Include="test\*\*.FunctionalTests.csproj" />
+    <Projects Include="@(SourceProjects);@(TestProjects)" />
+    <Content Include="docs\releasenotes.md" PackagePath="%(FileName)%(Extension)" />
+    <Content Include="packaging\README.md" PackagePath="%(FileName)%(Extension)" />
+  </ItemGroup>
+
+  <Target Name="Build" DependsOnTargets="ResolveCommitHash">
+    <MSBuild Targets="Build"
+             Projects="@(Projects)"
+             Properties="Configuration=$(Configuration)" />
+  </Target>
+
+  <Target Name="VSTest">
+    <MSBuild Projects="@(TestProjects)"
+             Targets="VSTest"
+             Properties="Configuration=$(Configuration)" />
+  </Target>
+
+  <Target Name="Publish" DependsOnTargets="CleanArtifacts;ResolveCommitHash">
+    <MakeDir Directories="$(ArtifactsDir);$(PublishDir);" />
+    <MSBuild Targets="Publish"
+             Projects="@(SourceProjects)"
+              Properties="Configuration=$(Configuration);PublishDir=$(PublishDir)bin\" />
+    <WriteLinesToFile File="$(PublishDir)version" Lines="$(CommitHash);$(Version)" />
+
+    <Copy SourceFiles="%(Content.FullPath)" DestinationFiles="$(PublishDir)%(Content.PackagePath)" />
+
+    <Exec Command="tar -zcf &quot;$(PackageFile)&quot; ."
+          WorkingDirectory="$(PublishDir)"/>
+    <Exec Command="du -hd 1 &quot;$(PublishDir)&quot; | awk '{print &quot;Uncompressed&quot;, $1}'" />
+    <Exec Command="ls -S -lh | grep dnvm.* | awk '{print &quot;Compressed&quot;, $9, $5}'"
+          WorkingDirectory="$(ArtifactsDir)" />
+    <Message Importance="high" Text="Created $(PackageFile)" />
+
+  </Target>
+
+  <Target Name="CleanArtifacts">
+    <RemoveDir Directories="$(ArtifactsDir)" />
+  </Target>
+
+  <Target Name="Clean"
+          DependsOnTargets="CleanArtifacts">
+    <MSBuild Targets="Clean"
+             Projects="@(Projects)" />
+  </Target>
+</Project>

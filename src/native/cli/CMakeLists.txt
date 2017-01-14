@@ -16,4 +16,5 @@ else()
 endif()
 
 add_executable(dotnet ${SOURCES})
-install(TARGETS dotnet DESTINATION bin)
+install(TARGETS dotnet
+        DESTINATION .)

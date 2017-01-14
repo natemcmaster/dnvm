@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <Import Project="..\..\version.props" />
+  <Import Project="..\..\build\common.props" />
+
   <PropertyGroup>
     <RootNamespace>DotNet</RootNamespace>
     <AssemblyName>dnvm</AssemblyName>

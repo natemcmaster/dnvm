@@ -1,0 +1,6 @@
+<Project>
+  <Import Project="..\version.props" />
+  <PropertyGroup>
+    <CustomAfterMicrosoftCommonTargets>$(MSBuildThisFileDirectory)common.targets</CustomAfterMicrosoftCommonTargets>
+  </PropertyGroup>
+</Project>

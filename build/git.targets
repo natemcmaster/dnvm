@@ -1,0 +1,8 @@
+<Project>
+  <Target Name="ResolveCommitHash">
+    <!-- TODO make an actual task that does this-->
+    <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true" EchoOff="true" Condition="'$(CommitHash)'==''">
+      <Output TaskParameter="ConsoleOutput" PropertyName="CommitHash" />
+    </Exec>
+  </Target>
+</Project>

@@ -1,0 +1,32 @@
+<Project ToolsVersion="15.0">
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
+    <IntermediateBasePath Condition="'$(IntermediateBasePath)'==''">$(MSBuildThisFileDirectory)obj\$(Configuration)\</IntermediateBasePath>
+    <TargetDir Condition="'$(TargetDir)'==''">$(MSBuildThisFileDirectory)bin\$(Configuration)\</TargetDir>
+    <PublishDir Condition="'$(PublishDir)'==''">$(TargetDir)publish\</PublishDir>
+  </PropertyGroup>
+
+  <Target Name="Build">
+    <MakeDir Directories="$(IntermediateBasePath);$(TargetDir);"/>
+
+    <Exec Command="cmake &quot;$(MSBuildThisFileDirectory)&quot; &quot;-DCMAKE_INSTALL_PREFIX=$(TargetDir)&quot;"
+          WorkingDirectory="$(IntermediateBasePath)"/>
+    <Exec Command="make install"
+          WorkingDirectory="$(IntermediateBasePath)"/>
+
+    <ItemGroup>
+      <TargetOutputs Include="$(TargetDir)\**\*" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="Publish" DependsOnTargets="Build">
+    <MakeDir Directories="$(PublishDir)"/>
+    <Copy SourceFiles="@(TargetOutputs)" DestinationFolder="$(PublishDir)" />
+  </Target>
+
+  <Target Name="Clean">
+    <RemoveDir Directories="$(IntermediateBasePath);$(TargetDir);$(PublishDir);" />
+  </Target>
+
+  <Target Name="Rebuild" DependsOnTargets="Clean;Build" />
+</Project>
