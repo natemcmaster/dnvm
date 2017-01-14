@@ -5,12 +5,13 @@
   <PropertyGroup>
     <Configuration>Debug</Configuration>
     <ArtifactsDir>$(MSBuildThisFileDirectory)artifacts\</ArtifactsDir>
+    <TargetDir>$(ArtifactsDir)build\</TargetDir>
     <PublishDir>$(ArtifactsDir)$(Configuration)\</PublishDir>
     <PackageFileExtension>tar.gz</PackageFileExtension>
     <Version>$(VersionPrefix)</Version>
     <Version Condition="'$(VersionSuffix)'!=''">$(Version)-$(VersionSuffix)</Version>
     <RuntimeOs>osx-x64</RuntimeOs>
-    <PackageFile>$(ArtifactsDir)dnvm.$(RuntimeOs).$(Version).$(PackageFileExtension)</PackageFile>
+    <PackageFile>$(TargetDir)dnvm.$(RuntimeOs).$(Version).$(PackageFileExtension)</PackageFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +36,7 @@
   </Target>
 
   <Target Name="Publish" DependsOnTargets="CleanArtifacts;ResolveCommitHash">
-    <MakeDir Directories="$(ArtifactsDir);$(PublishDir);" />
+    <MakeDir Directories="$(ArtifactsDir);$(PublishDir);$(TargetDir);" />
     <MSBuild Targets="Publish"
              Projects="@(SourceProjects)"
               Properties="Configuration=$(Configuration);PublishDir=$(PublishDir)bin\" />
@@ -45,15 +46,15 @@
 
     <Exec Command="tar -zcf &quot;$(PackageFile)&quot; ."
           WorkingDirectory="$(PublishDir)"/>
-    <Exec Command="du -hd 1 &quot;$(PublishDir)&quot; | awk '{print &quot;Uncompressed&quot;, $1}'" />
+    <Exec Command="du -hd 0 &quot;$(PublishDir)&quot; | awk '{print &quot;Uncompressed&quot;, $1}'" />
     <Exec Command="ls -S -lh | grep dnvm.* | awk '{print &quot;Compressed&quot;, $9, $5}'"
-          WorkingDirectory="$(ArtifactsDir)" />
+          WorkingDirectory="$(TargetDir)" />
     <Message Importance="high" Text="Created $(PackageFile)" />
 
   </Target>
 
   <Target Name="CleanArtifacts">
-    <RemoveDir Directories="$(ArtifactsDir)" />
+    <RemoveDir Directories="$(PublishDir);$(TargetDir);" />
   </Target>
 
   <Target Name="Clean"
