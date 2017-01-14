@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 
 namespace DotNet.Files
 {
@@ -23,7 +24,7 @@ namespace DotNet.Files
                 writer.Write("fx:");
                 if (config.SharedFx.Count == 1)
                 {
-                    writer.Write($" {config.SharedFx[0]}\n");
+                    writer.Write($" {config.SharedFx.First()}\n");
                 }
                 else
                 {
@@ -32,6 +33,15 @@ namespace DotNet.Files
                     {
                         writer.Write($"  - {fx}\n");
                     }
+                }
+            }
+
+            if (config.Tools.Count > 0)
+            {
+                writer.Write("tools:\n");
+                foreach (var tool in config.Tools)
+                {
+                    writer.Write($"  {tool.Key}: {tool.Value}\n");
                 }
             }
         }

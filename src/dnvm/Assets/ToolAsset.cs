@@ -12,7 +12,7 @@ namespace DotNet.Assets
 {
     public class ToolAsset : AssetBase
     {
-        public const string DefaultVersion = "latest";
+        public const string DefaultVersion = "stable";
         private readonly IAssetChannel _channel = new ToolAssetChannel();
 
         private readonly string _assetId;

@@ -15,14 +15,22 @@ env: myenvname
 fx:
  - 1.0.1
  - 1.2.3
-sdk: 1.0.0-preview3-003131 ");
+ - alpha
+sdk: 1.0.0-preview3-003131
+tools:
+  ef: 1.0.0
+  watch: stable ");
 
             file.Should().NotBeNull();
             file.Environment.Should().Equals("myenvname");
             file.SharedFx.Should()
-                .HaveCount(2)
-                .And.Contain(new[] { "1.0.1", "1.2.3" });
+                .HaveCount(3)
+                .And.Contain(new[] { "1.0.1", "1.2.3", "alpha" });
             file.Sdk.Should().Equals("1.0.0-preview3-003131");
+            file.Tools.Should()
+                .HaveCount(2)
+                .And.ContainKey("ef").WhichValue.Should().Be("1.0.0");
+            file.Tools.Should().ContainKey("watch").WhichValue.Should().Be("stable");
         }
 
         [Fact]

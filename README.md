@@ -94,7 +94,7 @@ fx:
   - 1.1.0
   - stable
 # optional: list of .NET Core CLI tools to install
-tool:
+tools:
   ef: 1.0.0-alpha
   watch: stable
 ```

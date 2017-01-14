@@ -28,6 +28,11 @@ namespace DotNet.Commands
                     commands.Add(new InstallCommand<SharedFxAsset>(fx));
                 }
 
+                foreach (var tool in context.ConfigFile.Tools)
+                {
+                    commands.Add(new InstallToolCommand(tool.Key, tool.Value));
+                }
+
                 if (commands.Count == 0)
                 {
                     context.Reporter.Warn("Nothing will be installed because the config file does not list assets.");

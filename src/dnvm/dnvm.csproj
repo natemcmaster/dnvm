@@ -1,9 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <Import Project="..\..\version.props" />
-  <PropertyGroup Label="Configuration">
-    <RootNamespace>DotNet</RootNamespace>
-  </PropertyGroup>
   <PropertyGroup>
+    <RootNamespace>DotNet</RootNamespace>
     <AssemblyName>dnvm</AssemblyName>
     <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
@@ -11,7 +9,6 @@
 
     <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers>
     <RuntimeIdentifier>osx.10.10-x64</RuntimeIdentifier>
-    <!--<MacOS Condition="'$(RuntimeIdentifier)' != '' AND $(RuntimeIdentifier.StartsWith('osx'))">true</MacOS>-->
     <MacOS>true</MacOS>
 
     <DefineConstants Condition="$(MacOS)">$(DefineConstants);__MACOS__</DefineConstants>

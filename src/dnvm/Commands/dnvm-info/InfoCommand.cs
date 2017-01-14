@@ -53,6 +53,27 @@ namespace DotNet.Commands
                 }
             }
 
+            context.Reporter.Output();
+
+            context.Reporter.Output("Command-line tools");
+            context.Reporter.Output("------------------");
+
+            if (!context.Environment.Tools.Any())
+            {
+                using (context.Indent())
+                {
+                    context.Reporter.Output(None);
+                }
+            }
+
+            foreach (var tool in context.Environment.Tools)
+            {
+                using (context.Indent())
+                {
+                    context.Reporter.Output($"{tool.Name}@{tool.Version}");
+                }
+            }
+
             context.Result = Result.Okay;
         }
     }

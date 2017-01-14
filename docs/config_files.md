@@ -26,8 +26,8 @@ fx:
   - version1
   - version2
 
-# tool = .NET Core tools
-tool:
+# tools = .NET Core CLI tools
+tools:
   name: version
 
 ```
@@ -40,7 +40,7 @@ sdk: 1.0.0-preview4-004233
 fx:
   - 1.0.1
   - 1.1.0
-tool:
+tools:
   watch: 1.0.0
   ef: 1.1.0 # can be a specific version
   user-secrets: stable # can reference a version alias, like 'stable'

@@ -41,7 +41,7 @@ namespace DotNet.Test
         {
             Read(@"---
 env: value
-fx: 
+fx:
   sub: item")
                 .ShouldThrow<FormatException>()
                 .WithMessage(ConfigFileErrors.FxMustBeListOrScalar);
@@ -52,7 +52,7 @@ fx:
         {
             Read(@"---
 env: value
-fx: 
+fx:
    - sub: item")
                 .ShouldThrow<FormatException>()
                 .WithMessage(ConfigFileErrors.FxSequenceItemIsNotScalar);
@@ -67,6 +67,28 @@ env: value
 env: value2")
                 .ShouldThrow<FormatException>()
                 .WithMessage(ConfigFileErrors.MultipleDocuments);
+        }
+
+        [Fact]
+        public void ToolIsSequence()
+        {
+            Read(@"tools:
+- name: watch
+  version: 1.0.0
+- watch: 1.0.0")
+                .ShouldThrow<FormatException>()
+                .WithMessage(ConfigFileErrors.ToolsMustBeMap);
+        }
+
+         [Fact]
+        public void ToolItemIsNotScalar()
+        {
+            Read(@"
+tools:
+  watch:
+    version: 1.0.0")
+                .ShouldThrow<FormatException>()
+                .WithMessage(ConfigFileErrors.ToolItemsMustBeScalar);
         }
 
         private Action Read(string doc)

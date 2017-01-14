@@ -13,6 +13,8 @@ namespace DotNet.Files
         public const string FxMustBeListOrScalar = "The 'fx' section must be a single value or a sequence of scalar values.";
         public const string MissingEnvKey = "Missing the required 'env' key.";
         public const string MultipleDocuments = "The config file should not contain multiple YAML document sections.";
+        public const string ToolsMustBeMap = "The 'tools' section must only contain key/value pairs for 'tool_name': 'tool_version'";
+        public const string ToolItemsMustBeScalar = "Items in the 'tools' section must only contain key/value pairs for 'tool_name': 'tool_version'";
     }
 
 
@@ -97,6 +99,27 @@ namespace DotNet.Files
                         else
                         {
                             throw new FormatException(ConfigFileErrors.SdkIsNotScalar);
+                        }
+                    }
+                    break;
+                case "tools":
+                    {
+                        if (node is YamlMappingNode tools)
+                        {
+                            foreach (var tool in tools)
+                            {
+                                var name = tool.Key as YamlScalarNode;
+                                if (!(tool.Value is YamlScalarNode version))
+                                {
+                                    throw new FormatException(ConfigFileErrors.ToolItemsMustBeScalar);
+                                }
+
+                                configFile.Tools[name.Value] = version.Value;
+                            }
+                        }
+                        else
+                        {
+                            throw new FormatException(ConfigFileErrors.ToolsMustBeMap);
                         }
                     }
                     break;

@@ -40,20 +40,37 @@ namespace DotNet.Files
                 {
                     return Enumerable.Empty<Framework>();
                 }
-                return _fxRoot.GetDirectories().SelectMany(d => d.GetDirectories().Select(ds => new NetCoreFramework(ds)));
+                return from fx in _fxRoot.GetDirectories()
+                       from version in fx.GetDirectories()
+                       select new NetCoreFramework(version);
             }
         }
 
-        public IEnumerable<Cli> Sdks
+        public IEnumerable<NetCoreSdk> Sdks
         {
             get
             {
                 _sdkRoot.Refresh();
                 if (!_sdkRoot.Exists)
                 {
-                    return Enumerable.Empty<Cli>();
+                    return Enumerable.Empty<NetCoreSdk>();
                 }
-                return _sdkRoot.GetDirectories().Select(d => new Cli(d));
+                return _sdkRoot.GetDirectories().Select(d => new NetCoreSdk(d));
+            }
+        }
+
+        public IEnumerable<NetCoreTool> Tools
+        {
+            get
+            {
+                _toolsRoot.Refresh();
+                if (!_toolsRoot.Exists)
+                {
+                    return Enumerable.Empty<NetCoreTool>();
+                }
+                return from tools in _toolsRoot.GetDirectories()
+                       from versions in tools.GetDirectories()
+                       select new NetCoreTool(versions);
             }
         }
     }

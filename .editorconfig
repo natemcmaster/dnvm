@@ -23,3 +23,6 @@ indent_size = 4
 
 [*.{sh}]
 indent_size = 4
+
+[.dnvm]
+indent_size = 2

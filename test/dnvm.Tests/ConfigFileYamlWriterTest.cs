@@ -15,10 +15,14 @@ namespace DotNet.Test
             {
                 Sdk = "1.0.0-preview4",
                 SharedFx = { "1.0.1", "1.1.0" },
-                Environment = "default"
+                Environment = "default",
+                Tools =
+                {
+                    ["prop"] = "1.1.0"
+                }
             })
            .Should()
-           .Be("env: default\nsdk: 1.0.0-preview4\nfx:\n  - 1.0.1\n  - 1.1.0\n");
+           .Be("env: default\nsdk: 1.0.0-preview4\nfx:\n  - 1.0.1\n  - 1.1.0\ntools:\n  prop: 1.1.0\n");
         }
 
         [Fact]

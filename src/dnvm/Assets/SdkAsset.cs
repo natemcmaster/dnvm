@@ -34,15 +34,15 @@ namespace DotNet.Assets
 
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-            Reporter.Output($"Installing .NET Core CLI {_version}");
+            Reporter.Output($"Installing .NET Core SDK {_version}");
             if (_env.Sdks.Any(c => c.Version == _version))
             {
-                Reporter.Verbose($"Skipping installation of CLI {_version}. Already installed.");
+                Reporter.Verbose($"Skipping installation of SDK {_version}. Already installed.");
                 return true;
             }
 
             var url = Channel.GetDownloadUrl(AssetId, _version);
-            Reporter.Output($"Downloading .NET Core CLI {_version}");
+            Reporter.Output($"Downloading .NET Core SDK {_version}");
             if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
             {
                 Reporter.Error($"Failed to install CLI {_version}");

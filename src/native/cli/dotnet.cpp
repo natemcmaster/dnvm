@@ -187,6 +187,8 @@ int main(const int argc, pal::char_t *argv[])
             trace::verbose(_X("Using default dotnet dnvironment"));
         }
 
+        // extend PATH to include the environment's bin folder
+        // to allow the .NET Core SDK to find and launch tools
         pal::string_t local_bin = get_directory(muxer);
         append_path(&local_bin, _X("bin"));
         pal::string_t pathext = local_bin + PATH_SEPARATOR + ::getenv("PATH");

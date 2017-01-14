@@ -2,10 +2,10 @@ using System.IO;
 
 namespace DotNet.Files
 {
-    public class Cli
+    public class NetCoreSdk
     {
         private readonly DirectoryInfo _base;
-        internal Cli(DirectoryInfo @base)
+        internal NetCoreSdk(DirectoryInfo @base)
         {
             _base = @base;
         }

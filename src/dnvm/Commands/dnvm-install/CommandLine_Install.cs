@@ -35,7 +35,7 @@ Additional Information:
             var argVersion = fx.Argument("version",
                     $"Version of the shared framework to install. Defaults to '{SharedFxAsset.DefaultVersion}'.");
 
-            var optSave = fx.Option("-s|--save", $"Save to the 'fx' version of the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
+            var optSave = fx.Option("--save", $"Save to the 'fx' version of the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
 
             fx.OnExecute(() =>
             {
@@ -47,7 +47,7 @@ Additional Information:
                     install = CommonCommands.Sequence(
                         CommonCommands.EnsureConfigFileExists,
                         install,
-                        new EditConfigCommand("fx", version, EditConfigCommand.EditAction.Append));
+                        new EditConfigCommand(c => c.SharedFx.Add(version)));
                 }
 
                 this.Command = install;
@@ -57,7 +57,7 @@ Additional Information:
         private void InstallSdkCommand(CommandLineApplication sdk)
         {
             var argVersion = sdk.Argument("version", $"Version of the .NET Core SDK to install. Defaults to '{SdkAsset.DefaultVersion}'.");
-            var optSave = sdk.Option("-s|--save", $"Save as the value of 'sdk' in the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
+            var optSave = sdk.Option("--save", $"Save as the value of 'sdk' in the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
 
             sdk.OnExecute(() =>
             {
@@ -68,7 +68,7 @@ Additional Information:
                     install = CommonCommands.Sequence(
                         CommonCommands.EnsureConfigFileExists,
                         install,
-                        new EditConfigCommand("sdk", version, EditConfigCommand.EditAction.Set));
+                        new EditConfigCommand(c => c.Sdk = version));
                 }
 
                 this.Command = install;
@@ -79,14 +79,24 @@ Additional Information:
         {
             var argName = tool.Argument("name", $"Name of the tool. Required.");
             var argVersion = tool.Argument("version", $"The version of the tool. Defaults to '{ToolAsset.DefaultVersion}'.");
-
-            // TODO save
+            var optSave = tool.Option(
+                "--save", $"Save the tool to the 'tools' in the '{FileConstants.Config}' config file.",
+                CommandOptionType.NoValue);
 
             tool.OnExecute(() =>
             {
-                this.Command = new InstallToolCommand(
-                        argName.IfNotNullOrEmpty(),
-                        argVersion.Value ?? ToolAsset.DefaultVersion);
+                var name = argName.IfNotNullOrEmpty();
+                var version = argVersion.Value ?? ToolAsset.DefaultVersion;
+                ICommand install = new InstallToolCommand(name, version);
+                if (optSave.HasValue())
+                {
+                    install = CommonCommands.Sequence(
+                        CommonCommands.EnsureConfigFileExists,
+                        install,
+                        new EditConfigCommand(c => c.Tools[name.ToLowerInvariant()] = version));
+                }
+
+                this.Command = install;
             });
         }
     }

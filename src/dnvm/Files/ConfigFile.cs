@@ -10,6 +10,8 @@ namespace DotNet.Files
 
         public string Sdk { get; set; }
 
-        public IList<string> SharedFx { get; } = new List<string>();
+        public IDictionary<string, string> Tools { get; } = new Dictionary<string, string>();
+
+        public ISet<string> SharedFx { get; } = new HashSet<string>();
     }
 }
