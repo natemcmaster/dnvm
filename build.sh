@@ -15,6 +15,6 @@ fi
 mkdir -p artifacts/log/
 
 $DOTNET_HOME/dotnet restore /nologo dnvm.sln
-$DOTNET_HOME/dotnet publish build.proj /nologo /m /fl /flp:LogFile=artifacts/log/msbuild.log
+$DOTNET_HOME/dotnet publish build.proj /nologo /m /fl /flp:LogFile=artifacts/log/msbuild.log "$@"
 
 echo 'Build succeeded'

@@ -1,6 +1,7 @@
-# TODO auto-configure release vs debug settings
-# add_definitions(-DCMAKE_BUILD_TYPE=Debug)
-# add_compile_options(-g)
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    # include debug symbols
+    add_compile_options(-g)
+endif()
 
 add_compile_options(-Werror) # make warnings errors
 add_compile_options(-Wreturn-type) # ensure functions return a type

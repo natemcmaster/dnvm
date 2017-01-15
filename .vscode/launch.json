@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug dotnet muxer",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/src/native/bin/Debug/dotnet",
+            "cwd": "${workspaceRoot}",
+            "osx": {
+                "MIMode": "lldb"
+            }
+        },
+        {
+            "name": "Debug dnvm",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceRoot}/bin/Debug/netcoreapp1.1/dnvm.dll",
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "stopAtEntry": false,
+            "externalConsole": false
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command.pickProcess}"
+        }
+    ]
+}
