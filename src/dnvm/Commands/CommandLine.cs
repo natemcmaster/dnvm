@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using DotNet.Files;
@@ -9,6 +10,7 @@ namespace DotNet.Commands
 {
     partial class CommandLine
     {
+        private static readonly Assembly s_thisAssembly = typeof(Program).GetTypeInfo().Assembly;
         private const string Logo = @"
    ___  _  ___   ____  ___
   / _ \/ |/ / | / /  |/  /
@@ -50,7 +52,7 @@ namespace DotNet.Commands
                 Out = new StringWriter(_helpText)
             };
 
-            app.VersionOption("--version", GetVersion);
+            app.VersionOption("--version", GetVersion, GetFullVersion);
             app.HelpOption();
 
             var optVerbose =
@@ -88,11 +90,22 @@ namespace DotNet.Commands
 
         private static string GetVersion()
         {
-            var assembly = typeof(Program).GetTypeInfo().Assembly;
-            var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
-                ?? assembly.GetName().Version.ToString();
+            var version = s_thisAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                ?? s_thisAssembly.GetName().Version.ToString();
 
             return version;
+        }
+
+        private static string GetFullVersion()
+        {
+            var commit = s_thisAssembly
+                .GetCustomAttributes<AssemblyMetadataAttribute>()
+                .FirstOrDefault(a => a.Key == "CommitHash")
+                ?.Value;
+
+            return string.IsNullOrEmpty(commit)
+                ? GetVersion()
+                : $"{GetVersion()}\n{commit}";
         }
     }
 }

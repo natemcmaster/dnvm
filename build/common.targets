@@ -21,7 +21,11 @@ Generates an assembly attribute with commit hash
   </Target>
 
   <Target Name="GenerateIntermediateCommitHash" Condition="'$(CommitHash)' != ''">
-    <Touch Files="$(IntermediateOutputPath)$(CommitHash).commit.txt" AlwaysCreate="true" />
+    <PropertyGroup>
+      <IntermediateCommitHash>$(IntermediateOutputPath)$(CommitHash).commit.txt</IntermediateCommitHash>
+    </PropertyGroup>
+
+    <Touch Files="$(IntermediateCommitHash)" AlwaysCreate="true" Condition="!Exists('$(IntermediateCommitHash)')" />
   </Target>
 
   <Target Name="CoreGenerateCommitHashAttribute"
