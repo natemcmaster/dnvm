@@ -36,12 +36,16 @@
   </Target>
 
   <Target Name="Publish" DependsOnTargets="CleanArtifacts;ResolveCommitHash">
-    <MakeDir Directories="$(ArtifactsDir);$(PublishDir);$(TargetDir);" />
+    <MakeDir Directories="$(ArtifactsDir);$(PublishDir)bin\;$(TargetDir);" />
     <MSBuild Targets="Publish"
              Projects="@(SourceProjects)"
-              Properties="Configuration=$(Configuration);PublishDir=$(PublishDir)bin\" />
+              Properties="Configuration=$(Configuration);PublishDir=$(PublishDir)libexec\" />
     <WriteLinesToFile File="$(PublishDir)version" Lines="$(CommitHash);$(Version)" />
 
+    <Exec Command="ln -s ../libexec/dotnet ./dotnet"
+          WorkingDirectory="$(PublishDir)bin\" />
+    <Exec Command="ln -s ../libexec/dnvm ./dnvm"
+          WorkingDirectory="$(PublishDir)bin\" />
     <Copy SourceFiles="%(Content.FullPath)" DestinationFiles="$(PublishDir)%(Content.PackagePath)" />
 
     <Exec Command="tar -zcf &quot;$(PackageFile)&quot; ."
