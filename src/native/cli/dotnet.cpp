@@ -154,7 +154,7 @@ int main(const int argc, pal::char_t *argv[])
             find_global_muxer(&muxer);
         }
 
-        bool invalid_muxer;
+        bool invalid_muxer = false;
         if (muxer.empty())
         {
             invalid_muxer = true;
@@ -192,6 +192,7 @@ int main(const int argc, pal::char_t *argv[])
         pal::string_t local_bin = get_directory(muxer);
         append_path(&local_bin, _X("bin"));
         pal::string_t pathext = local_bin + PATH_SEPARATOR + ::getenv("PATH");
+        trace::verbose(_X("Setting PATH to '%s'"), pathext.c_str());
         ::setenv("PATH", pathext.c_str(), 1);
 
         int rc = pal::exec_process(muxer, argc, argv);
