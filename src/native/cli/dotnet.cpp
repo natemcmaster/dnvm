@@ -171,7 +171,7 @@ int main(const int argc, pal::char_t *argv[])
         {
             if (config.empty())
             {
-                trace::error(_RED_X("The default dotnet environment has not been installed.\nRun `dnvm install --global`."));
+                trace::error(_RED_X("The default dotnet environment has not been installed.\nRun `dnvm install --help` for more information on how to install .NET Core."));
             }
             else
             {
