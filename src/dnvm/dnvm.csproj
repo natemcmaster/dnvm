@@ -6,6 +6,7 @@
     <AssemblyName>dnvm</AssemblyName>
     <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <PackageTargetFallback>dotnet</PackageTargetFallback>
 
     <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers>
@@ -13,13 +14,12 @@
     <MacOS>true</MacOS>
 
     <DefineConstants Condition="$(MacOS)">$(DefineConstants);__MACOS__</DefineConstants>
-    <WarningsAsErrors>true</WarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**\*.macos.cs</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="**\*.cs" Exclude="**\*.macos.cs" />
     <Compile Include="**\*.macos.cs" Condition="$(MacOS)" />
-    <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +29,7 @@
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
-    <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc2" />
+    <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc3" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="YamlDotNet" Version="4.0.1-pre309" />
   </ItemGroup>
