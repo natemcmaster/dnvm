@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using DotNet.Assets;
@@ -24,7 +24,8 @@ namespace DotNet.Test
         // [InlineData("1.0.0-preview2-003156", "1.0.3")]
         // [InlineData("1.0.0-preview2-1-003177", "1.1.0")]
         // [InlineData("1.0.0-preview3-004056", "1.0.1")]
-        [InlineData("1.0.0-preview4-004233", "1.0.1")]
+        //[InlineData("1.0.0-preview4-004233", "1.0.1")]
+        [InlineData("1.0.0-rc3-004350", "1.0.3")]
         public async Task InstallsCliWithSharedFx(string version, string fxVersion)
         {
             var command = new InstallCommand<SdkAsset>(version);

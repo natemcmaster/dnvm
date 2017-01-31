@@ -1,4 +1,4 @@
-using DotNet.Assets;
+﻿using DotNet.Assets;
 using FluentAssertions;
 using Xunit;
 
@@ -36,7 +36,7 @@ namespace DotNet.Test
 
         [Theory]
         [InlineData("Microsoft.NETCore.App", "1.1.0")]
-        [InlineData("Microsoft.DotNet.Cli.osx-x64", "1.0.0-preview4-004233")]
+        [InlineData("Microsoft.DotNet.Cli.osx-x64", "1.0.0-rc3-004530")]
         public void GetsLatestVersion(string assetId, string version)
         {
             new StableAssetChannel()
