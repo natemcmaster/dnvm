@@ -4,7 +4,7 @@ using DotNet.Reporting;
 
 namespace DotNet.Commands
 {
-    public class ListSdkCommand : SyncCommand
+    public class SearchFxCommand : SyncCommand
     {
         protected override void Execute(CommandContext context)
         {
@@ -14,15 +14,15 @@ namespace DotNet.Commands
             using (context.Indent())
             {
                 var channel = new StableAssetChannel();
-                var stable = channel.GetLatestVersion(SdkAsset.AssetId);
-                foreach (var version in channel.GetAvailableVersions(SdkAsset.AssetId))
+                var stable = channel.GetLatestVersion(SharedFxAsset.AssetId);
+                foreach (var version in channel.GetAvailableVersions(SharedFxAsset.AssetId))
                 {
                     var line = version == stable
                     ? $"{version} ({SdkAsset.DefaultVersion})"
                     : version;
                     var installed = context.Environment
-                        .Sdks
-                        .Any(s => s.Version.Equals(version))
+                        .Frameworks
+                        .Any(f => f.Name == SharedFxAsset.AssetId && f.Version.Equals(version))
                         ? "*"
                         : " ";
 

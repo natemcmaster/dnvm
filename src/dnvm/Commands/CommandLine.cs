@@ -62,8 +62,8 @@ namespace DotNet.Commands
             app.Command("init", $"Initializes a new '{FileConstants.Config}' config file in the current directory.", InitCommand);
             app.Command("info", "Display information about the current dotnet environment", InfoCommand);
             app.Command("install", "Install things", InstallCommand);
-            app.Command("list", "Show available versions", ListCommand);
             app.Command("rm", "Removes installed things", RemoveCommand);
+            app.Command("search", "Search for available versions", SearchCommand);
 
             app.OnExecute(() =>
             {

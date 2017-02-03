@@ -4,21 +4,21 @@ namespace DotNet.Commands
 {
     partial class CommandLine
     {
-        private void ListCommand(CommandLineApplication c)
+        private void SearchCommand(CommandLineApplication c)
         {
-            c.Command("fx", "Show available versions of .NET Core runtime frameworks", fx =>
+            c.Command("fx", "Search available versions of .NET Core runtime frameworks", fx =>
             {
                 fx.OnExecute(() =>
                 {
-                    this.Command = new ListFxCommand();
+                    this.Command = new SearchFxCommand();
                 });
             });
 
-            c.Command("sdk", "Show available versions of .NET Core SDKs", sdk =>
+            c.Command("sdk", "Search available versions of .NET Core SDKs", sdk =>
             {
                 sdk.OnExecute(() =>
                 {
-                    this.Command = new ListSdkCommand();
+                    this.Command = new SearchSdkCommand();
                 });
             });
 
