@@ -36,7 +36,7 @@ namespace DotNet.Test
 
         [Theory]
         [InlineData("Microsoft.NETCore.App", "1.1.0")]
-        [InlineData("Microsoft.DotNet.Cli.osx-x64", "1.0.0-rc3-004530")]
+        [InlineData("Microsoft.DotNet.Cli.osx-x64", "1.0.0-rc4-004767")]
         public void GetsLatestVersion(string assetId, string version)
         {
             new StableAssetChannel()
