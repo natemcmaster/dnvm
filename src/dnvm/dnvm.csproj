@@ -2,24 +2,23 @@
   <Import Project="..\..\build\common.props" />
 
   <PropertyGroup>
+    <RuntimeIdentifiers>osx.10.10-x64;win7-x64;win7-x86</RuntimeIdentifiers>
+    <OSName Condition="'$(RuntimeIdentifier)'!=''">$(RuntimeIdentifier.Substring(0, 3))</OSName>
     <RootNamespace>DotNet</RootNamespace>
     <AssemblyName>dnvm</AssemblyName>
     <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <PackageTargetFallback>dotnet</PackageTargetFallback>
-
-    <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers>
-    <RuntimeIdentifier>osx.10.10-x64</RuntimeIdentifier>
-    <MacOS>true</MacOS>
-
-    <DefineConstants Condition="$(MacOS)">$(DefineConstants);__MACOS__</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DefaultItemExcludes>$(DefaultItemExcludes);**\*.macos.cs</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**\*.macos.cs;**\*.win.cs</DefaultItemExcludes>
+    <DefineConstants Condition="'$(OSName)'=='osx'">$(DefineConstants);__MACOS__</DefineConstants>
+    <DefineConstants Condition="'$(OSName)'=='win'">$(DefineConstants);__WIN__;FEATURE_MULTI_ARCH_ASSETS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="**\*.macos.cs" Condition="$(MacOS)" />
+    <Compile Include="**\*.macos.cs" Condition="'$(OSName)'=='osx'" Exclude="$(DefaultItemExcludes)" />
+    <Compile Include="**\*.win.cs" Condition="'$(OSName)'=='win'" Exclude="$(DefaultItemExcludes)" />
   </ItemGroup>
 
   <ItemGroup>
