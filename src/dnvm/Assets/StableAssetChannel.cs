@@ -37,8 +37,15 @@ namespace DotNet.Assets
         {
             public IDictionary<string, string> Versions { get; }
                 = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
             public string GetDownloadUrl(string version)
-                => Versions[version];
+            {
+                if (!Versions.TryGetValue(version, out var url))
+                {
+                    throw new KeyNotFoundException($"Unrecognized version '{version}'");
+                }
+                return url;
+            }
 
             public IEnumerable<string> GetVersions()
                 => Versions.Keys;

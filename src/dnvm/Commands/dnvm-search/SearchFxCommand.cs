@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Runtime.InteropServices;
 using DotNet.Assets;
 using DotNet.Reporting;
 
@@ -14,15 +15,15 @@ namespace DotNet.Commands
             using (context.Indent())
             {
                 var channel = new StableAssetChannel();
-                var stable = channel.GetLatestVersion(SharedFxAsset._assetId);
-                foreach (var version in channel.GetAvailableVersions(SharedFxAsset._assetId))
+                var stable = channel.GetLatestVersion(SharedFxAsset.GetAssetId(Architecture.X64));
+                foreach (var version in channel.GetAvailableVersions(SharedFxAsset.GetAssetId(Architecture.X64)))
                 {
                     var line = version == stable
                     ? $"{version} ({SdkAsset.DefaultVersion})"
                     : version;
                     var installed = context.Environment
                         .Frameworks
-                        .Any(f => f.Name == SharedFxAsset._assetId && f.Version.Equals(version))
+                        .Any(f => f.Name == SharedFxAsset.GetAssetId(Architecture.X64) && f.Version.Equals(version))
                         ? "*"
                         : " ";
 

@@ -14,8 +14,6 @@ namespace DotNet.Commands
         }
 
         protected override ToolAsset CreateAsset(CommandContext context)
-        {
-            return new ToolAsset(context.Reporter, context.Environment, _name, _version);
-        }
+            => new ToolAsset(context.Reporter, context.Environment, _name, _version);
     }
 }

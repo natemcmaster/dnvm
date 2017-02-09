@@ -14,7 +14,7 @@ namespace DotNet.Test
         public void CreatesSharedFxDownloadUrl(string version, string expectedUrl)
         {
             new StableAssetChannel()
-                .GetDownloadUrl("Microsoft.NETCore.App", version)
+                .GetDownloadUrl("Microsoft.NETCore.App.osx-x64", version)
                 .Should()
                 .Be(expectedUrl);
         }
@@ -26,6 +26,7 @@ namespace DotNet.Test
         [InlineData("1.0.0-preview2-1-003177", "https://dotnetcli.blob.core.windows.net/dotnet/preview/Binaries/1.0.0-preview2-1-003177/dotnet-dev-osx-x64.1.0.0-preview2-1-003177.tar.gz")]
         [InlineData("1.0.0-preview3-004056", "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/1.0.0-preview3-004056/dotnet-dev-osx-x64.1.0.0-preview3-004056.tar.gz")]
         [InlineData("1.0.0-preview4-004233", "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/1.0.0-preview4-004233/dotnet-dev-osx-x64.1.0.0-preview4-004233.tar.gz")]
+        [InlineData("1.0.0-rc4-004771", "https://dotnetcli.blob.core.windows.net/dotnet/Sdk/1.0.0-rc4-004771/dotnet-dev-osx-x64.1.0.0-rc4-004771.tar.gz")]
         public void CreatesCliDownloadUrl(string version, string expectedUrl)
         {
             new StableAssetChannel()
@@ -35,7 +36,7 @@ namespace DotNet.Test
         }
 
         [Theory]
-        [InlineData("Microsoft.NETCore.App", "1.1.0")]
+        [InlineData("Microsoft.NETCore.App.osx-x64", "1.1.0")]
         [InlineData("Microsoft.DotNet.Cli.osx-x64", "1.0.0-rc4-004771")]
         public void GetsLatestVersion(string assetId, string version)
         {

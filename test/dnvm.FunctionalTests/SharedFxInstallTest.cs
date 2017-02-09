@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using DotNet.Assets;
 using DotNet.Commands;
@@ -24,7 +25,7 @@ namespace DotNet.Test
         [InlineData("1.1.0")]
         public async Task InstallsFx(string version)
         {
-            var command = new InstallCommand<SharedFxAsset>(version);
+            var command = new InstallFxCommand(version, Architecture.X64);
             var context = new CommandContext
             {
                 Reporter = new TestReporter(_output),

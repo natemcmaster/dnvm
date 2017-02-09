@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using DotNet.Assets;
 
@@ -20,12 +21,12 @@ namespace DotNet.Commands
                 var commands = new List<ICommand>();
                 if (!string.IsNullOrEmpty(context.ConfigFile.Sdk))
                 {
-                    commands.Add(new InstallCommand<SdkAsset>(context.ConfigFile.Sdk));
+                    commands.Add(new InstallSdkCommand(context.ConfigFile.Sdk, Architecture.X64));
                 }
 
                 foreach (var fx in context.ConfigFile.SharedFx)
                 {
-                    commands.Add(new InstallCommand<SharedFxAsset>(fx));
+                    commands.Add(new InstallFxCommand(fx, Architecture.X64));
                 }
 
                 foreach (var tool in context.ConfigFile.Tools)

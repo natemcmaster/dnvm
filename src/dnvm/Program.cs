@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DotNet.Commands;
 using DotNet.Files;
 using DotNet.Reporting;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNet
 {
@@ -86,13 +85,14 @@ namespace DotNet
             {
                 CancellationToken = _cts.Token,
                 Console = _console,
-                WorkingDir = _workingDir
+                WorkingDir = _workingDir,
+                Reporter = CreateReporter(options.IsVerbose),
+                Settings = DnvmSettings.Load(),
             };
 
-            var settings = DnvmSettings.Load();
-            var envFactory = new DotNetEnvFactory(settings);
+            var envFactory = new DotNetEnvFactory(context.Settings);
             var configFileFactory = new ConfigFileFactory();
-            var configFile = configFileFactory.FindFile(_workingDir);
+            var configFile = configFileFactory.FindFile(context.WorkingDir);
 
             if (configFile != null)
             {
@@ -103,7 +103,7 @@ namespace DotNet
                 }
                 catch (FormatException ex)
                 {
-                    CreateReporter(options.IsVerbose).Error($"Config file '{configFile}' has an invalid format. {ex.Message}");
+                    context.Reporter.Error($"Config file '{configFile}' has an invalid format. {ex.Message}");
                     return null;
                 }
 
@@ -114,16 +114,6 @@ namespace DotNet
             {
                 context.Environment = envFactory.CreateDefault();
             }
-
-            var services = new ServiceCollection();
-
-            services
-                .AddDnvm()
-                .AddSingleton(context.Environment)
-                .AddSingleton(settings)
-                .AddSingleton<IReporter>(_ => CreateReporter(options.IsVerbose));
-
-            context.Services = services.BuildServiceProvider();
 
             return context;
         }

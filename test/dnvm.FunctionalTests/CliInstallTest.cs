@@ -20,23 +20,23 @@ namespace DotNet.Test
 
         [Theory]
         // commented out to improve test time. Each test downloads ~50MB
-        // [InlineData("1.0.0-preview2-003121", "1.0.0")]
-        // [InlineData("1.0.0-preview2-003131", "1.0.1")]
-        // [InlineData("1.0.0-preview2-003156", "1.0.3")]
-        // [InlineData("1.0.0-preview2-1-003177", "1.1.0")]
-        // [InlineData("1.0.0-preview3-004056", "1.0.1")]
-        //[InlineData("1.0.0-preview4-004233", "1.0.1")]
-        [InlineData("1.0.0-rc3-004350", "1.0.3")]
-        public async Task InstallsCliWithSharedFx(string version, string fxVersion)
+        // [InlineData("1.0.0-preview2-003121", new [] { "1.0.0" })]
+        // [InlineData("1.0.0-preview2-003131", new [] { "1.0.1" })]
+        // [InlineData("1.0.0-preview2-003156", new [] { "1.0.3" })]
+        // [InlineData("1.0.0-preview2-1-003177", new [] { "1.1.0" })]
+        // [InlineData("1.0.0-preview3-004056", new [] { "1.0.1" })]
+        // [InlineData("1.0.0-preview4-004233", new [] { "1.0.1" })]
+        // [InlineData("1.0.0-rc3-004530", new [] { "1.0.3" })]
+        [InlineData("1.0.0-rc4-004771", new[] { "1.0.3", "1.1.0" })]
+        public async Task InstallsCliWithSharedFx(string version, string[] runtimes)
         {
             var command = new InstallSdkCommand(version, Architecture.X64);
             var context = new CommandContext
             {
                 Reporter = new TestReporter(_output),
-                Environment = new DotNetEnv("test", new DirectoryInfo(_tempDir.Path)),
-                Services = CreateTestServices()
+                Environment = new DotNetEnv("test", new DirectoryInfo(_tempDir.Path))
             };
-
+            // while (!System.Diagnostics.Debugger.IsAttached);
             await command.ExecuteAsync(context).OrTimeout(90);
 
             context.Result.Should().Be(Result.Okay);
@@ -44,22 +44,18 @@ namespace DotNet.Test
             Directory.EnumerateFiles(_tempDir.Path)
                 .Should().Contain(f => Path.GetFileName(f) == "dotnet");
 
-            Directory.Exists(Path.Combine(_tempDir.Path, "shared", "Microsoft.NETCore.App", fxVersion)).Should().BeTrue();
             Directory.Exists(Path.Combine(_tempDir.Path, "sdk", version)).Should().BeTrue();
+
+            foreach (var runtime in runtimes)
+            {
+                Directory.Exists(Path.Combine(_tempDir.Path, "shared", "Microsoft.NETCore.App", runtime)).Should().BeTrue();
+            }
         }
 
         public CliInstallTest(ITestOutputHelper output)
         {
             _output = output;
         }
-
-        private IServiceProvider CreateTestServices()
-        {
-            return new ServiceCollection()
-                .AddDnvm()
-                .BuildServiceProvider();
-        }
-
         public void Dispose()
         {
             _tempDir.Dispose();

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.InteropServices;
 using DotNet.Assets;
 using DotNet.Reporting;
 
@@ -14,8 +15,8 @@ namespace DotNet.Commands
             using (context.Indent())
             {
                 var channel = new StableAssetChannel();
-                var stable = channel.GetLatestVersion(SdkAsset.AssetIdPrexix);
-                foreach (var version in channel.GetAvailableVersions(SdkAsset.AssetIdPrexix))
+                var stable = channel.GetLatestVersion(SdkAsset.GetAssetId(Architecture.X64));
+                foreach (var version in channel.GetAvailableVersions(SdkAsset.GetAssetId(Architecture.X64)))
                 {
                     var line = version == stable
                     ? $"{version} ({SdkAsset.DefaultVersion})"

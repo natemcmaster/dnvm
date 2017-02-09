@@ -15,8 +15,6 @@ namespace DotNet.Commands
         }
 
         protected override SharedFxAsset CreateAsset(CommandContext context)
-        {
-            return new SharedFxAsset(context.Reporter, context.Environment, _version, _arch);
-        }
+            => new SharedFxAsset(context.Reporter, context.Environment, _version, _arch);
     }
 }

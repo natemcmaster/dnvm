@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using DotNet.Files;
 using DotNet.Reporting;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNet.Commands
 {
@@ -17,22 +16,7 @@ namespace DotNet.Commands
         public IConsole Console { get; set; }
         public string WorkingDir { get; set; }
 
-        public IServiceProvider Services { get; set; }
-
-        private IReporter _reporter;
-        public IReporter Reporter
-        {
-            get
-            {
-                if (_reporter == null)
-                {
-                    _reporter = Services.GetRequiredService<IReporter>();
-                }
-                return _reporter;
-            }
-            set { _reporter = value; }
-        }
-
-        public DnvmSettings Settings => Services.GetRequiredService<DnvmSettings>();
+        public IReporter Reporter { get; set; }
+        public DnvmSettings Settings { get; set; }
     }
 }

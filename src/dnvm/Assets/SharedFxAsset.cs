@@ -24,7 +24,7 @@ namespace DotNet.Assets
         public SharedFxAsset(IReporter reporter, DotNetEnv env, string version, Architecture arch)
             : base(reporter)
         {
-            _assetId = $"{AssetIdPrefix}.{PlatformConstants.RuntimeOSName}-{arch.ToString().ToLower()}";
+            _assetId = GetAssetId(arch);
             _version = version == DefaultVersion
                 ? Channel.GetLatestVersion(_assetId)
                 : version;
@@ -35,6 +35,9 @@ namespace DotNet.Assets
             DisplayName += " ({arch.ToString().ToLower()})";
 #endif
         }
+
+        public static string GetAssetId(Architecture arch)
+            => $"{AssetIdPrefix}.{PlatformConstants.RuntimeOSName}-{arch.ToString().ToLower()}";
 
         public override string DisplayName { get; }
 
@@ -96,7 +99,7 @@ namespace DotNet.Assets
             Reporter.Verbose($"Linking OpenSSL from Homebrew into '{dest}'");
             if (!await openssl.InstallAsync(cancellationToken))
             {
-                Reporter.Warn($"Failed to install OpenSSL into {AssetId}@{_version}. Try running `brew install openssl` first and re-run this command.");
+                Reporter.Warn($"Failed to install OpenSSL into {DisplayName}. Try running `brew install openssl` first and re-run this command.");
             }
 #else
             await Task.CompletedTask;

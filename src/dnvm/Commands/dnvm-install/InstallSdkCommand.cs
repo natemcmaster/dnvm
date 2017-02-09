@@ -15,8 +15,6 @@ namespace DotNet.Commands
         }
 
         protected override SdkAsset CreateAsset(CommandContext context)
-        {
-            return new SdkAsset(context.Reporter, context.Environment, _version, _arch);
-        }
+            => new SdkAsset(context.Reporter, context.Environment, _version, _arch);
     }
 }

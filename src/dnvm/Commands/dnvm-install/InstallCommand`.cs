@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using DotNet.Assets;
 
@@ -12,7 +13,19 @@ namespace DotNet.Commands
             var asset = CreateAsset(context);
             Directory.CreateDirectory(context.Environment.Root);
 
-            if (!await asset.InstallAsync(context.CancellationToken))
+            bool success;
+            try
+            {
+                success = await asset.InstallAsync(context.CancellationToken);
+            }
+            catch (Exception ex)
+            {
+                context.Reporter.Verbose(ex.ToString());
+                context.Reporter.Error(ex.Message);
+                success = false;
+            }
+
+            if (!success)
             {
                 context.Result = Result.Error;
                 return;
