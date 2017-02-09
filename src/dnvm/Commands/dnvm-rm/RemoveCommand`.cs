@@ -1,17 +1,14 @@
-using DotNet.Assets;
-using Microsoft.Extensions.DependencyInjection;
+﻿using DotNet.Assets;
 
 namespace DotNet.Commands
 {
-    public class RemoveCommand<TAsset> : SyncCommand
+    public abstract class RemoveCommand<TAsset> : SyncCommand
         where TAsset : Asset
     {
-        private readonly string _version;
         private readonly bool _force;
 
-        public RemoveCommand(string version, bool force)
+        public RemoveCommand(bool force)
         {
-            _version = version;
             _force = force;
         }
 
@@ -35,7 +32,6 @@ namespace DotNet.Commands
                 : Result.Error;
         }
 
-        protected virtual TAsset CreateAsset(CommandContext context)
-            => context.Services.GetRequiredService<IAssetFactory>().Create<TAsset>(_version);
+        protected abstract TAsset CreateAsset(CommandContext context);
     }
 }

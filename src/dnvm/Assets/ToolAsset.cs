@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DotNet.Files;
 using DotNet.Reporting;
 using DotNet.Utils;
+using System.Runtime.InteropServices;
 
 namespace DotNet.Assets
 {
@@ -88,7 +89,7 @@ namespace DotNet.Assets
                         var runtimeConfig = RuntimeConfig.LoadFromFile(runtimeConfigPath);
                         var name = runtimeConfig?.RuntimeOptions?.Framework?.Name;
 
-                        if (!SharedFxAsset.AssetId.Equals(name, StringComparison.OrdinalIgnoreCase))
+                        if (!"Microsoft.NETCore.App".Equals(name, StringComparison.OrdinalIgnoreCase))
                         {
                             Reporter.Error($"This tool requires an unsupported shared framework: {name}");
                             Uninstall();
@@ -96,7 +97,7 @@ namespace DotNet.Assets
                         }
 
                         var version = runtimeConfig.RuntimeOptions.Framework.Version;
-                        var sharedFx = new SharedFxAsset(Reporter, _env, version);
+                        var sharedFx = new SharedFxAsset(Reporter, _env, version, Architecture.X64);
                         secondaryInstalls.Add(sharedFx.InstallAsync(cancellationToken));
                     }
                 }

@@ -1,20 +1,12 @@
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using DotNet.Assets;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNet.Commands
 {
-    public class InstallCommand<TAsset> : ICommand
+    public abstract class InstallCommand<TAsset> : ICommand
         where TAsset : Asset
     {
-        private readonly string _version;
-
-        public InstallCommand(string version)
-        {
-            _version = version;
-        }
-
         public async Task ExecuteAsync(CommandContext context)
         {
             var asset = CreateAsset(context);
@@ -29,9 +21,6 @@ namespace DotNet.Commands
             context.Result = Result.Okay;
         }
 
-        protected virtual TAsset CreateAsset(CommandContext context)
-        {
-            return context.Services.GetRequiredService<IAssetFactory>().Create<TAsset>(_version);
-        }
+        protected abstract TAsset CreateAsset(CommandContext context);
     }
 }

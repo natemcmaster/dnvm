@@ -1,5 +1,5 @@
-using DotNet.Assets;
-using Microsoft.Extensions.CommandLineUtils;
+﻿using Microsoft.Extensions.CommandLineUtils;
+using System.Runtime.InteropServices;
 
 namespace DotNet.Commands
 {
@@ -16,7 +16,7 @@ namespace DotNet.Commands
 
                 fx.OnExecute(() =>
                 {
-                    this.Command = new RemoveCommand<SharedFxAsset>(version.IfNotNullOrEmpty(), force.HasValue());
+                    this.Command = new RemoveFxCommand(version.IfNotNullOrEmpty(), Architecture.X64, force.HasValue());
                 });
             });
 
@@ -28,7 +28,7 @@ namespace DotNet.Commands
 
                 sdk.OnExecute(() =>
                 {
-                    this.Command = new RemoveCommand<SdkAsset>(version.IfNotNullOrEmpty(), force.HasValue());
+                    this.Command = new RemoveSdkCommand(version.IfNotNullOrEmpty(), Architecture.X64, force.HasValue());
                 });
             });
 
@@ -41,10 +41,10 @@ namespace DotNet.Commands
 
                tool.OnExecute(() =>
                {
-                    this.Command = new RemoveToolCommand(
-                        name.IfNotNullOrEmpty(),
-                        version.IfNotNullOrEmpty(),
-                        force.HasValue());
+                   this.Command = new RemoveToolCommand(
+                       name.IfNotNullOrEmpty(),
+                       version.IfNotNullOrEmpty(),
+                       force.HasValue());
                });
            });
 

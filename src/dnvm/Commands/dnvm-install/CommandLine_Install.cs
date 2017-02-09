@@ -1,3 +1,4 @@
+﻿using System.Runtime.InteropServices;
 using DotNet.Assets;
 using DotNet.Files;
 using Microsoft.Extensions.CommandLineUtils;
@@ -35,12 +36,20 @@ Additional Information:
             var argVersion = fx.Argument("version",
                     $"Version of the shared framework to install. Defaults to '{SharedFxAsset.DefaultVersion}'.");
 
-            var optSave = fx.Option("--save", $"Save to the 'fx' version of the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
+/*
+            TODO support architecture-specific assets
+            var optArch = fx.Option("-a|--arch",
+                    $"Processor architecture of the framework. Accepted values: x86, x64. Defaults to {defaultArch}");
+*/
+
+            var optSave = fx.Option("--save",
+                $"Save to the 'fx' version of the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
 
             fx.OnExecute(() =>
             {
                 var version = argVersion.Value ?? SharedFxAsset.DefaultVersion;
-                ICommand install = new InstallCommand<SharedFxAsset>(version);
+
+                ICommand install = new InstallFxCommand(version, Architecture.X64);
 
                 if (optSave.HasValue())
                 {
@@ -62,7 +71,7 @@ Additional Information:
             sdk.OnExecute(() =>
             {
                 var version = argVersion.Value ?? SdkAsset.DefaultVersion;
-                ICommand install = new InstallCommand<SdkAsset>(version);
+                ICommand install = new InstallSdkCommand(version, Architecture.X64);
                 if (optSave.HasValue())
                 {
                     install = CommonCommands.Sequence(

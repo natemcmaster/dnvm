@@ -9,7 +9,7 @@
   <Target Name="Build">
     <MakeDir Directories="$(IntermediateBasePath);$(TargetDir);"/>
 
-    <Exec Command="cmake &quot;$(MSBuildThisFileDirectory)&quot; &quot;-DCMAKE_INSTALL_PREFIX=$(TargetDir)&quot; -DCMAKE_BUILD_TYPE=$(Configuration)"
+    <Exec Command="cmake $(MSBuildThisFileDirectory) -DCMAKE_INSTALL_PREFIX=$(TargetDir) -DCMAKE_BUILD_TYPE=$(Configuration)"
           WorkingDirectory="$(IntermediateBasePath)"/>
     <Exec Command="make install"
           WorkingDirectory="$(IntermediateBasePath)"/>

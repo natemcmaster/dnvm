@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using DotNet.Assets;
 using DotNet.Commands;
@@ -28,7 +29,7 @@ namespace DotNet.Test
         [InlineData("1.0.0-rc3-004350", "1.0.3")]
         public async Task InstallsCliWithSharedFx(string version, string fxVersion)
         {
-            var command = new InstallCommand<SdkAsset>(version);
+            var command = new InstallSdkCommand(version, Architecture.X64);
             var context = new CommandContext
             {
                 Reporter = new TestReporter(_output),

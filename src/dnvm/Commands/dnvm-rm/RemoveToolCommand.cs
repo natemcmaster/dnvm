@@ -1,4 +1,4 @@
-using DotNet.Assets;
+﻿using DotNet.Assets;
 
 namespace DotNet.Commands
 {
@@ -8,7 +8,7 @@ namespace DotNet.Commands
         private readonly string _version;
 
         public RemoveToolCommand(string name, string version, bool force)
-            : base(version, force)
+            : base(force)
         {
             _name = name;
             _version = version;

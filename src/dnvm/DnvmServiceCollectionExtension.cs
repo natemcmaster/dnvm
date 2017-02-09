@@ -1,5 +1,4 @@
-using DotNet.Assets;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNet
 {
@@ -7,9 +6,6 @@ namespace DotNet
     {
         public static IServiceCollection AddDnvm(this IServiceCollection services)
         {
-            services
-                .AddSingleton<IAssetFactory, AssetFactory>();
-
             return services;
         }
     }

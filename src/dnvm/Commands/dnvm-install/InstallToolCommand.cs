@@ -1,4 +1,4 @@
-using DotNet.Assets;
+﻿using DotNet.Assets;
 
 namespace DotNet.Commands
 {
@@ -8,7 +8,6 @@ namespace DotNet.Commands
         private readonly string _version;
 
         public InstallToolCommand(string name, string version)
-            : base(version)
         {
             _name = name;
             _version = version;

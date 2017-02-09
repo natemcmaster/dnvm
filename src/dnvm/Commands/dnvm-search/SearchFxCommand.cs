@@ -14,15 +14,15 @@ namespace DotNet.Commands
             using (context.Indent())
             {
                 var channel = new StableAssetChannel();
-                var stable = channel.GetLatestVersion(SharedFxAsset.AssetId);
-                foreach (var version in channel.GetAvailableVersions(SharedFxAsset.AssetId))
+                var stable = channel.GetLatestVersion(SharedFxAsset._assetId);
+                foreach (var version in channel.GetAvailableVersions(SharedFxAsset._assetId))
                 {
                     var line = version == stable
                     ? $"{version} ({SdkAsset.DefaultVersion})"
                     : version;
                     var installed = context.Environment
                         .Frameworks
-                        .Any(f => f.Name == SharedFxAsset.AssetId && f.Version.Equals(version))
+                        .Any(f => f.Name == SharedFxAsset._assetId && f.Version.Equals(version))
                         ? "*"
                         : " ";
 
