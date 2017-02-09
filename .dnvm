@@ -1,5 +1,5 @@
 env: default
-sdk: 1.0.0-rc3-004530
+sdk: stable
 fx:
   - 1.1.0
   - 1.0.3
