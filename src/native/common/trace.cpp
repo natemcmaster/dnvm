@@ -12,7 +12,7 @@ void trace::setup()
 {
     // Read trace environment variable
     pal::string_t trace_str;
-    if (!pal::getenv(_X("COREHOST_TRACE"), &trace_str))
+    if (!pal::getenv(_X("COREHOST_TRACE"), &trace_str) && !pal::getenv(_X("DNVM_TRACE"), &trace_str))
     {
         return;
     }

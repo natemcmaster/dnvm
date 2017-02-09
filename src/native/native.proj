@@ -1,4 +1,7 @@
-<Project ToolsVersion="15.0">
+<Project>
+  <Import Project="..\..\version.props" />
+  <Import Project="..\..\build\git.targets" />
+
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
     <IntermediateBasePath Condition="'$(IntermediateBasePath)'==''">$(MSBuildThisFileDirectory)obj\$(Configuration)\</IntermediateBasePath>
@@ -6,10 +9,14 @@
     <PublishDir Condition="'$(PublishDir)'==''">$(TargetDir)publish\</PublishDir>
   </PropertyGroup>
 
-  <Target Name="Build">
+  <Target Name="Build" DependsOnTargets="ResolveCommitHash">
     <MakeDir Directories="$(IntermediateBasePath);$(TargetDir);"/>
 
-    <Exec Command="cmake $(MSBuildThisFileDirectory) -DCMAKE_INSTALL_PREFIX=$(TargetDir) -DCMAKE_BUILD_TYPE=$(Configuration)"
+    <Exec Command="cmake $(MSBuildThisFileDirectory)
+          -DBUILD_VERSION=$(VersionPrefix)
+          -DGIT_COMMIT_HASH=$(CommitHash)
+          -DCMAKE_INSTALL_PREFIX=$(TargetDir)
+          -DCMAKE_BUILD_TYPE=$(Configuration)"
           WorkingDirectory="$(IntermediateBasePath)"/>
     <Exec Command="make install"
           WorkingDirectory="$(IntermediateBasePath)"/>

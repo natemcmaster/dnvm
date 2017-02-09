@@ -14,3 +14,9 @@ else()
         add_definitions(-D__APPLE__)
     endif()
 endif()
+
+
+configure_file (
+  "${CMAKE_CURRENT_LIST_DIR}/variables.h.in"
+  "${PROJECT_BINARY_DIR}/variables.h")
+include_directories("${PROJECT_BINARY_DIR}")

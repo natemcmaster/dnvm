@@ -1,0 +1,7 @@
+#ifndef VARIABLES_H
+#define VARIABLES_H
+
+#define GIT_COMMIT_HASH "@GIT_COMMIT_HASH@"
+#define BUILD_VERSION "@BUILD_VERSION@"
+
+#endif // VARIABLES_H

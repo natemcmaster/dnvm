@@ -3,34 +3,12 @@
 #include "utils.h"
 #include "colors.h"
 #include "corehost_error_codes.h"
+#include "variables.h"
+#include "config_file.h"
+
 #include <stdlib.h>
 
 static pal::string_t s_own_path;
-static pal::string_t s_default_env_name = _X("default");
-
-bool find_config_file(pal::string_t &cwd, pal::string_t *recv)
-{
-    for (pal::string_t parent_dir, cur_dir = cwd; true; cur_dir = parent_dir)
-    {
-        pal::string_t file = cur_dir;
-        append_path(&file, _X(".dnvm"));
-
-        trace::verbose(_X("Probing path [%s] for .dnvm"), file.c_str());
-        if (pal::file_exists(file) && !pal::is_directory(file))
-        {
-            recv->assign(file.c_str());
-            trace::verbose(_X("Found .dnvm [%s]"), recv->c_str());
-            return true;
-        }
-        parent_dir = get_directory(cur_dir);
-        if (parent_dir.empty() || parent_dir.size() == cur_dir.size())
-        {
-            trace::verbose(_X("Terminating .dnvm search at [%s]"), parent_dir.c_str());
-            break;
-        }
-    }
-    return false;
-}
 
 bool resolve_env_root(const pal::string_t &env_name, pal::string_t *path)
 {
@@ -68,53 +46,22 @@ void find_muxer_for_env(const pal::string_t &env_name, pal::string_t *muxer)
 
 void find_global_muxer(pal::string_t *muxer)
 {
-    find_muxer_for_env(s_default_env_name, muxer);
+    find_muxer_for_env(config_file_t::default_env_name, muxer);
 }
 
-bool resolve_env_name(pal::ifstream_t &file, pal::string_t *name)
+
+void find_muxer_from_config(config_file_t &config_file, pal::string_t *muxer)
 {
-    pal::string_t key;
-    pal::string_t value;
-    file >> key;
-    file >> value;
-    pal::string_t env = _X("env:");
-    if (pal::strncmp(env.c_str(), key.c_str(), env.length()) == 0)
+    const pal::string_t env_name = config_file.get_env_name();
+    if (env_name.empty())
     {
-        name->assign(value);
-        return true;
-    }
-    return false;
-}
-
-void find_muxer_from_config(pal::string_t &config, pal::string_t *muxer, pal::string_t *env_name)
-{
-    if (!pal::file_exists(config) || pal::is_directory(config))
-    {
-        return;
-    }
-
-    pal::ifstream_t file(config);
-    if (!file.good())
-    {
-        trace::verbose(_X("[%s] could not be opened"), config.c_str());
-        return;
-    }
-
-    if (skip_utf8_bom(&file))
-    {
-        trace::verbose(_X("UTF-8 BOM skipped while reading [%s]"), config.c_str());
-    }
-
-    if (resolve_env_name(file, env_name))
-    {
-        find_muxer_for_env(*env_name, muxer);
+        trace::error(_YELLOW_X("warn: Could not resolve environment name from '%s'."), config_file.get_filepath().c_str());
+        trace::error(_YELLOW_X("      Falling back to environment 'default'."));
+        find_global_muxer(muxer);
     }
     else
     {
-        trace::error(_YELLOW_X("warn: Could not resolve environment name from '%s'."), config.c_str());
-        trace::error(_YELLOW_X("      Falling back to environment 'default'."));
-        env_name->assign(s_default_env_name);
-        find_global_muxer(muxer);
+        find_muxer_for_env(env_name, muxer);
     }
 }
 
@@ -123,6 +70,7 @@ int main(const int argc, pal::char_t *argv[])
     trace::setup();
 
     trace::verbose(_X("--------> start execution of dnvm muxer"));
+    trace::verbose(_X("dnvm version " BUILD_VERSION " " GIT_COMMIT_HASH));
 
     try
     {
@@ -142,12 +90,11 @@ int main(const int argc, pal::char_t *argv[])
         }
 
         pal::string_t muxer;
-        pal::string_t config;
-        pal::string_t env_name;
-        if (find_config_file(cwd, &config))
+        config_file_t config_file;
+
+        if (config_file.load(cwd))
         {
-            pal::string_t config_dir = get_directory(config);
-            find_muxer_from_config(config, &muxer, &env_name);
+            find_muxer_from_config(config_file, &muxer);
         }
         else
         {
@@ -169,20 +116,20 @@ int main(const int argc, pal::char_t *argv[])
 
         if (invalid_muxer)
         {
-            if (config.empty())
+            if (config_file.get_filepath().empty())
             {
                 trace::error(_RED_X("The default dotnet environment has not been installed.\nRun `dnvm install --help` for more information on how to install .NET Core."));
             }
             else
             {
-                trace::error(_GRAY_X("Using '%s'"), config.c_str());
+                trace::error(_GRAY_X("Using '%s'"), config_file.get_filepath().c_str());
                 trace::error(_RED_X("The environment '%s' has not been installed.\nRun `dnvm install`."),
-                             env_name.c_str());
+                             config_file.get_env_name().c_str());
             }
             return 1;
         }
 
-        if (config.empty())
+        if (config_file.get_env_name().empty())
         {
             trace::verbose(_X("Using default dotnet dnvironment"));
         }

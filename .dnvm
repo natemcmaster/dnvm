@@ -1,7 +1,4 @@
 env: default
-sdk: stable
-fx:
-  - 1.1.0
-  - 1.0.3
+sdk: 1.0.0-rc4-004771
 tools:
   watch: stable

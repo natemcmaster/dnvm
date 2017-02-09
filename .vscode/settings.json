@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.props": "xml",
+        ".dnvm": "yaml",
+        "*.h.in": "cpp",
+        "string": "cpp"
+    }
+}

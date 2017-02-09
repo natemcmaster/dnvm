@@ -46,6 +46,8 @@
           WorkingDirectory="$(PublishDir)bin\" />
     <Exec Command="ln -s ../libexec/dnvm ./dnvm"
           WorkingDirectory="$(PublishDir)bin\" />
+    <Exec Command="ln -s ../libexec/dnvm-prompt ./dnvm-prompt"
+          WorkingDirectory="$(PublishDir)bin\" />
     <Copy SourceFiles="%(Content.FullPath)" DestinationFiles="$(PublishDir)%(Content.PackagePath)" />
 
     <Exec Command="tar -zcf &quot;$(PackageFile)&quot; ."
