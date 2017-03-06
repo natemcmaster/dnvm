@@ -1,5 +1,6 @@
 using System.Threading;
 using DotNet.VersionManager.Files;
+using DotNet.VersionManager.IO;
 using Microsoft.Extensions.Logging;
 
 namespace DotNet.VersionManager.Commands

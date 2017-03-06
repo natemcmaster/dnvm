@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace DotNet.VersionManager
+namespace DotNet.VersionManager.IO
 {
     public interface IConsole
     {

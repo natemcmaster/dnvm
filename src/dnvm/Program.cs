@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DotNet.VersionManager.Commands;
 using DotNet.VersionManager.Files;
+using DotNet.VersionManager.IO;
 using Microsoft.Extensions.Logging;
 
 namespace DotNet.VersionManager
