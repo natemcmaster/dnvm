@@ -5,11 +5,13 @@ source $DIR/common.sh
 
 if [ "$(uname)" = "Darwin" ]; then
     if ! [ "$TRAVIS" = true ]; then
-        brew outdated cmake || brew install cmake
+        brew outdated cmake || __exec brew install cmake
     fi
-    brew outdated libyaml || brew install libyaml
-    brew tap natemcmaster/dnvm
-    brew outdated dnvm || brew install dnvm
+    __exec brew install libyaml
+    brew outdated libyaml || __exec brew install libyaml
+    __exec brew tap natemcmaster/dnvm
+    __exec brew install dnvm
+    brew outdated dnvm || __exec brew install dnvm
 fi
 
 __exec dnvm install
