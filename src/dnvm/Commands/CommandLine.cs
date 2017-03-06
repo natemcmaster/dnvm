@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using DotNet.Files;
+using DotNet.VersionManager.Files;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {

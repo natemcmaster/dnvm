@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace DotNet.Utils
+namespace DotNet.VersionManager.Utils
 {
     public class ZipExtractor
     {

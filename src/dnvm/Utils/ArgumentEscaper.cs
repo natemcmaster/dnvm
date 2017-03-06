@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DotNet.Utils
+namespace DotNet.VersionManager.Utils
 {
     static class ArgumentEscaper
     {

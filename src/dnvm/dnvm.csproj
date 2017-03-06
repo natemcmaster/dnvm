@@ -6,7 +6,7 @@
     <RuntimeIdentifier Condition="'$(OS)' == 'Windows_NT'">win7-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$(OS)' != 'Windows_NT'">osx.10.10-x64</RuntimeIdentifier>
     <OSName Condition="'$(RuntimeIdentifier)'!=''">$(RuntimeIdentifier.Substring(0, 3))</OSName>
-    <RootNamespace>DotNet</RootNamespace>
+    <RootNamespace>DotNet.VersionManager</RootNamespace>
     <AssemblyName>dnvm</AssemblyName>
     <OutputType>exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
@@ -31,6 +31,7 @@
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.0" />
     <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc3" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="YamlDotNet" Version="4.0.1-pre309" />

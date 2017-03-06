@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DotNet.Files;
-using DotNet.Reporting;
+using DotNet.VersionManager.Files;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     public class SdkAsset : DotNetAssetBase
     {
@@ -16,8 +16,8 @@ namespace DotNet.Assets
         private readonly string _version;
         private readonly string _assetId;
 
-        public SdkAsset(IReporter reporter, DotNetEnv env, string version, Architecture arch)
-            : base(reporter)
+        public SdkAsset(ILogger logger, DotNetEnv env, string version, Architecture arch)
+            : base(logger)
         {
             _assetId = GetAssetId(arch);
             _version = version == DefaultVersion
@@ -44,24 +44,24 @@ namespace DotNet.Assets
 
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-            Reporter.Output($"Installing {DisplayName}");
+            Log.Output($"Installing {DisplayName}");
 
             if (_env.Sdks.Any(c => c.Version == _version))
             {
-                Reporter.Verbose($"Skipping installation of {DisplayName}. Already installed.");
-                Reporter.Output("Done");
+                Log.Verbose($"Skipping installation of {DisplayName}. Already installed.");
+                Log.Output("Done");
                 return true;
             }
 
             var url = Channel.GetDownloadUrl(_assetId, _version);
-            Reporter.Output($"Downloading {DisplayName}");
+            Log.Output($"Downloading {DisplayName}");
             if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
             {
-                Reporter.Error($"Failed to install {DisplayName}");
+                Log.Error($"Failed to install {DisplayName}");
                 return false;
             }
 
-            Reporter.Output($"Installed {DisplayName}");
+            Log.Output($"Installed {DisplayName}");
             return true;
         }
     }

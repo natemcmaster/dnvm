@@ -1,9 +1,9 @@
 using System.IO;
-using DotNet.Files;
+using DotNet.VersionManager.Files;
 using FluentAssertions;
 using Xunit;
 
-namespace DotNet.Test
+namespace DotNet.VersionManager.Test
 {
     public class ConfigFileReaderTest
     {

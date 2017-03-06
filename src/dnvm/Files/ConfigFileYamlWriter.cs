@@ -1,7 +1,7 @@
 using System.IO;
 using System.Linq;
 
-namespace DotNet.Files
+namespace DotNet.VersionManager.Files
 {
     public class ConfigFileYamlWriter
     {

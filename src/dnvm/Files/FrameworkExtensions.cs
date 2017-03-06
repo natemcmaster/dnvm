@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NuGet.Versioning;
 
-namespace DotNet.Files
+namespace DotNet.VersionManager.Files
 {
     public static class FrameworkExtensions
     {

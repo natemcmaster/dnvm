@@ -1,6 +1,6 @@
-﻿using DotNet.Assets;
+﻿using DotNet.VersionManager.Assets;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public abstract class RemoveCommand<TAsset> : SyncCommand
         where TAsset : Asset
@@ -21,7 +21,7 @@ namespace DotNet.Commands
                 var answer = context.Console.Prompt($"Are you sure you want to remove {asset.DisplayName}? (y/N) ");
                 if (!"y".Equals(answer?.Trim()?.ToLowerInvariant()))
                 {
-                    context.Reporter.Output("Cancelled");
+                    context.Logger.Output("Cancelled");
                     context.Result = Result.Okay;
                     return;
                 }

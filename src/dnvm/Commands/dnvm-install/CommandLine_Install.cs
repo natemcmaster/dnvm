@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
-using DotNet.Assets;
-using DotNet.Files;
+using DotNet.VersionManager.Assets;
+using DotNet.VersionManager.Files;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {

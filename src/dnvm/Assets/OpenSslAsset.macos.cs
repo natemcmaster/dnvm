@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     /// <summary>
     /// Represents the linking of openssl into installations of Microsoft.NETCore.App on macOS.

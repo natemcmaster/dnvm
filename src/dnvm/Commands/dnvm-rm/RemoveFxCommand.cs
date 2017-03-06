@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using DotNet.Assets;
+using DotNet.VersionManager.Assets;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class RemoveFxCommand : RemoveCommand<SharedFxAsset>
     {
@@ -16,7 +16,7 @@ namespace DotNet.Commands
 
         protected override SharedFxAsset CreateAsset(CommandContext context)
         {
-            return new SharedFxAsset(context.Reporter, context.Environment, _version, _arch);
+            return new SharedFxAsset(context.Logger, context.Environment, _version, _arch);
         }
     }
 }

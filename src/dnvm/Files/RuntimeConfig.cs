@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace DotNet.Files
+namespace DotNet.VersionManager.Files
 {
     public class RuntimeConfig
     {

@@ -1,25 +1,29 @@
-using DotNet.Reporting;
+using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions.Internal;
 using Xunit.Abstractions;
 
-namespace DotNet.Test
+namespace DotNet.VersionManager.Test
 {
-    public class TestReporter : IReporter
+    public class TestLogger : ILogger
     {
         private ITestOutputHelper _output;
-        public TestReporter(ITestOutputHelper output)
+        public TestLogger(ITestOutputHelper output)
         {
             _output = output;
         }
 
+        public IDisposable BeginScope<TState>(TState state)
+            => NullScope.Instance;
+
         public void Error(string message)
             => _output.WriteLine("err : " + message);
-        public void Output(string message)
-            => _output.WriteLine("out : " + message);
 
-        public void Verbose(string message)
-            => _output.WriteLine("vrbs: " + message);
-
-        public void Warn(string message)
-            => _output.WriteLine("warn: " + message);
+        public bool IsEnabled(LogLevel logLevel)
+            => true;
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        {
+            _output.WriteLine($"{logLevel} : {formatter(state, exception)}");
+        }
     }
 }

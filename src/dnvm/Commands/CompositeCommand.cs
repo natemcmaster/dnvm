@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class CompositeCommand : ICommand
     {

@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using DotNet.Files;
-using DotNet.Reporting;
-using DotNet.Utils;
+using DotNet.VersionManager.Files;
+using DotNet.VersionManager.Utils;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     public class ToolAsset : AssetBase
     {
@@ -19,8 +19,8 @@ namespace DotNet.Assets
         private readonly string _assetId;
         private readonly string _version;
         private readonly DotNetEnv _env;
-        public ToolAsset(IReporter reporter, DotNetEnv env, string name, string version)
-            : base(reporter)
+        public ToolAsset(ILogger logger, DotNetEnv env, string name, string version)
+            : base(logger)
         {
             _assetId = $"dnvm.tool.{name}";
             _version = version == DefaultVersion
@@ -35,7 +35,7 @@ namespace DotNet.Assets
 
         public override bool Uninstall()
         {
-            Reporter.Output($"Removing {DisplayName}");
+            Log.Output($"Removing {DisplayName}");
             var dest = GetToolRoot();
             if (Directory.Exists(dest))
             {
@@ -47,12 +47,12 @@ namespace DotNet.Assets
 
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-            Reporter.Output($"Installing {DisplayName}");
+            Log.Output($"Installing {DisplayName}");
             var dest = GetToolRoot();
 
             if (Directory.Exists(dest))
             {
-                Reporter.Verbose("Skipping. Already installed");
+                Log.Verbose("Skipping. Already installed");
                 // TODO ensure commands are linkied
                 return true;
             }
@@ -66,7 +66,7 @@ namespace DotNet.Assets
             var manifestFile = Path.Combine(dest, "dnvm.json");
             if (!File.Exists(manifestFile))
             {
-                Reporter.Error("This tool is missing the 'dnvm.json' manifest file");
+                Log.Error("This tool is missing the 'dnvm.json' manifest file");
                 Uninstall();
                 return false;
             }
@@ -91,13 +91,13 @@ namespace DotNet.Assets
 
                         if (!"Microsoft.NETCore.App".Equals(name, StringComparison.OrdinalIgnoreCase))
                         {
-                            Reporter.Error($"This tool requires an unsupported shared framework: {name}");
+                            Log.Error($"This tool requires an unsupported shared framework: {name}");
                             Uninstall();
                             return false;
                         }
 
                         var version = runtimeConfig.RuntimeOptions.Framework.Version;
-                        var sharedFx = new SharedFxAsset(Reporter, _env, version, Architecture.X64);
+                        var sharedFx = new SharedFxAsset(Log, _env, version, Architecture.X64);
                         secondaryInstalls.Add(sharedFx.InstallAsync(cancellationToken));
                     }
                 }
@@ -106,8 +106,8 @@ namespace DotNet.Assets
             }
             catch (FormatException ex)
             {
-                Reporter.Verbose(ex.Message);
-                Reporter.Error("This tool has an unrecognized 'dnvm.json' manifest format");
+                Log.Verbose(ex.Message);
+                Log.Error("This tool has an unrecognized 'dnvm.json' manifest format");
                 Uninstall();
                 return false;
             }
@@ -131,12 +131,12 @@ namespace DotNet.Assets
 
             if (File.Exists(targetPath))
             {
-                Reporter.Verbose($"File already exists: {targetPath}");
-                Reporter.Error($"A tool with a command named {name} has already been installed");
+                Log.Verbose($"File already exists: {targetPath}");
+                Log.Error($"A tool with a command named {name} has already been installed");
                 return false;
             }
 
-            Reporter.Verbose($"Creating tool executable in '{targetPath}'");
+            Log.Verbose($"Creating tool executable in '{targetPath}'");
 
             if (command.Portable)
             {
@@ -164,13 +164,13 @@ DIR=""$( cd -P ""$( dirname ""$SOURCE"" )"" && pwd )""
                     UseShellExecute = false,
                 };
 
-                Reporter.Debug($"Executing {psi.FileName} {psi.Arguments}");
+                Log.Trace($"Executing {psi.FileName} {psi.Arguments}");
 
                 var chmod = Process.Start(psi);
                 chmod.WaitForExit();
                 if (chmod.ExitCode != 0)
                 {
-                    Reporter.Warn($"Failed to make '{targetPath}' executable. Please run 'chmod +x {targetPath}'");
+                    Log.Warn($"Failed to make '{targetPath}' executable. Please run 'chmod +x {targetPath}'");
                 }
             }
             else
@@ -193,14 +193,14 @@ DIR=""$( cd -P ""$( dirname ""$SOURCE"" )"" && pwd )""
                     var exe = GetToolExecutable(command.Key);
                     if (File.Exists(exe))
                     {
-                        Reporter.Verbose($"Deleting '{exe}'");
+                        Log.Verbose($"Deleting '{exe}'");
                         File.Delete(exe);
                     }
                 }
             }
             catch
             {
-                Reporter.Verbose("Unable to read tool manifest.");
+                Log.Verbose("Unable to read tool manifest.");
             }
         }
     }

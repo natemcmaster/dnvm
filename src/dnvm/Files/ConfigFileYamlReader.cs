@@ -3,7 +3,7 @@ using System.IO;
 using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
-namespace DotNet.Files
+namespace DotNet.VersionManager.Files
 {
     public static class ConfigFileErrors
     {

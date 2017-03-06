@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 internal static class Ensure
 {
@@ -17,6 +18,16 @@ internal static class Ensure
         if (string.IsNullOrEmpty(obj))
         {
             throw new ArgumentException("Value cannot be null or an empty string.", paramName);
+        }
+        return obj;
+    }
+
+    public static T NotNullOrEmpty<T>(T obj, string paramName)
+        where T : ICollection<object>
+    {
+        if (obj == null || obj.Count == 1)
+        {
+            throw new ArgumentException("Value cannot be null or an empty collection.", paramName);
         }
         return obj;
     }

@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DotNet.Commands;
-using DotNet.Files;
-using DotNet.Reporting;
+using DotNet.VersionManager.Commands;
+using DotNet.VersionManager.Files;
+using Microsoft.Extensions.Logging;
 
-namespace DotNet
+namespace DotNet.VersionManager
 {
     class Program
     {
@@ -57,7 +57,7 @@ namespace DotNet
 
             if (context == null) return Error;
 
-            context.Reporter.Verbose($"Using environment '{context.Environment.Name}'");
+            context.Logger.LogDebug($"Using environment '{context.Environment.Name}'");
 
             try
             {
@@ -74,7 +74,7 @@ namespace DotNet
             }
             catch (Exception ex)
             {
-                context.Reporter.Error(ex.ToString());
+                context.Logger.LogCritical(ex.ToString());
                 return Error;
             }
         }
@@ -86,7 +86,7 @@ namespace DotNet
                 CancellationToken = _cts.Token,
                 Console = _console,
                 WorkingDir = _workingDir,
-                Reporter = CreateReporter(options.IsVerbose),
+                Logger = new ConsoleLogger(_console, options.IsVerbose),
                 Settings = DnvmSettings.Load(),
             };
 
@@ -103,7 +103,7 @@ namespace DotNet
                 }
                 catch (FormatException ex)
                 {
-                    context.Reporter.Error($"Config file '{configFile}' has an invalid format. {ex.Message}");
+                    context.Logger.LogError($"Config file '{configFile}' has an invalid format. {ex.Message}");
                     return null;
                 }
 
@@ -116,16 +116,6 @@ namespace DotNet
             }
 
             return context;
-        }
-
-        private IReporter CreateReporter(bool verbose)
-        {
-            return new ReporterBuilder()
-                .WithConsole(_console)
-                .Verbose(c => c.WithColor(ConsoleColor.DarkGray).When(() => verbose))
-                .Warn(c => c.WithColor(ConsoleColor.Yellow))
-                .Error(c => c.WithColor(ConsoleColor.Red))
-                .Build();
         }
 
         [Conditional("DEBUG")]

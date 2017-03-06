@@ -2,16 +2,14 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using DotNet.Assets;
-using DotNet.Commands;
-using DotNet.Files;
-using DotNet.Utils;
+using DotNet.VersionManager.Commands;
+using DotNet.VersionManager.Files;
+using DotNet.VersionManager.Utils;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace DotNet.Test
+namespace DotNet.VersionManager.Test
 {
     public class CliInstallTest : IDisposable
     {
@@ -33,7 +31,7 @@ namespace DotNet.Test
             var command = new InstallSdkCommand(version, Architecture.X64);
             var context = new CommandContext
             {
-                Reporter = new TestReporter(_output),
+                Logger = new TestLogger(_output),
                 Environment = new DotNetEnv("test", new DirectoryInfo(_tempDir.Path))
             };
             // while (!System.Diagnostics.Debugger.IsAttached);

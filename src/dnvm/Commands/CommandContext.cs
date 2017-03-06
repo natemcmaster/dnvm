@@ -1,9 +1,8 @@
-using System;
 using System.Threading;
-using DotNet.Files;
-using DotNet.Reporting;
+using DotNet.VersionManager.Files;
+using Microsoft.Extensions.Logging;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class CommandContext
     {
@@ -16,7 +15,7 @@ namespace DotNet.Commands
         public IConsole Console { get; set; }
         public string WorkingDir { get; set; }
 
-        public IReporter Reporter { get; set; }
+        public ILogger Logger { get; set; }
         public DnvmSettings Settings { get; set; }
     }
 }

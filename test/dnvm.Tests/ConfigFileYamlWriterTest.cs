@@ -1,10 +1,10 @@
 using System.IO;
 using System.Text;
-using DotNet.Files;
+using DotNet.VersionManager.Files;
 using FluentAssertions;
 using Xunit;
 
-namespace DotNet.Test
+namespace DotNet.VersionManager.Test
 {
     public class ConfigFileYamlWriterTest
     {

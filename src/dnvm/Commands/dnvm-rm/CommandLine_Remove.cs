@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.CommandLineUtils;
 using System.Runtime.InteropServices;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {

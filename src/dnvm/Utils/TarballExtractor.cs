@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace DotNet.Utils
+namespace DotNet.VersionManager.Utils
 {
     public class TarballExtractor
     {

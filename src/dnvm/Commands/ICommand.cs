@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public interface ICommand
     {

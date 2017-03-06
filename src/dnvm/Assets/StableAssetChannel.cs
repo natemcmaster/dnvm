@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     public partial class StableAssetChannel : IAssetChannel
     {

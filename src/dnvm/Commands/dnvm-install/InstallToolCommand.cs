@@ -1,6 +1,6 @@
-﻿using DotNet.Assets;
+﻿using DotNet.VersionManager.Assets;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class InstallToolCommand : InstallCommand<ToolAsset>
     {
@@ -14,6 +14,6 @@ namespace DotNet.Commands
         }
 
         protected override ToolAsset CreateAsset(CommandContext context)
-            => new ToolAsset(context.Reporter, context.Environment, _name, _version);
+            => new ToolAsset(context.Logger, context.Environment, _name, _version);
     }
 }

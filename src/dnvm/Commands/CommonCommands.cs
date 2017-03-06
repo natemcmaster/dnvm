@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class CommonCommands
     {
@@ -19,8 +19,8 @@ namespace DotNet.Commands
                 if (context.ConfigFile == null)
                 {
                     context.Result = Result.Error;
-                    context.Reporter.Error("Could not find a config file.");
-                    context.Reporter.Output("Try executing `dnvm init` to create a config file.");
+                    context.Logger.Error("Could not find a config file.");
+                    context.Logger.Output("Try executing `dnvm init` to create a config file.");
                     return;
                 }
             }

@@ -1,7 +1,7 @@
 using System.IO;
-using DotNet.Files;
+using DotNet.VersionManager.Files;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class InitConfigInteractiveCommand : SyncCommand
     {
@@ -13,14 +13,14 @@ namespace DotNet.Commands
             {
                 if (File.Exists(dest))
                 {
-                    context.Reporter.Error("Failed to initialize new environment.");
-                    context.Reporter.Error($"The file '{dest}' already exists .");
+                    context.Logger.Error("Failed to initialize new environment.");
+                    context.Logger.Error($"The file '{dest}' already exists .");
                     context.Result = Result.Error;
                     return;
                 }
 
-                context.Reporter.Warn($"A config file already exists at '{context.ConfigFile.FilePath}'.");
-                context.Reporter.Warn("Adding the new config file here will override this file's settings.");
+                context.Logger.Warn($"A config file already exists at '{context.ConfigFile.FilePath}'.");
+                context.Logger.Warn("Adding the new config file here will override this file's settings.");
             }
 
             var defaultName = Path.GetFileName(context.WorkingDir);

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using DotNet.Assets;
+using DotNet.VersionManager.Assets;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class RemoveSdkCommand : RemoveCommand<SdkAsset>
     {
@@ -16,7 +16,7 @@ namespace DotNet.Commands
 
         protected override SdkAsset CreateAsset(CommandContext context)
         {
-            return new SdkAsset(context.Reporter, context.Environment, _version, _arch);
+            return new SdkAsset(context.Logger, context.Environment, _version, _arch);
         }
     }
 }

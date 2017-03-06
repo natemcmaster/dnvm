@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace DotNet.Utils
+namespace DotNet.VersionManager.Utils
 {
     public class TempFile : IDisposable
     {

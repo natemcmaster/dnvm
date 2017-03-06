@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
-using DotNet.Assets;
+using DotNet.VersionManager.Assets;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class InstallSdkCommand : InstallCommand<SdkAsset>
     {
@@ -15,6 +15,6 @@ namespace DotNet.Commands
         }
 
         protected override SdkAsset CreateAsset(CommandContext context)
-            => new SdkAsset(context.Reporter, context.Environment, _version, _arch);
+            => new SdkAsset(context.Logger, context.Environment, _version, _arch);
     }
 }

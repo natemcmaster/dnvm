@@ -3,40 +3,40 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using DotNet.Reporting;
-using DotNet.Utils;
+using DotNet.VersionManager.Utils;
+using Microsoft.Extensions.Logging;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     public abstract class AssetBase : Asset
     {
-        protected IReporter Reporter { get; }
+        protected ILogger Log { get; }
 
-        public AssetBase(IReporter reporter)
+        public AssetBase(ILogger logger)
         {
-            Reporter = reporter;
+            Log = logger;
         }
 
         protected bool UninstallFolder(string path)
         {
             if (Directory.Exists(path))
             {
-                Reporter.Verbose($"Deleting '{path}'");
+                Log.Verbose($"Deleting '{path}'");
                 try
                 {
                     Directory.Delete(path, recursive: true);
                 }
                 catch (Exception ex)
                 {
-                    Reporter.Verbose(ex.Message);
-                    Reporter.Error($"Failed to delete '{path}'. Try again or remove manually.");
+                    Log.Verbose(ex.Message);
+                    Log.Error($"Failed to delete '{path}'. Try again or remove manually.");
                     return false;
                 }
-                Reporter.Verbose("Deleted");
+                Log.Verbose("Deleted");
             }
             else
             {
-                Reporter.Verbose($"Skipping. '{path}' does not exist.");
+                Log.Verbose($"Skipping. '{path}' does not exist.");
             }
             return true;
         }
@@ -53,7 +53,7 @@ namespace DotNet.Assets
             ArchiveExtractor extractor,
             CancellationToken cancellationToken)
         {
-            Reporter.Verbose($"Downloading from '{url}'");
+            Log.Verbose($"Downloading from '{url}'");
 
             HttpResponseMessage result;
             try
@@ -62,13 +62,13 @@ namespace DotNet.Assets
             }
             catch (HttpRequestException ex)
             {
-                Reporter.Error($"Downloading asset failed: {ex.Message}");
+                Log.Error($"Downloading asset failed: {ex.Message}");
                 return false;
             }
 
             if (!result.IsSuccessStatusCode)
             {
-                Reporter.Error($"Failed to download '{url}'");
+                Log.Error($"Failed to download '{url}'");
                 throw new InvalidOperationException("Installation failed");
             }
 
@@ -82,7 +82,7 @@ namespace DotNet.Assets
             {
                 await result.Content.CopyToAsync(stream);
 
-                Reporter.Verbose($"Extracting '{filename}' to '{destination}'");
+                Log.Verbose($"Extracting '{filename}' to '{destination}'");
 
                 return extractor(tmp.Path, destination);
             }

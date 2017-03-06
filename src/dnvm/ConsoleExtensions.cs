@@ -1,4 +1,4 @@
-namespace DotNet
+namespace DotNet.VersionManager
 {
     public static class ConsoleExtensions
     {

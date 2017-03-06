@@ -1,9 +1,9 @@
-using DotNet.Files;
+using DotNet.VersionManager.Files;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace DotNet.Tests
+namespace DotNet.VersionManager.Tests
 {
     public class ToolManifestTest
     {

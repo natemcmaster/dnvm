@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using DotNet.Assets;
+using DotNet.VersionManager.Assets;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public abstract class InstallCommand<TAsset> : ICommand
         where TAsset : Asset
@@ -20,8 +20,8 @@ namespace DotNet.Commands
             }
             catch (Exception ex)
             {
-                context.Reporter.Verbose(ex.ToString());
-                context.Reporter.Error(ex.Message);
+                context.Logger.Verbose(ex.ToString());
+                context.Logger.Error(ex.Message);
                 success = false;
             }
 

@@ -1,4 +1,4 @@
-namespace DotNet.Files
+namespace DotNet.VersionManager.Files
 {
     public static class FileConstants
     {

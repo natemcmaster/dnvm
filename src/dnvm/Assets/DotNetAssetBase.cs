@@ -1,11 +1,11 @@
-using DotNet.Reporting;
+using Microsoft.Extensions.Logging;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     public abstract class DotNetAssetBase : AssetBase
     {
-        public DotNetAssetBase(IReporter reporter)
-        : base(reporter)
+        public DotNetAssetBase(ILogger logger)
+        : base(logger)
         {
         }
 

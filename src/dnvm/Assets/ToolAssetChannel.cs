@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     public class ToolAssetChannel : IAssetChannel
     {

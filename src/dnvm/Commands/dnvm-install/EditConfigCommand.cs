@@ -1,7 +1,7 @@
 using System.IO;
-using DotNet.Files;
+using DotNet.VersionManager.Files;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class EditConfigCommand : SyncCommand
     {

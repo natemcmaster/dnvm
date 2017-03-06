@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
-using DotNet.Assets;
+using DotNet.VersionManager.Assets;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public class InstallFxCommand : InstallCommand<SharedFxAsset>
     {
@@ -15,6 +15,6 @@ namespace DotNet.Commands
         }
 
         protected override SharedFxAsset CreateAsset(CommandContext context)
-            => new SharedFxAsset(context.Reporter, context.Environment, _version, _arch);
+            => new SharedFxAsset(context.Logger, context.Environment, _version, _arch);
     }
 }

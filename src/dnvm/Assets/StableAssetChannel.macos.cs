@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     // TODO make this info available remotely so it can be updated without re-installing dnvm
     partial class StableAssetChannel : IAssetChannel

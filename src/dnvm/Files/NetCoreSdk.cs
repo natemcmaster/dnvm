@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace DotNet.Files
+namespace DotNet.VersionManager.Files
 {
     public class NetCoreSdk
     {

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     public abstract class SyncCommand : ICommand
     {

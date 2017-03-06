@@ -4,11 +4,11 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
-using DotNet.Files;
-using DotNet.Reporting;
+using DotNet.VersionManager.Files;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     public class SharedFxAsset : DotNetAssetBase
     {
@@ -21,8 +21,8 @@ namespace DotNet.Assets
 
         private static readonly HttpClient DefaultHttpClient = new HttpClient();
 
-        public SharedFxAsset(IReporter reporter, DotNetEnv env, string version, Architecture arch)
-            : base(reporter)
+        public SharedFxAsset(ILogger logger, DotNetEnv env, string version, Architecture arch)
+            : base(logger)
         {
             _assetId = GetAssetId(arch);
             _version = version == DefaultVersion
@@ -51,15 +51,15 @@ namespace DotNet.Assets
         {
 
             var assetFullName = $"{_assetId}@{_version}";
-            Reporter.Output($"Installing '{assetFullName}'");
-            Reporter.Verbose($"Begin installation of {assetFullName} to '{_env.Root}'");
+            Log.Output($"Installing '{assetFullName}'");
+            Log.Verbose($"Begin installation of {assetFullName} to '{_env.Root}'");
 
             var dest = Path.Combine(_env.FxRoot, _assetId, _version);
 
             if (_env.Frameworks.Any(f => f.Name.Equals(_assetId, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
             {
                 await EnsureAssetsLinkedIntoFramework(dest, cancellationToken);
-                Reporter.Verbose($"Skipping installation of {assetFullName}. Already installed.");
+                Log.Verbose($"Skipping installation of {assetFullName}. Already installed.");
                 return true;
             }
 
@@ -69,10 +69,10 @@ namespace DotNet.Assets
 
             var url = Channel.GetDownloadUrl(_assetId, _version);
 
-            Reporter.Output($"Downloading {assetFullName}");
+            Log.Output($"Downloading {assetFullName}");
             if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
             {
-                Reporter.Error($"Failed to install {assetFullName}");
+                Log.Error($"Failed to install {assetFullName}");
 
                 if (Directory.EnumerateFiles(dest).Any())
                 {
@@ -82,7 +82,7 @@ namespace DotNet.Assets
                     }
                     catch
                     {
-                        Reporter.Verbose($"Failed to delete {dest}");
+                        Log.Verbose($"Failed to delete {dest}");
                     }
                 }
 
@@ -96,10 +96,10 @@ namespace DotNet.Assets
         {
 #if __MACOS__
             var openssl = new OpenSslAsset(dest);
-            Reporter.Verbose($"Linking OpenSSL from Homebrew into '{dest}'");
+            Log.Verbose($"Linking OpenSSL from Homebrew into '{dest}'");
             if (!await openssl.InstallAsync(cancellationToken))
             {
-                Reporter.Warn($"Failed to install OpenSSL into {DisplayName}. Try running `brew install openssl` first and re-run this command.");
+                Log.Warn($"Failed to install OpenSSL into {DisplayName}. Try running `brew install openssl` first and re-run this command.");
             }
 #else
             await Task.CompletedTask;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DotNet.Files
+namespace DotNet.VersionManager.Files
 {
     public class ConfigFile
     {

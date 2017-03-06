@@ -1,6 +1,6 @@
 using System.Net.Http;
 
-namespace DotNet.Utils
+namespace DotNet.VersionManager.Utils
 {
     public static class Http
     {

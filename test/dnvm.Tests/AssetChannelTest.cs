@@ -1,8 +1,8 @@
-﻿using DotNet.Assets;
+﻿using DotNet.VersionManager.Assets;
 using FluentAssertions;
 using Xunit;
 
-namespace DotNet.Test
+namespace DotNet.VersionManager.Test
 {
     public class AssetChannelTest
     {

@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using DotNet.Assets;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     class InstallFromFileCommand : ICommand
     {
@@ -11,9 +10,9 @@ namespace DotNet.Commands
         {
             if (context.ConfigFile == null)
             {
-                context.Reporter.Error("No config file could be found.");
-                context.Reporter.Output("Try executing `dnvm init` to create a config file, or use a subcommand of `dnvm install`.");
-                context.Reporter.Output("See `dnvm install --help` for more info.");
+                context.Logger.Error("No config file could be found.");
+                context.Logger.Output("Try executing `dnvm init` to create a config file, or use a subcommand of `dnvm install`.");
+                context.Logger.Output("See `dnvm install --help` for more info.");
                 context.Result = Result.Error;
             }
             else
@@ -36,7 +35,7 @@ namespace DotNet.Commands
 
                 if (commands.Count == 0)
                 {
-                    context.Reporter.Warn("Nothing will be installed because the config file does not list assets.");
+                    context.Logger.Warn("Nothing will be installed because the config file does not list assets.");
                 }
 
                 var composite = CommonCommands.Sequence(commands);

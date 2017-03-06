@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DotNet.Assets
+namespace DotNet.VersionManager.Assets
 {
     public abstract class Asset
     {

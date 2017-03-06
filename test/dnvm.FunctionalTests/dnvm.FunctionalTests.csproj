@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <RootNamespace>DotNet.Test</RootNamespace>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\dnvm\dnvm.csproj" />
   </ItemGroup>
+
   <Import Project="..\testdeps.props" />
 </Project>

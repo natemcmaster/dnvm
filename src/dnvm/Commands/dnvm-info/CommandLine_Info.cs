@@ -1,6 +1,6 @@
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace DotNet.Commands
+namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {
