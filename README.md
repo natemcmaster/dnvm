@@ -32,11 +32,11 @@ Install a .NET Core runtime
 ```sh
 # install the most recent stable .NET Core runtime
 # these commands are equivalent
-dnvm install fx
-dnvm install fx stable
+dnvm install runtime
+dnvm install runtime stable
 
 # install a specific version of .NET Core runtime
-dnvm install fx 1.1.0
+dnvm install runtime 1.1.0
 ```
 
 Install a .NET Core CLI tool
@@ -58,7 +58,7 @@ dotnet watch
 List versions that could be installed
 ```sh
 # list all known versions of .NET Core runtime
-dnvm list fx
+dnvm list runtime
 # list all known versions of .NET Core SDK
 dnvm list sdk
 ```
@@ -73,7 +73,7 @@ Remove stuff
 # uninstalls the .NET Core SDK
 dnvm rm sdk 1.0.0-preview4-004233
 # uninstalls the .NET Core runtime
-dnvm rm fx 1.0.0
+dnvm rm runtime 1.0.0
 ```
 
 ## The dnvm config file (optional)
@@ -89,7 +89,7 @@ env: default
 # optional: list the .NET Core SDK to install
 sdk: 1.0.0-preview4-004233
 # optional: list versions of .NET Core to install
-fx:
+runtime:
   - 1.0.1
   - 1.1.0
   - stable
@@ -117,5 +117,5 @@ dnvm init
 dnvm install sdk --save
 
 # installs .NET Core runtime and saves the version to the .dnvm file
-dnvm install fx 1.1.0 --save
+dnvm install runtime 1.1.0 --save
 ```

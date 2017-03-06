@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -12,6 +11,7 @@ namespace DotNet.VersionManager.Assets
     public class OpenSslAsset : Asset
     {
         private readonly string _symlinkDest;
+        private readonly string[] _dylibs = new[] { "libcrypto.1.0.0.dylib", "libssl.1.0.0.dylib" };
 
         public override string DisplayName { get; } = "OpenSSL (from Homebrew)";
 
@@ -25,17 +25,16 @@ namespace DotNet.VersionManager.Assets
 
         public override Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-            // default Homebrew library path
-            var basename = "/usr/local/opt/openssl/lib/";
-            foreach (var file in new[] { "libcrypto.1.0.0.dylib", "libssl.1.0.0.dylib" })
+            var basename = GetOpenSSLPath();
+            foreach (var dylib in _dylibs)
             {
-                var src = Path.Combine(basename, file);
+                var src = Path.Combine(basename, dylib);
                 if (!File.Exists(src))
                 {
                     return Task.FromResult(false);
                 }
 
-                var dest = Path.Combine(_symlinkDest, file);
+                var dest = Path.Combine(_symlinkDest, dylib);
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     symlink(src, dest);
@@ -50,7 +49,22 @@ namespace DotNet.VersionManager.Assets
 
         public override bool Uninstall()
         {
-            throw new NotImplementedException();
+            foreach (var dylib in _dylibs)
+            {
+                var filePath = Path.Combine(_symlinkDest, dylib);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+
+            return true;
+        }
+
+        private string GetOpenSSLPath()
+        {
+            // default Homebrew library path
+            return "/usr/local/opt/openssl/lib/";
         }
     }
 }

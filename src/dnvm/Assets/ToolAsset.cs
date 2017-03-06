@@ -97,7 +97,7 @@ namespace DotNet.VersionManager.Assets
                         }
 
                         var version = runtimeConfig.RuntimeOptions.Framework.Version;
-                        var sharedFx = new SharedFxAsset(Log, _env, version, Architecture.X64);
+                        var sharedFx = new RuntimeAsset(Log, _env, version, Architecture.X64);
                         secondaryInstalls.Add(sharedFx.InstallAsync(cancellationToken));
                     }
                 }

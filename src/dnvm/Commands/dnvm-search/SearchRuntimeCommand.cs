@@ -4,7 +4,7 @@ using DotNet.VersionManager.Assets;
 
 namespace DotNet.VersionManager.Commands
 {
-    public class SearchFxCommand : SyncCommand
+    public class SearchRuntimeCommand : SyncCommand
     {
         protected override void Execute(CommandContext context)
         {
@@ -12,15 +12,15 @@ namespace DotNet.VersionManager.Commands
             context.Logger.Output("");
 
             var channel = new StableAssetChannel();
-            var stable = channel.GetLatestVersion(SharedFxAsset.GetAssetId(Architecture.X64));
-            foreach (var version in channel.GetAvailableVersions(SharedFxAsset.GetAssetId(Architecture.X64)))
+            var stable = channel.GetLatestVersion(RuntimeAsset.GetAssetId(Architecture.X64));
+            foreach (var version in channel.GetAvailableVersions(RuntimeAsset.GetAssetId(Architecture.X64)))
             {
                 var line = version == stable
                 ? $"{version} ({SdkAsset.DefaultVersion})"
                 : version;
                 var installed = context.Environment
-                    .Frameworks
-                    .Any(f => f.Name == SharedFxAsset.GetAssetId(Architecture.X64) && f.Version.Equals(version))
+                    .Runtimes
+                    .Any(f => f.Name == RuntimeAsset.GetAssetId(Architecture.X64) && f.Version.Equals(version))
                     ? "*"
                     : " ";
 

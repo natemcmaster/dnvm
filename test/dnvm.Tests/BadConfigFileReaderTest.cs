@@ -37,25 +37,25 @@ namespace DotNet.VersionManager.Test
         }
 
         [Fact]
-        public void FxIsAMap()
+        public void RuntimeIsAMap()
         {
             Read(@"---
 env: value
-fx:
+runtime:
   sub: item")
                 .ShouldThrow<FormatException>()
-                .WithMessage(ConfigFileErrors.FxMustBeListOrScalar);
+                .WithMessage(ConfigFileErrors.RuntimeMustBeListOrScalar);
         }
 
         [Fact]
-        public void FxItemIsAMap()
+        public void RuntimeItemIsAMap()
         {
             Read(@"---
 env: value
-fx:
+runtime:
    - sub: item")
                 .ShouldThrow<FormatException>()
-                .WithMessage(ConfigFileErrors.FxSequenceItemIsNotScalar);
+                .WithMessage(ConfigFileErrors.RuntimeSequenceItemIsNotScalar);
         }
 
         [Fact]

@@ -23,9 +23,9 @@ namespace DotNet.VersionManager.Commands
                     commands.Add(new InstallSdkCommand(context.ConfigFile.Sdk, Architecture.X64));
                 }
 
-                foreach (var fx in context.ConfigFile.SharedFx)
+                foreach (var runtime in context.ConfigFile.Runtime)
                 {
-                    commands.Add(new InstallFxCommand(fx, Architecture.X64));
+                    commands.Add(new InstallRuntimeCommand(runtime, Architecture.X64));
                 }
 
                 foreach (var tool in context.ConfigFile.Tools)

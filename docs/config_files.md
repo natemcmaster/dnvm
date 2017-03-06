@@ -17,12 +17,11 @@ env: env_name
 # format
 sdk: sdk_version
 
-# fx = shared frameworks
-# the shared runtime frameworks
-fx: version
+# runtime = .NET Core runtimes
+runtime: version
 
-# Can also be a list of multiple versions frameworks to install.
-fx:
+# Can also be a list of multiple versions runtimes to install.
+runtime:
   - version1
   - version2
 
@@ -37,7 +36,7 @@ Example:
 ```yml
 env: myapp
 sdk: 1.0.0-preview4-004233
-fx:
+runtime:
   - 1.0.1
   - 1.1.0
 tools:

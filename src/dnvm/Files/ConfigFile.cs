@@ -12,6 +12,6 @@ namespace DotNet.VersionManager.Files
 
         public IDictionary<string, string> Tools { get; } = new Dictionary<string, string>();
 
-        public ISet<string> SharedFx { get; } = new HashSet<string>();
+        public ISet<string> Runtime { get; } = new HashSet<string>();
     }
 }

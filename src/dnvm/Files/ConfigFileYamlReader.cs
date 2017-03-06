@@ -9,8 +9,8 @@ namespace DotNet.VersionManager.Files
     {
         public const string EnvIsNotScalar = "The value for 'env' must be a single, scalar value.";
         public const string SdkIsNotScalar = "The value for 'sdk' must be a single, scalar value.";
-        public const string FxSequenceItemIsNotScalar = "Items in the 'fx' section must only be scalar values.";
-        public const string FxMustBeListOrScalar = "The 'fx' section must be a single value or a sequence of scalar values.";
+        public const string RuntimeSequenceItemIsNotScalar = "Items in the 'runtime' section must only be scalar values.";
+        public const string RuntimeMustBeListOrScalar = "The 'runtime' section must be a single value or a sequence of scalar values.";
         public const string MissingEnvKey = "Missing the required 'env' key.";
         public const string MultipleDocuments = "The config file should not contain multiple YAML document sections.";
         public const string ToolsMustBeMap = "The 'tools' section must only contain key/value pairs for 'tool_name': 'tool_version'";
@@ -85,7 +85,7 @@ namespace DotNet.VersionManager.Files
                         }
                     }
                     break;
-                case "fx":
+                case "runtime":
                     {
                         ReadFx(node, configFile);
                     }
@@ -128,27 +128,27 @@ namespace DotNet.VersionManager.Files
 
         private static void ReadFx(YamlNode node, ConfigFile configFile)
         {
-            if (node is YamlScalarNode fx)
+            if (node is YamlScalarNode runtime)
             {
-                configFile.SharedFx.Add(fx.Value);
+                configFile.Runtime.Add(runtime.Value);
             }
             else if (node is YamlSequenceNode values)
             {
-                foreach (var fxItem in values.Children)
+                foreach (var runtimeItem in values.Children)
                 {
-                    if (fxItem is YamlScalarNode fxValue)
+                    if (runtimeItem is YamlScalarNode runtimeValue)
                     {
-                        configFile.SharedFx.Add(fxValue.Value);
+                        configFile.Runtime.Add(runtimeValue.Value);
                     }
                     else
                     {
-                        throw new FormatException(ConfigFileErrors.FxSequenceItemIsNotScalar);
+                        throw new FormatException(ConfigFileErrors.RuntimeSequenceItemIsNotScalar);
                     }
                 }
             }
             else
             {
-                throw new FormatException(ConfigFileErrors.FxMustBeListOrScalar);
+                throw new FormatException(ConfigFileErrors.RuntimeMustBeListOrScalar);
             }
         }
     }

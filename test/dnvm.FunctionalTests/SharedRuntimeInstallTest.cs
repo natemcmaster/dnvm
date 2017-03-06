@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 
 namespace DotNet.VersionManager.Test
 {
-    public class SharedFxInstallTest : IDisposable
+    public class SharedRuntimeInstallTest : IDisposable
     {
         private readonly TempDir _tempDir = new TempDir();
         private readonly ITestOutputHelper _output;
@@ -24,7 +24,7 @@ namespace DotNet.VersionManager.Test
         [InlineData("1.1.0")]
         public async Task InstallsFx(string version)
         {
-            var command = new InstallFxCommand(version, Architecture.X64);
+            var command = new InstallRuntimeCommand(version, Architecture.X64);
             var context = new CommandContext
             {
                 Logger = new TestLogger(_output),

@@ -4,7 +4,7 @@ namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {
-        private void InfoCommand(CommandLineApplication c)
+        private void Info(CommandLineApplication c)
         {
             c.OnExecute(() =>
             {

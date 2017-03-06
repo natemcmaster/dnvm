@@ -7,13 +7,13 @@ namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {
-        private void InstallCommand(CommandLineApplication c)
+        private void Install(CommandLineApplication c)
         {
-            c.Command("fx", "Install a .NET Core runtime framework", InstallFxCommand);
+            c.Command("runtime", "Install a .NET Core runtime", InstallRuntime);
 
-            c.Command("sdk", "Install a .NET Core SDK", InstallSdkCommand);
+            c.Command("sdk", "Install a .NET Core SDK", InstallSdk);
 
-            c.Command("tool", "Install a .NET Core CLI tool", InstallToolCommand);
+            c.Command("tool", "Install a .NET Core CLI tool", InstallTool);
 
             c.OnExecute(() =>
             {
@@ -31,39 +31,39 @@ Additional Information:
 ";
         }
 
-        private void InstallFxCommand(CommandLineApplication fx)
+        private void InstallRuntime(CommandLineApplication runtime)
         {
-            var argVersion = fx.Argument("version",
-                    $"Version of the shared framework to install. Defaults to '{SharedFxAsset.DefaultVersion}'.");
+            var argVersion = runtime.Argument("version",
+                    $"Version of the shared framework to install. Defaults to '{RuntimeAsset.DefaultVersion}'.");
 
 /*
             TODO support architecture-specific assets
-            var optArch = fx.Option("-a|--arch",
-                    $"Processor architecture of the framework. Accepted values: x86, x64. Defaults to {defaultArch}");
+            var optArch = runtime.Option("-a|--arch",
+                    $"Processor architecture of the runtime. Accepted values: x86, x64. Defaults to {defaultArch}");
 */
 
-            var optSave = fx.Option("--save",
-                $"Save to the 'fx' version of the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
+            var optSave = runtime.Option("--save",
+                $"Save to the 'runtime' version of the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
 
-            fx.OnExecute(() =>
+            runtime.OnExecute(() =>
             {
-                var version = argVersion.Value ?? SharedFxAsset.DefaultVersion;
+                var version = argVersion.Value ?? RuntimeAsset.DefaultVersion;
 
-                ICommand install = new InstallFxCommand(version, Architecture.X64);
+                ICommand install = new InstallRuntimeCommand(version, Architecture.X64);
 
                 if (optSave.HasValue())
                 {
                     install = CommonCommands.Sequence(
                         CommonCommands.EnsureConfigFileExists,
                         install,
-                        new EditConfigCommand(c => c.SharedFx.Add(version)));
+                        new EditConfigCommand(c => c.Runtime.Add(version)));
                 }
 
                 this.Command = install;
             });
         }
 
-        private void InstallSdkCommand(CommandLineApplication sdk)
+        private void InstallSdk(CommandLineApplication sdk)
         {
             var argVersion = sdk.Argument("version", $"Version of the .NET Core SDK to install. Defaults to '{SdkAsset.DefaultVersion}'.");
             var optSave = sdk.Option("--save", $"Save as the value of 'sdk' in the '{FileConstants.Config}' config file.", CommandOptionType.NoValue);
@@ -84,7 +84,7 @@ Additional Information:
             });
         }
 
-        private void InstallToolCommand(CommandLineApplication tool)
+        private void InstallTool(CommandLineApplication tool)
         {
             var argName = tool.Argument("name", $"Name of the tool. Required.");
             var argVersion = tool.Argument("version", $"The version of the tool. Defaults to '{ToolAsset.DefaultVersion}'.");

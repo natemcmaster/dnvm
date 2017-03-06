@@ -14,7 +14,7 @@ namespace DotNet.VersionManager.Test
             Write(new ConfigFile
             {
                 Sdk = "1.0.0-preview4",
-                SharedFx = { "1.0.1", "1.1.0" },
+                Runtime = { "1.0.1", "1.1.0" },
                 Environment = "default",
                 Tools =
                 {
@@ -22,7 +22,7 @@ namespace DotNet.VersionManager.Test
                 }
             })
            .Should()
-           .Be("env: default\nsdk: 1.0.0-preview4\nfx:\n  - 1.0.1\n  - 1.1.0\ntools:\n  prop: 1.1.0\n");
+           .Be("env: default\nsdk: 1.0.0-preview4\nruntime:\n  - 1.0.1\n  - 1.1.0\ntools:\n  prop: 1.1.0\n");
         }
 
         [Fact]
@@ -58,10 +58,10 @@ namespace DotNet.VersionManager.Test
         {
             Write(new ConfigFile
             {
-                SharedFx = { "1.0.1" }
+                Runtime = { "1.0.1" }
             })
             .Should()
-            .Be("fx: 1.0.1\n");
+            .Be("runtime: 1.0.1\n");
         }
 
         [Fact]
@@ -69,10 +69,10 @@ namespace DotNet.VersionManager.Test
         {
             Write(new ConfigFile
             {
-                SharedFx = { "stable", "1.0.0" }
+                Runtime = { "stable", "1.0.0" }
             })
             .Should()
-            .Be("fx:\n  - stable\n  - 1.0.0\n");
+            .Be("runtime:\n  - stable\n  - 1.0.0\n");
         }
 
 

@@ -6,17 +6,17 @@ namespace DotNet.VersionManager.Commands
     partial class CommandLine
     {
         // TODO implement --save
-        private void RemoveCommand(CommandLineApplication c)
+        private void Remove(CommandLineApplication c)
         {
-            c.Command("fx", "Remove a .NET Core runtime framework", fx =>
+            c.Command("runtime", "Remove a .NET Core runtime", runtime =>
             {
-                var version = fx.Argument("version", "The version of the framework to remove");
-                var force = fx.Option("-f|--force", "Uninstall without asking questions",
+                var version = runtime.Argument("version", "The version of the runtime to remove");
+                var force = runtime.Option("-f|--force", "Uninstall without asking questions",
                         CommandOptionType.NoValue);
 
-                fx.OnExecute(() =>
+                runtime.OnExecute(() =>
                 {
-                    this.Command = new RemoveFxCommand(version.IfNotNullOrEmpty(), Architecture.X64, force.HasValue());
+                    this.Command = new RemoveRuntimeCommand(version.IfNotNullOrEmpty(), Architecture.X64, force.HasValue());
                 });
             });
 

@@ -12,7 +12,7 @@ namespace DotNet.VersionManager.Test
         {
             var file = Read(@"
 env: myenvname
-fx:
+runtime:
  - 1.0.1
  - 1.2.3
  - alpha
@@ -23,7 +23,7 @@ tools:
 
             file.Should().NotBeNull();
             file.Environment.Should().Equals("myenvname");
-            file.SharedFx.Should()
+            file.Runtime.Should()
                 .HaveCount(3)
                 .And.Contain(new[] { "1.0.1", "1.2.3", "alpha" });
             file.Sdk.Should().Equals("1.0.0-preview3-003131");
@@ -38,11 +38,11 @@ tools:
         {
             var file = Read(@"
 env: myenvname
-fx: 1.1.0");
+runtime: 1.1.0");
 
             file.Should().NotBeNull();
             file.Environment.Should().Equals("myenvname");
-            file.SharedFx.Should().ContainSingle("1.1.0");
+            file.Runtime.Should().ContainSingle("1.1.0");
         }
 
         [Fact]
@@ -53,13 +53,13 @@ fx: 1.1.0");
 env: myenvname
 # more comments
 
-fx: 1.1.0 # trailing comments
+runtime: 1.1.0 # trailing comments
 
 #end comments");
 
             file.Should().NotBeNull();
             file.Environment.Should().Equals("myenvname");
-            file.SharedFx.Should().ContainSingle("1.1.0");
+            file.Runtime.Should().ContainSingle("1.1.0");
         }
 
 

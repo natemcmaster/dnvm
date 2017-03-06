@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace DotNet.VersionManager.Files
 {
+    /// <summary>
+    /// Represents the 'runtimeconfig.json' file
+    /// </summary>
     public class RuntimeConfig
     {
         public static RuntimeConfig LoadFromFile(string fileName)

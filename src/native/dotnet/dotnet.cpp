@@ -148,9 +148,9 @@ int main(const int argc, pal::char_t *argv[])
         // TODO ensure this doesn't happen for other failures, such as bad host policy files
         if (rc == (StatusCode::CoreHostLibMissingFailure & 0xff))
         {
-            // TODO check if there is a 'fx' section in the config file
+            // TODO check if there is a 'runtime' section in the config file
 
-            // extends the 'install the shared fx' error
+            // extends the 'install the shared runtime' error
             // see https://github.com/dotnet/core-setup/blob/eca152525e19a41d489cd5845afa14982653cc0a/src/corehost/cli/fxr/fx_muxer.cpp#L22
 
             /*              $ dotnet run
@@ -162,9 +162,9 @@ int main(const int argc, pal::char_t *argv[])
                             |    - Alternatively, install the framework version 'x.y.z'. */
             trace::println(_X("    This can be done using the 'dnvm' command."));
             trace::println();
-            trace::println(_X("      dnvm install fx [version]")); // TODO detect the right version?
+            trace::println(_X("      dnvm install runtime [version]")); // TODO detect the right version?
             trace::println();
-            trace::println(_X("    See `dnvm install fx --help` for more info."));
+            trace::println(_X("    See `dnvm install runtime --help` for more info."));
         }
 
         return rc;

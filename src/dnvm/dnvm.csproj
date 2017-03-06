@@ -32,7 +32,6 @@
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.0" />
-    <PackageReference Include="NuGet.Versioning" Version="4.0.0-rc3" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="YamlDotNet" Version="4.0.1-pre309" />
   </ItemGroup>

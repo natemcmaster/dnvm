@@ -59,11 +59,11 @@ namespace DotNet.VersionManager.Commands
                 app.Option("-v|--verbose", "Use verbose output",
                 CommandOptionType.NoValue, inherited: true);
 
-            app.Command("init", $"Initializes a new '{FileConstants.Config}' config file in the current directory.", InitCommand);
-            app.Command("info", "Display information about the current dotnet environment", InfoCommand);
-            app.Command("install", "Install things", InstallCommand);
-            app.Command("rm", "Removes installed things", RemoveCommand);
-            app.Command("search", "Search for available versions", SearchCommand);
+            app.Command("init", $"Initializes a new '{FileConstants.Config}' config file in the current directory.", Init);
+            app.Command("info", "Display information about the current dotnet environment", Info);
+            app.Command("install", "Install things", Install);
+            app.Command("rm", "Removes installed things", Remove);
+            app.Command("search", "Search for available versions", Search);
 
             app.OnExecute(() =>
             {

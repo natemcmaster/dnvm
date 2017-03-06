@@ -4,13 +4,13 @@ namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {
-        private void SearchCommand(CommandLineApplication c)
+        private void Search(CommandLineApplication c)
         {
-            c.Command("fx", "Search available versions of .NET Core runtime frameworks", fx =>
+            c.Command("runtime", "Search available versions of .NET Core runtime", runtime =>
             {
-                fx.OnExecute(() =>
+                runtime.OnExecute(() =>
                 {
-                    this.Command = new SearchFxCommand();
+                    this.Command = new SearchRuntimeCommand();
                 });
             });
 

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNet.VersionManager.Assets
 {
-    public class SharedFxAsset : DotNetAssetBase
+    public class RuntimeAsset : DotNetAssetBase
     {
         public const string DefaultVersion = "stable";
         public const string AssetIdPrefix = "Microsoft.NETCore.App";
@@ -21,7 +21,7 @@ namespace DotNet.VersionManager.Assets
 
         private static readonly HttpClient DefaultHttpClient = new HttpClient();
 
-        public SharedFxAsset(ILogger logger, DotNetEnv env, string version, Architecture arch)
+        public RuntimeAsset(ILogger logger, DotNetEnv env, string version, Architecture arch)
             : base(logger)
         {
             _assetId = GetAssetId(arch);
@@ -43,29 +43,27 @@ namespace DotNet.VersionManager.Assets
 
         public override bool Uninstall()
         {
-            var path = Path.Combine(_env.FxRoot, _assetId, _version);
-            return UninstallFolder(path);
+            return UninstallFolder(GetInstallationPath());
         }
 
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-
             var assetFullName = $"{_assetId}@{_version}";
             Log.Output($"Installing '{assetFullName}'");
             Log.Verbose($"Begin installation of {assetFullName} to '{_env.Root}'");
 
-            var dest = Path.Combine(_env.FxRoot, _assetId, _version);
+            var dest = GetInstallationPath();
 
-            if (_env.Frameworks.Any(f => f.Name.Equals(_assetId, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
+            if (_env.Runtimes.Any(f => f.Name.Equals(_assetId, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
             {
-                await EnsureAssetsLinkedIntoFramework(dest, cancellationToken);
+                await EnsureRuntimeDependencies(dest, cancellationToken);
                 Log.Verbose($"Skipping installation of {assetFullName}. Already installed.");
                 return true;
             }
 
             Directory.CreateDirectory(dest);
 
-            await EnsureAssetsLinkedIntoFramework(dest, cancellationToken);
+            await EnsureRuntimeDependencies(dest, cancellationToken);
 
             var url = Channel.GetDownloadUrl(_assetId, _version);
 
@@ -92,7 +90,10 @@ namespace DotNet.VersionManager.Assets
             return true;
         }
 
-        private async Task EnsureAssetsLinkedIntoFramework(string dest, CancellationToken cancellationToken)
+        private string GetInstallationPath()
+            => Path.Combine(_env.FxRoot, "Microsoft.NETCore.App", _version);
+
+        private async Task EnsureRuntimeDependencies(string dest, CancellationToken cancellationToken)
         {
 #if __MACOS__
             var openssl = new OpenSslAsset(dest);

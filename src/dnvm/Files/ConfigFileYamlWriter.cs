@@ -19,19 +19,19 @@ namespace DotNet.VersionManager.Files
                 writer.Write($"sdk: {config.Sdk}\n");
             }
 
-            if (config.SharedFx.Count > 0)
+            if (config.Runtime.Count > 0)
             {
-                writer.Write("fx:");
-                if (config.SharedFx.Count == 1)
+                writer.Write("runtime:");
+                if (config.Runtime.Count == 1)
                 {
-                    writer.Write($" {config.SharedFx.First()}\n");
+                    writer.Write($" {config.Runtime.First()}\n");
                 }
                 else
                 {
                     writer.Write("\n");
-                    foreach (var fx in config.SharedFx)
+                    foreach (var runtime in config.Runtime)
                     {
-                        writer.Write($"  - {fx}\n");
+                        writer.Write($"  - {runtime}\n");
                     }
                 }
             }

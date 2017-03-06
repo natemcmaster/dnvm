@@ -9,7 +9,7 @@ namespace DotNet.VersionManager.Files
         private readonly DirectoryInfo _binRoot;
         private readonly DirectoryInfo _sdkRoot;
         private readonly DirectoryInfo _root;
-        private readonly DirectoryInfo _fxRoot;
+        private readonly DirectoryInfo _runtimeRoot;
         private readonly DirectoryInfo _toolsRoot;
 
         public DotNetEnv(string name, DirectoryInfo root)
@@ -19,7 +19,7 @@ namespace DotNet.VersionManager.Files
 
             _binRoot = new DirectoryInfo(Path.Combine(_root.FullName, "bin"));
             _sdkRoot = new DirectoryInfo(Path.Combine(_root.FullName, "sdk"));
-            _fxRoot = new DirectoryInfo(Path.Combine(_root.FullName, "shared"));
+            _runtimeRoot = new DirectoryInfo(Path.Combine(_root.FullName, "shared"));
             _toolsRoot = new DirectoryInfo(Path.Combine(_root.FullName, "tools"));
         }
 
@@ -27,22 +27,23 @@ namespace DotNet.VersionManager.Files
         public string Name { get; }
         public string Root => _root.FullName;
         public string BinRoot => _binRoot.FullName;
-        public string FxRoot => _fxRoot.FullName;
+        public string FxRoot => _runtimeRoot.FullName;
         public string SdkRoot => _sdkRoot.FullName;
         public string ToolsRoot => _toolsRoot.FullName;
 
-        public IEnumerable<Framework> Frameworks
+        public IEnumerable<NetCoreRuntime> Runtimes
         {
             get
             {
-                _fxRoot.Refresh();
-                if (!_fxRoot.Exists)
+                _runtimeRoot.Refresh();
+                if (!_runtimeRoot.Exists)
                 {
-                    return Enumerable.Empty<Framework>();
+                    return Enumerable.Empty<NetCoreRuntime>();
                 }
-                return from fx in _fxRoot.GetDirectories()
-                       from version in fx.GetDirectories()
-                       select new NetCoreFramework(version);
+
+                return from runtime in _runtimeRoot.GetDirectories()
+                       from version in runtime.GetDirectories()
+                       select new NetCoreRuntime(version);
             }
         }
 

@@ -27,17 +27,17 @@ namespace DotNet.VersionManager.Commands
 
             context.Logger.Output("");
 
-            context.Logger.Output("Shared Frameworks");
-            context.Logger.Output("-----------------");
+            context.Logger.Output(".NET Core Runtimes");
+            context.Logger.Output("------------------");
 
-            if (!context.Environment.Frameworks.Any())
+            if (!context.Environment.Runtimes.Any())
             {
                 context.Logger.Output("    " + None);
             }
 
-            foreach (var fx in context.Environment.Frameworks)
+            foreach (var runtime in context.Environment.Runtimes)
             {
-                context.Logger.Output($"{fx.Name}@{fx.Version}");
+                context.Logger.Output("    " + runtime.Version);
             }
 
             context.Logger.Output("");

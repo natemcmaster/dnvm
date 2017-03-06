@@ -4,7 +4,7 @@ namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {
-        private void InitCommand(CommandLineApplication c)
+        private void Init(CommandLineApplication c)
         {
             c.OnExecute(() =>
             {
