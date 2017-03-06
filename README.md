@@ -1,14 +1,22 @@
-# dnvm
+dnvm
+----
 
-dotnet environment manager
+The .NET Core version manager.
+The easiest way to install and manage versions of .NET Core tools, runtimes, and SDKs.
 
 ## Getting started
 
-```sh
+**Install**
+```
+brew tap natemcmaster/dnvm
 brew install dnvm
+```
+
+**Use**
+```
 dnvm install sdk
 mkdir MyFirstApp
-dotnet new
+dotnet new console
 dotnet restore
 dotnet run
 ```
@@ -24,7 +32,7 @@ dnvm install sdk
 dnvm install sdk stable
 
 # install a specific version
-dnvm install sdk 1.0.0-preview4-004233
+dnvm install sdk 1.0.0-rc4-004915
 ```
 
 Install a .NET Core runtime
@@ -71,7 +79,7 @@ dnvm info
 Remove stuff
 ```sh
 # uninstalls the .NET Core SDK
-dnvm rm sdk 1.0.0-preview4-004233
+dnvm rm sdk 1.0.0-rc4-004915
 # uninstalls the .NET Core runtime
 dnvm rm runtime 1.0.0
 ```
@@ -87,7 +95,7 @@ Example:
 # required: specify an environment name
 env: default
 # optional: list the .NET Core SDK to install
-sdk: 1.0.0-preview4-004233
+sdk: 1.0.0-rc4-004915
 # optional: list versions of .NET Core to install
 runtime:
   - 1.0.1
@@ -95,7 +103,6 @@ runtime:
   - stable
 # optional: list of .NET Core CLI tools to install
 tools:
-  ef: 1.0.0-alpha
   watch: stable
 ```
 
