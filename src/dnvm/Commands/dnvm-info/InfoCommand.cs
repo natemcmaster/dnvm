@@ -27,8 +27,8 @@ namespace DotNet.VersionManager.Commands
 
             context.Logger.Output("");
 
-            context.Logger.Output(".NET Core Runtimes");
-            context.Logger.Output("------------------");
+            context.Logger.Output(".NET Core Runtime");
+            context.Logger.Output("-----------------");
 
             if (!context.Environment.Runtimes.Any())
             {

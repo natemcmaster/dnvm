@@ -21,8 +21,8 @@ namespace DotNet.VersionManager.Test
         // [InlineData("1.0.0")]
         // [InlineData("1.0.1")]
         [InlineData("1.0.3")]
-        [InlineData("1.1.0")]
-        public async Task InstallsFx(string version)
+        [InlineData("1.1.1")]
+        public async Task InstallsRuntime(string version)
         {
             var command = new InstallRuntimeCommand(version, Architecture.X64);
             var context = new CommandContext
@@ -41,7 +41,7 @@ namespace DotNet.VersionManager.Test
             Directory.Exists(Path.Combine(_tempDir.Path, "shared", "Microsoft.NETCore.App", version)).Should().BeTrue();
         }
 
-        public SharedFxInstallTest(ITestOutputHelper output)
+        public SharedRuntimeInstallTest(ITestOutputHelper output)
         {
             _output = output;
         }

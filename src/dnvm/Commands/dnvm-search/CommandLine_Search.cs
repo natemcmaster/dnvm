@@ -6,7 +6,7 @@ namespace DotNet.VersionManager.Commands
     {
         private void Search(CommandLineApplication c)
         {
-            c.Command("runtime", "Search available versions of .NET Core runtime", runtime =>
+            c.Command("runtime", "Search available .NET Core runtimes", runtime =>
             {
                 runtime.OnExecute(() =>
                 {
@@ -14,7 +14,7 @@ namespace DotNet.VersionManager.Commands
                 });
             });
 
-            c.Command("sdk", "Search available versions of .NET Core SDKs", sdk =>
+            c.Command("sdk", "Search available .NET Core SDKs", sdk =>
             {
                 sdk.OnExecute(() =>
                 {

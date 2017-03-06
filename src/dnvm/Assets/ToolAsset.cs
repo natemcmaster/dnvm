@@ -35,7 +35,7 @@ namespace DotNet.VersionManager.Assets
 
         public override bool Uninstall()
         {
-            Log.Output($"Removing {DisplayName}");
+            Log.Output($"Uninstalling {DisplayName}");
             var dest = GetToolRoot();
             if (Directory.Exists(dest))
             {
@@ -111,6 +111,8 @@ namespace DotNet.VersionManager.Assets
                 Uninstall();
                 return false;
             }
+
+            Log.Output($"Installed {DisplayName}");
 
             return true;
         }

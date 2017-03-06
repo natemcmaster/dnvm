@@ -30,7 +30,7 @@ namespace DotNet.VersionManager.Assets
                 : version;
 
             _env = env;
-            DisplayName = $"{_assetId} {_version}";
+            DisplayName = $".NET Core Runtime {_version}";
 #if FEATURE_MULTI_ARCH_ASSETS
             DisplayName += " ({arch.ToString().ToLower()})";
 #endif
@@ -43,21 +43,21 @@ namespace DotNet.VersionManager.Assets
 
         public override bool Uninstall()
         {
+            Log.Output($"Uninstalling {DisplayName}");
             return UninstallFolder(GetInstallationPath());
         }
 
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-            var assetFullName = $"{_assetId}@{_version}";
-            Log.Output($"Installing '{assetFullName}'");
-            Log.Verbose($"Begin installation of {assetFullName} to '{_env.Root}'");
+            Log.Output($"Installing {DisplayName}");
+            Log.Verbose($"Begin installation of {DisplayName} to '{_env.Root}'");
 
             var dest = GetInstallationPath();
 
             if (_env.Runtimes.Any(f => f.Name.Equals(_assetId, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
             {
                 await EnsureRuntimeDependencies(dest, cancellationToken);
-                Log.Verbose($"Skipping installation of {assetFullName}. Already installed.");
+                Log.Verbose($"Skipping installation of {DisplayName}. Already installed.");
                 return true;
             }
 
@@ -67,10 +67,10 @@ namespace DotNet.VersionManager.Assets
 
             var url = Channel.GetDownloadUrl(_assetId, _version);
 
-            Log.Output($"Downloading {assetFullName}");
+            Log.Output($"Downloading {DisplayName}");
             if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
             {
-                Log.Error($"Failed to install {assetFullName}");
+                Log.Error($"Failed to install {DisplayName}");
 
                 if (Directory.EnumerateFiles(dest).Any())
                 {
@@ -86,6 +86,8 @@ namespace DotNet.VersionManager.Assets
 
                 return false;
             }
+
+            Log.Output($"Installed {DisplayName}");
 
             return true;
         }

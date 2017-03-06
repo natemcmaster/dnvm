@@ -38,6 +38,7 @@ namespace DotNet.VersionManager.Assets
 
         public override bool Uninstall()
         {
+            Log.Output($"Uninstalling {DisplayName}");
             var path = Path.Combine(_env.SdkRoot, _version);
             return UninstallFolder(path);
         }
