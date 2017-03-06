@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 GREEN="\033[0;32m"
 CYAN="\033[0;36m"
@@ -11,9 +11,9 @@ set -e
 __exec() {
     local cmd=$1
     shift
-    echo -e "${CYAN}> $cmd $@${RESET}"
+    echo "${CYAN}> $cmd $@${RESET}"
     $cmd $@
-    if [[ $? != 0 ]]; then
+    if ! [ $? = 0 ]; then
         exit $?
     fi
 }

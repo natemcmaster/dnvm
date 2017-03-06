@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/common.sh
 
-if [[ "$(uname)" == "Darwin" ]]; then
+if [ "$(uname)" = "Darwin" ]; then
     os='macos'
 else
     os='linux'
