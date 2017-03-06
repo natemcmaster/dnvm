@@ -4,5 +4,5 @@ mono: none
 before_install:
   - brew update
   - ./scripts/install-tools.sh
-build:
+script:
   - ./scripts/pack.sh
