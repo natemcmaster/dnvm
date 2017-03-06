@@ -1,0 +1,7 @@
+language: c
+os: osx
+before_install:
+  - brew update
+  - ./scripts/install-tools.sh
+build:
+  - ./scripts/pack.sh

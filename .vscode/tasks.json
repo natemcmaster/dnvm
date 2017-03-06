@@ -21,6 +21,7 @@
         "test"
       ],
       "isShellCommand": true,
+      "isTestCommand": true,
       "options": {
         "cwd": "${workspaceRoot}/test/dnvm.Tests/"
       }
@@ -37,12 +38,11 @@
       }
     },
     {
-      "taskName": "Test all",
-      "isTestCommand": true,
-      "dependsOn": [
-        "Unit tests",
-        "Functional tests"
-      ]
+      "taskName": "Package",
+      "command": "./scripts/pack.sh",
+      "options": {
+        "cwd": "${workspaceRoot}"
+      }
     }
   ]
 }

@@ -1,6 +1,6 @@
 <Project>
-  <Import Project="..\build\version.props" />
-  <Import Project="..\build\git.targets" />
+  <Import Project="..\version.props" />
+  <Import Project="git.targets" />
 
   <PropertyGroup>
     <Configuration>Release</Configuration>
@@ -18,7 +18,7 @@
     <TestProjects Include="..\test\*\*.Tests.csproj" />
     <TestProjects Include="..\test\*\*.FunctionalTests.csproj" />
     <Projects Include="@(SourceProjects);@(TestProjects)" />
-    <Content Include="README.md" PackagePath="%(FileName)%(Extension)" />
+    <Content Include="..\packaging\README.md" PackagePath="%(FileName)%(Extension)" />
   </ItemGroup>
 
   <Target Name="Build" DependsOnTargets="Restore;VSTest;Pack" />
