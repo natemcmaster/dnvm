@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="..\..\version.props" />
+  <Import Project="..\..\build\version.props" />
   <Import Project="..\..\build\git.targets" />
 
   <PropertyGroup>

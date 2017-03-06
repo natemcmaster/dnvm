@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+GREEN="\033[0;32m"
 CYAN="\033[0;36m"
 RESET="\033[0m"
 
@@ -16,7 +17,11 @@ __exec() {
 }
 
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 if [[ "$(uname)" == "Darwin" ]]; then
+    os='macos'
     if brew ls --versions dnvm >/dev/null ; then
         brew outdated libyaml
         [[ $? != 0 ]] && brew install dnvm --without-sdk
@@ -27,22 +32,14 @@ if [[ "$(uname)" == "Darwin" ]]; then
 
     brew outdated libyaml
     [[ $? != 0 ]] && brew install libyaml
+else
+    os='linux'
 fi
 
 __exec dnvm install
 
-mkdir -p artifacts/log/
+mkdir -p $DIR/../artifacts/log/
 
-config='/p:Configuration=Release'
-
-__exec dotnet restore /nologo dnvm.sln
-
-for proj in test/*/*.csproj; do
-    __exec dotnet test $proj $config
-done
-
-__exec dotnet publish build.proj /nologo /m \
-    /fl /flp:LogFile=artifacts/log/msbuild.log \
-    $config
-
-echo 'Build succeeded'
+__exec dotnet msbuild $DIR/$os.pkgproj /t:Build /nologo /m \
+    /clp:Summary \
+    /fl "/flp:LogFile=$DIR/../artifacts/log/$os.msbuild.log;Verbosity=normal"

@@ -1,32 +1,30 @@
-<Project DefaultTargets="Publish">
-  <Import Project="version.props" />
-  <Import Project="build\git.targets" />
+<Project>
+  <Import Project="..\build\version.props" />
+  <Import Project="..\build\git.targets" />
 
   <PropertyGroup>
-    <Configuration>Debug</Configuration>
-    <ArtifactsDir>$(MSBuildThisFileDirectory)artifacts\</ArtifactsDir>
+    <Configuration>Release</Configuration>
+    <ArtifactsDir>$(MSBuildThisFileDirectory)..\artifacts\</ArtifactsDir>
     <TargetDir>$(ArtifactsDir)build\</TargetDir>
     <PublishDir>$(ArtifactsDir)$(Configuration)\</PublishDir>
-    <PackageFileExtension>tar.gz</PackageFileExtension>
     <Version>$(VersionPrefix)</Version>
-    <Version Condition="'$(VersionSuffix)'!=''">$(Version)-$(VersionSuffix)</Version>
+    <Version Condition="'$(VersionSuffix)' != ''">$(Version)-$(VersionSuffix)</Version>
     <RuntimeOs>osx-x64</RuntimeOs>
-    <PackageFile>$(TargetDir)dnvm.$(RuntimeOs).$(Version).$(PackageFileExtension)</PackageFile>
+    <PackageFile>$(TargetDir)dnvm.$(RuntimeOs).$(Version).tar.gz</PackageFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <SourceProjects Include="src\*\*.*proj" />
-    <TestProjects Include="test\*\*.Tests.csproj" />
-    <TestProjects Include="test\*\*.FunctionalTests.csproj" />
+    <SourceProjects Include="..\src\*\*.*proj" />
+    <TestProjects Include="..\test\*\*.Tests.csproj" />
+    <TestProjects Include="..\test\*\*.FunctionalTests.csproj" />
     <Projects Include="@(SourceProjects);@(TestProjects)" />
-    <Content Include="docs\releasenotes.md" PackagePath="%(FileName)%(Extension)" />
-    <Content Include="packaging\README.md" PackagePath="%(FileName)%(Extension)" />
+    <Content Include="README.md" PackagePath="%(FileName)%(Extension)" />
   </ItemGroup>
 
-  <Target Name="Build" DependsOnTargets="ResolveCommitHash">
-    <MSBuild Targets="Build"
-             Projects="@(Projects)"
-             Properties="Configuration=$(Configuration)" />
+  <Target Name="Build" DependsOnTargets="Restore;VSTest;Pack" />
+
+  <Target Name="Restore">
+    <MSBuild Projects="..\dnvm.sln" Targets="Restore" />
   </Target>
 
   <Target Name="VSTest">
@@ -35,7 +33,11 @@
              Properties="Configuration=$(Configuration)" />
   </Target>
 
-  <Target Name="Publish" DependsOnTargets="CleanArtifacts;ResolveCommitHash">
+  <Target Name="CleanArtifacts">
+    <RemoveDir Directories="$(PublishDir);$(TargetDir);" />
+  </Target>
+
+  <Target Name="Pack" DependsOnTargets="CleanArtifacts;ResolveCommitHash">
     <MakeDir Directories="$(ArtifactsDir);$(PublishDir)bin\;$(TargetDir);" />
     <MSBuild Targets="Publish"
              Projects="@(SourceProjects)"
@@ -59,13 +61,4 @@
 
   </Target>
 
-  <Target Name="CleanArtifacts">
-    <RemoveDir Directories="$(PublishDir);$(TargetDir);" />
-  </Target>
-
-  <Target Name="Clean"
-          DependsOnTargets="CleanArtifacts">
-    <MSBuild Targets="Clean"
-             Projects="@(Projects)" />
-  </Target>
 </Project>
