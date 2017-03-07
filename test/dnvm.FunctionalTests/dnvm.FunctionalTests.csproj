@@ -3,11 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PackageTargetFallback>dotnet</PackageTargetFallback>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\dnvm\dnvm.csproj" />
+    <ProjectReference Include="..\dnvm.Tests\dnvm.Tests.csproj" />
   </ItemGroup>
 
-  <Import Project="..\testdeps.props" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+  </ItemGroup>
+
 </Project>

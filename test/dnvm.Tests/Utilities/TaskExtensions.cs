@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace DotNet.VersionManager.Test
+namespace DotNet.VersionManager.Tests
 {
     public static class TaskExtensions
     {

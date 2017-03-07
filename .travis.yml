@@ -1,0 +1,8 @@
+language: csharp
+os: osx
+mono: none
+before_install:
+  - brew update
+  - ./scripts/install-tools.sh
+script:
+  - ./scripts/pack.sh

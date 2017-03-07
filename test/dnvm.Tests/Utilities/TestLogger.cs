@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions.Internal;
 using Xunit.Abstractions;
 
-namespace DotNet.VersionManager.Test
+namespace DotNet.VersionManager.Tests
 {
     public class TestLogger : ILogger
     {

@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "ms-vscode.csharp",
+    "ms-vscode.cpptools",
+    "EditorConfig.EditorConfig",
+    "k--kato.docomment"
+  ]
+}

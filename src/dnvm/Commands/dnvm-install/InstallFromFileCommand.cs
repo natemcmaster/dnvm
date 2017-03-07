@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using DotNet.VersionManager.Assets;
 
 namespace DotNet.VersionManager.Commands
 {
-    class InstallFromFileCommand : ICommand
+    class InstallFromFileCommand : InstallCommandBase
     {
-        public async Task ExecuteAsync(CommandContext context)
+        public override async Task ExecuteAsync(CommandContext context)
         {
             if (context.ConfigFile == null)
             {
@@ -17,35 +18,25 @@ namespace DotNet.VersionManager.Commands
             }
             else
             {
-                var commands = new List<ICommand>();
-                if (!string.IsNullOrEmpty(context.ConfigFile.Sdk))
-                {
-                    commands.Add(new InstallSdkCommand(context.ConfigFile.Sdk, Architecture.X64));
-                }
+                await base.ExecuteAsync(context);
+            }
+        }
 
-                foreach (var runtime in context.ConfigFile.Runtime)
-                {
-                    commands.Add(new InstallRuntimeCommand(runtime, Architecture.X64));
-                }
+        protected override IEnumerable<Asset> CreateAssets(CommandContext context)
+        {
+            if (!string.IsNullOrEmpty(context.ConfigFile.Sdk))
+            {
+                yield return new SdkAsset(context.Logger, context.Environment, context.ConfigFile.Sdk, Architecture.X64);
+            }
 
-                foreach (var tool in context.ConfigFile.Tools)
-                {
-                    commands.Add(new InstallToolCommand(tool.Key, tool.Value));
-                }
+            foreach (var runtime in context.ConfigFile.Runtime)
+            {
+                yield return new RuntimeAsset(context.Logger, context.Environment, runtime, Architecture.X64);
+            }
 
-                if (commands.Count == 0)
-                {
-                    context.Logger.Warn("Nothing will be installed because the config file does not list assets.");
-                }
-
-                var composite = CommonCommands.Sequence(commands);
-
-                await composite.ExecuteAsync(context);
-
-                if (context.Result != Result.Error)
-                {
-                    context.Result = Result.Okay;
-                }
+            foreach (var tool in context.ConfigFile.Tools)
+            {
+                yield return new ToolAsset(context.Logger, context.Environment, tool.Key, tool.Value);
             }
         }
     }

@@ -1,35 +1,48 @@
 {
-    "version": "0.1.0",
-    "isShellCommand": true,
-    "showOutput": "silent",
-    "suppressTaskName": true,
-    "tasks": [
-        {
-            "taskName": "build",
-            "args": [
-                "dotnet build ${workspaceRoot}/src/native/native.proj"
-            ],
-            "isBuildCommand": true
-        }
-    ],
-    "osx": {
-        "command": "bash",
-        "args": [
-            "-c"
-        ],
-        "tasks": [
-            {
-                "taskName": "publish",
-                "args": [
-                    "./build.sh"
-                ]
-            }
-        ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "taskName": "Build solution",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "dnvm.sln"
+      ],
+      "isBuildCommand": true,
+      "isShellCommand": true,
+      "options": {
+        "cwd": "${workspaceRoot}"
+      }
     },
-    "windows": {
-        "command": "cmd",
-        "args": [
-            "/C"
-        ]
+    {
+      "taskName": "Unit tests",
+      "command": "dotnet",
+      "args": [
+        "test"
+      ],
+      "isShellCommand": true,
+      "isTestCommand": true,
+      "options": {
+        "cwd": "${workspaceRoot}/test/dnvm.Tests/"
+      }
+    },
+    {
+      "taskName": "Functional tests",
+      "command": "dotnet",
+      "args": [
+        "test"
+      ],
+      "isShellCommand": true,
+      "options": {
+        "cwd": "${workspaceRoot}/test/dnvm.FunctionalTests/"
+      }
+    },
+    {
+      "taskName": "Package",
+      "command": "./scripts/pack.sh",
+      "options": {
+        "cwd": "${workspaceRoot}"
+      }
     }
+  ]
 }

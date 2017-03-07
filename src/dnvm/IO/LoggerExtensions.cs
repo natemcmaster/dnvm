@@ -11,6 +11,12 @@ namespace DotNet.VersionManager
             return log;
         }
 
+        public static ILogger Output(this ILogger log, EventId eventId, string text)
+        {
+            log.LogInformation(eventId, text);
+            return log;
+        }
+
         public static ILogger Verbose(this ILogger log, string text)
         {
             log.LogDebug(text);

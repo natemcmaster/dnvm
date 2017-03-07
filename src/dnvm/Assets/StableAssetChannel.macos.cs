@@ -6,34 +6,82 @@ namespace DotNet.VersionManager.Assets
     // TODO make this info available remotely so it can be updated without re-installing dnvm
     partial class StableAssetChannel : IAssetChannel
     {
-        private IDictionary<string, AssetInfo> _assets
-            = new Dictionary<string, AssetInfo>(StringComparer.OrdinalIgnoreCase)
+        private class RuntimeAssetInfo : AssetInfo
+        {
+            public RuntimeAssetInfo(string version, string channel)
             {
-                ["Microsoft.NETCore.App.osx-x64"] = new AssetInfo
+                Version = version;
+                Id = "Microsoft.NETCore.App.osx-x64";
+                DownloadUrl = $"https://dotnetcli.azureedge.net/dotnet/{channel}/Binaries/{version}/dotnet-osx-x64.{version}.tar.gz";
+            }
+        }
+
+        private class SdkAssetInfo : AssetInfo
+        {
+            public SdkAssetInfo(string version, string folder, RuntimeAssetInfo[] runtimes)
+            {
+                Version = version;
+                Id = "Microsoft.DotNet.Cli.osx-x64";
+                DownloadUrl = $"https://dotnetcli.azureedge.net/dotnet/{folder}/{version}/dotnet-dev-osx-x64.{version}.tar.gz";
+
+                runtimes = runtimes ?? Array.Empty<RuntimeAssetInfo>();
+                foreach (var runtime in runtimes)
                 {
-                    Versions =
-                    {
-                        ["1.0.0"] = "https://dotnetcli.azureedge.net/dotnet/preview/Binaries/1.0.0/dotnet-osx-x64.1.0.0.tar.gz",
-                        ["1.0.1"] = "https://dotnetcli.azureedge.net/dotnet/preview/Binaries/1.0.1/dotnet-osx-x64.1.0.1.tar.gz",
-                        ["1.0.3"] = "https://dotnetcli.azureedge.net/dotnet/preview/Binaries/1.0.3/dotnet-osx-x64.1.0.3.tar.gz",
-                        ["1.1.0"] = "https://dotnetcli.azureedge.net/dotnet/release/1.1.0/Binaries/1.1.0/dotnet-osx-x64.1.1.0.tar.gz",
-                        ["1.1.1"] = "https://dotnetcli.azureedge.net/dotnet/release/1.1.0/Binaries/1.1.1/dotnet-osx-x64.1.1.1.tar.gz",
-                    }
+                    Dependencies.Add(runtime);
+                }
+            }
+        }
+
+        private IDictionary<string, ICollection<AssetInfo>> _assets
+            = new Dictionary<string, ICollection<AssetInfo>>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["Microsoft.NETCore.App.osx-x64"] = new List<AssetInfo>
+                {
+                    new RuntimeAssetInfo("1.0.0", "preview"),
+                    new RuntimeAssetInfo("1.0.1", "preview"),
+                    new RuntimeAssetInfo("1.0.3", "preview"),
+                    new RuntimeAssetInfo("1.0.4", "preview"),
+                    new RuntimeAssetInfo("1.1.0", "release/1.1.0"),
+                    new RuntimeAssetInfo("1.1.1", "release/1.1.0"),
                 },
-                ["Microsoft.DotNet.Cli.osx-x64"] = new AssetInfo
+                ["Microsoft.DotNet.Cli.osx-x64"] = new List<AssetInfo>
                 {
-                    Versions =
-                    {
-                        ["1.0.0-preview2-003121"] = "https://dotnetcli.azureedge.net/dotnet/preview/Binaries/1.0.0-preview2-003121/dotnet-dev-osx-x64.1.0.0-preview2-003121.tar.gz",
-                        ["1.0.0-preview2-003131"] = "https://dotnetcli.azureedge.net/dotnet/preview/Binaries/1.0.0-preview2-003131/dotnet-dev-osx-x64.1.0.0-preview2-003131.tar.gz",
-                        ["1.0.0-preview2-003156"] = "https://dotnetcli.azureedge.net/dotnet/preview/Binaries/1.0.0-preview2-003156/dotnet-dev-osx-x64.1.0.0-preview2-003156.tar.gz",
-                        ["1.0.0-preview2-1-003177"] = "https://dotnetcli.azureedge.net/dotnet/preview/Binaries/1.0.0-preview2-1-003177/dotnet-dev-osx-x64.1.0.0-preview2-1-003177.tar.gz",
-                        ["1.0.0-preview3-004056"] = "https://dotnetcli.azureedge.net/dotnet/Sdk/1.0.0-preview3-004056/dotnet-dev-osx-x64.1.0.0-preview3-004056.tar.gz",
-                        ["1.0.0-preview4-004233"] = "https://dotnetcli.azureedge.net/dotnet/Sdk/1.0.0-preview4-004233/dotnet-dev-osx-x64.1.0.0-preview4-004233.tar.gz",
-                        ["1.0.0-rc3-004530"] = "https://dotnetcli.azureedge.net/dotnet/Sdk/1.0.0-rc3-004530/dotnet-dev-osx-x64.1.0.0-rc3-004530.tar.gz",
-                        ["1.0.0-rc4-004771"] = "https://dotnetcli.azureedge.net/dotnet/Sdk/1.0.0-rc4-004771/dotnet-dev-osx-x64.1.0.0-rc4-004771.tar.gz",
-                        ["1.0.0-rc4-004915"] = "https://dotnetcli.azureedge.net/dotnet/Sdk/1.0.0-rc4-004915/dotnet-dev-osx-x64.1.0.0-rc4-004915.tar.gz",
-                    }
+                    new SdkAssetInfo("1.0.0-preview2-003121", "preview/Binaries",
+                        new[]{ new RuntimeAssetInfo("1.0.0", "preview") }),
+                    new SdkAssetInfo("1.0.0-preview2-003131", "preview/Binaries",
+                        new[]{ new RuntimeAssetInfo("1.0.1", "preview") }),
+                    new SdkAssetInfo("1.0.0-preview2-003156", "preview/Binaries",
+                        new[]{ new RuntimeAssetInfo("1.0.3", "preview") }),
+                    new SdkAssetInfo("1.0.0-preview2-1-003177", "preview/Binaries",
+                        new[]{ new RuntimeAssetInfo("1.1.0", "preview") }),
+                    new SdkAssetInfo("1.0.0-preview3-004056", "Sdk",
+                        new[]{ new RuntimeAssetInfo("1.0.1", "preview") }),
+                    new SdkAssetInfo("1.0.0-preview4-004233", "Sdk",
+                        new[]{ new RuntimeAssetInfo("1.0.1", "preview") }),
+                    new SdkAssetInfo("1.0.0-rc3-004530", "Sdk",
+                        new[]
+                        {
+                            new RuntimeAssetInfo("1.0.3", "preview"),
+                            new RuntimeAssetInfo("1.1.0", "preview"),
+                        }),
+                    new SdkAssetInfo("1.0.0-rc4-004771", "Sdk",
+                        new[]
+                        {
+                            new RuntimeAssetInfo("1.0.3", "preview"),
+                            new RuntimeAssetInfo("1.1.0", "preview"),
+                        }),
+                    new SdkAssetInfo("1.0.0", "Sdk",
+                        new[]
+                        {
+                            new RuntimeAssetInfo("1.0.4", "preview"),
+                            new RuntimeAssetInfo("1.1.1", "release/1.1.0")
+                        }),
+                    new SdkAssetInfo("1.0.1", "Sdk",
+                        new[]
+                        {
+                            new RuntimeAssetInfo("1.0.4", "preview"),
+                            new RuntimeAssetInfo("1.1.1", "release/1.1.0")
+                        }),
                 },
             };
     }
