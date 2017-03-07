@@ -4,7 +4,7 @@ using DotNet.VersionManager.Files;
 using FluentAssertions;
 using Xunit;
 
-namespace DotNet.VersionManager.Test
+namespace DotNet.VersionManager.Tests
 {
     public class ConfigFileYamlWriterTest
     {

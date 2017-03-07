@@ -8,6 +8,7 @@ using DotNet.VersionManager.Files;
 using DotNet.VersionManager.Utils;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace DotNet.VersionManager.Assets
 {
@@ -15,23 +16,28 @@ namespace DotNet.VersionManager.Assets
     {
         public const string DefaultVersion = "stable";
         private readonly IAssetChannel _channel = new ToolAssetChannel();
-
-        private readonly string _assetId;
-        private readonly string _version;
+        private readonly AssetInfo _assetInfo;
         private readonly DotNetEnv _env;
         public ToolAsset(ILogger logger, DotNetEnv env, string name, string version)
             : base(logger)
         {
-            _assetId = $"dnvm.tool.{name}";
-            _version = version == DefaultVersion
-                ? _channel.GetLatestVersion(_assetId)
-                : version;
-
             _env = env;
-            DisplayName = $"dotnet-{name} {_version}";
+
+            var id = $"dnvm.tool.{name}";
+            _assetInfo = version == DefaultVersion
+                ? _channel.GetLatest(id)
+                : _channel.GetAssetInfo(id, version);
+
+            DisplayName = $"dotnet-{name} {_assetInfo.Version}";
         }
 
         public override string DisplayName { get; }
+
+        public override IEnumerable<Asset> Dependencies
+            => Enumerable.Empty<Asset>();
+
+        public override bool IsInstalled
+            => Directory.Exists(GetToolRoot());
 
         public override bool Uninstall()
         {
@@ -50,14 +56,7 @@ namespace DotNet.VersionManager.Assets
             Log.Output($"Installing {DisplayName}");
             var dest = GetToolRoot();
 
-            if (Directory.Exists(dest))
-            {
-                Log.Verbose("Skipping. Already installed");
-                // TODO ensure commands are linkied
-                return true;
-            }
-
-            var url = _channel.GetDownloadUrl(_assetId, _version);
+            var url = _assetInfo.DownloadUrl;
             if (!await DownloadAndExtractAsync(url, dest, ZipExtractor.Extract, cancellationToken))
             {
                 return false;
@@ -118,7 +117,7 @@ namespace DotNet.VersionManager.Assets
         }
 
         private string GetToolRoot()
-            => Path.Combine(_env.ToolsRoot, _assetId.ToLowerInvariant(), _version);
+            => Path.Combine(_env.ToolsRoot, _assetInfo.Id.ToLowerInvariant(), _assetInfo.Version);
 
         private string GetToolExecutable(string name)
         {
@@ -142,7 +141,7 @@ namespace DotNet.VersionManager.Assets
 
             if (command.Portable)
             {
-                var exe = Path.Combine(_assetId.ToLowerInvariant(), _version, command.Exe);
+                var exe = Path.Combine(_assetInfo.Id.ToLowerInvariant(), _assetInfo.Version, command.Exe);
                 Directory.CreateDirectory(_env.BinRoot);
                 File.WriteAllText(targetPath, $@"#!/usr/bin/env bash
 set -e
@@ -203,6 +202,36 @@ DIR=""$( cd -P ""$( dirname ""$SOURCE"" )"" && pwd )""
             catch
             {
                 Log.Verbose("Unable to read tool manifest.");
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            var other = (ToolAsset)obj;
+            return _assetInfo.Id == other._assetInfo.Id
+                && _assetInfo.Version == other._assetInfo.Version
+                && _env.Name == other._env.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hash = 17;
+                hash = hash * 23 + _assetInfo.Id.GetHashCode();
+                hash = hash * 23 + _assetInfo.Version.GetHashCode();
+                hash = hash * 23 + _env.Name.GetHashCode();
+                return hash;
             }
         }
     }

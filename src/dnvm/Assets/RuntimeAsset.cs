@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 using DotNet.VersionManager.Files;
-using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
 
 namespace DotNet.VersionManager.Assets
@@ -13,59 +14,61 @@ namespace DotNet.VersionManager.Assets
     public class RuntimeAsset : DotNetAssetBase
     {
         public const string DefaultVersion = "stable";
-        public const string AssetIdPrefix = "Microsoft.NETCore.App";
+        private const string RuntimeName = "Microsoft.NETCore.App";
 
-        private readonly string _version;
+        private readonly AssetInfo _assetInfo;
         private readonly DotNetEnv _env;
-        private readonly string _assetId;
-
+        private readonly Architecture _arch;
         private static readonly HttpClient DefaultHttpClient = new HttpClient();
 
         public RuntimeAsset(ILogger logger, DotNetEnv env, string version, Architecture arch)
             : base(logger)
         {
-            _assetId = GetAssetId(arch);
-            _version = version == DefaultVersion
-                ? Channel.GetLatestVersion(_assetId)
-                : version;
+            _arch = arch;
+            var assetId = CreateAssetId(arch);
+            _assetInfo = version == DefaultVersion
+                ? Channel.GetLatest(assetId)
+                : Channel.GetAssetInfo(assetId, version);
 
             _env = env;
-            DisplayName = $".NET Core Runtime {_version}";
+            DisplayName = $".NET Core Runtime {Version}";
 #if FEATURE_MULTI_ARCH_ASSETS
             DisplayName += " ({arch.ToString().ToLower()})";
 #endif
         }
 
-        public static string GetAssetId(Architecture arch)
-            => $"{AssetIdPrefix}.{PlatformConstants.RuntimeOSName}-{arch.ToString().ToLower()}";
+        public string Version => _assetInfo.Version;
+
+        public static string CreateAssetId(Architecture arch)
+            => $"{RuntimeName}.{PlatformConstants.RuntimeOSName}-{arch.ToString().ToLower()}";
 
         public override string DisplayName { get; }
 
+        public override IEnumerable<Asset> Dependencies
+#if __MACOS__
+            => new[] { new OpenSslAsset(Log, GetInstallationPath(), _assetInfo.Version) };
+#else
+            => Enumerable.Empty<Asset>();
+#endif
+
+        public override bool IsInstalled
+            => _env.Runtimes.Any(f => f.Name.Equals(RuntimeName, StringComparison.OrdinalIgnoreCase) && f.Version == Version);
+
         public override bool Uninstall()
         {
-            Log.Output($"Uninstalling {DisplayName}");
+            Log.Output($"Deleting files for {DisplayName}");
             return UninstallFolder(GetInstallationPath());
         }
 
         public override async Task<bool> InstallAsync(CancellationToken cancellationToken)
         {
-            Log.Output($"Installing {DisplayName}");
             Log.Verbose($"Begin installation of {DisplayName} to '{_env.Root}'");
 
             var dest = GetInstallationPath();
 
-            if (_env.Runtimes.Any(f => f.Name.Equals(_assetId, StringComparison.OrdinalIgnoreCase) && f.Version == _version))
-            {
-                await EnsureRuntimeDependencies(dest, cancellationToken);
-                Log.Verbose($"Skipping installation of {DisplayName}. Already installed.");
-                return true;
-            }
-
             Directory.CreateDirectory(dest);
 
-            await EnsureRuntimeDependencies(dest, cancellationToken);
-
-            var url = Channel.GetDownloadUrl(_assetId, _version);
+            var url = _assetInfo.DownloadUrl;
 
             Log.Output($"Downloading {DisplayName}");
             if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
@@ -93,20 +96,36 @@ namespace DotNet.VersionManager.Assets
         }
 
         private string GetInstallationPath()
-            => Path.Combine(_env.FxRoot, "Microsoft.NETCore.App", _version);
+            => Path.Combine(_env.FxRoot, RuntimeName, Version);
 
-        private async Task EnsureRuntimeDependencies(string dest, CancellationToken cancellationToken)
+        public override bool Equals(object obj)
         {
-#if __MACOS__
-            var openssl = new OpenSslAsset(dest);
-            Log.Verbose($"Linking OpenSSL from Homebrew into '{dest}'");
-            if (!await openssl.InstallAsync(cancellationToken))
+            if (obj == null || GetType() != obj.GetType())
             {
-                Log.Warn($"Failed to install OpenSSL into {DisplayName}. Try running `brew install openssl` first and re-run this command.");
+                return false;
             }
-#else
-            await Task.CompletedTask;
-#endif
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            var other = (RuntimeAsset)obj;
+            return _assetInfo.Version == other._assetInfo.Version
+                && _arch == other._arch
+                && _env.Name == other._env.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hash = 17;
+                hash = hash * 23 + _arch.GetHashCode();
+                hash = hash * 23 + _assetInfo.Version.GetHashCode();
+                hash = hash * 23 + _env.Name.GetHashCode();
+                return hash;
+            }
         }
     }
 }

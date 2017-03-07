@@ -12,15 +12,16 @@ namespace DotNet.VersionManager.Commands
             context.Logger.Output("");
 
             var channel = new StableAssetChannel();
-            var stable = channel.GetLatestVersion(RuntimeAsset.GetAssetId(Architecture.X64));
-            foreach (var version in channel.GetAvailableVersions(RuntimeAsset.GetAssetId(Architecture.X64)))
+            var stable = channel.GetLatest(RuntimeAsset.CreateAssetId(Architecture.X64)).Version;
+            foreach (var runtime in channel.GetAll(RuntimeAsset.CreateAssetId(Architecture.X64)))
             {
+                var version = runtime.Version;
                 var line = version == stable
                 ? $"{version} ({SdkAsset.DefaultVersion})"
                 : version;
                 var installed = context.Environment
                     .Runtimes
-                    .Any(f => f.Name == RuntimeAsset.GetAssetId(Architecture.X64) && f.Version.Equals(version))
+                    .Any(f => f.Name == RuntimeAsset.CreateAssetId(Architecture.X64) && f.Version.Equals(version))
                     ? "*"
                     : " ";
 

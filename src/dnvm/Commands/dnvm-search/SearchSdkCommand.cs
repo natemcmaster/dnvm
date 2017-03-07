@@ -12,9 +12,10 @@ namespace DotNet.VersionManager.Commands
             context.Logger.Output("");
 
             var channel = new StableAssetChannel();
-            var stable = channel.GetLatestVersion(SdkAsset.GetAssetId(Architecture.X64));
-            foreach (var version in channel.GetAvailableVersions(SdkAsset.GetAssetId(Architecture.X64)))
+            var stable = channel.GetLatest(SdkAsset.CreateAssetId(Architecture.X64)).Version;
+            foreach (var sdk in channel.GetAll(SdkAsset.CreateAssetId(Architecture.X64)))
             {
+                var version = sdk.Version;
                 var line = version == stable
                 ? $"{version} ({SdkAsset.DefaultVersion})"
                 : version;

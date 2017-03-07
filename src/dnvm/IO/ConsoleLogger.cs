@@ -41,7 +41,13 @@ namespace DotNet.VersionManager
                 return;
             }
 
-            _console.WriteLine(formatter(state, exception), _colors[logLevel]);
+            var color =  _colors[logLevel];
+            if ((eventId.Id & ConsoleEventIds.ColorFlag) != 0)
+            {
+                color = (ConsoleColor)(eventId.Id & ~ConsoleEventIds.ColorFlag);
+            }
+
+            _console.WriteLine(formatter(state, exception), color);
         }
     }
 }

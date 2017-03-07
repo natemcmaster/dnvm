@@ -9,7 +9,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace DotNet.VersionManager.Test
+namespace DotNet.VersionManager.Tests
 {
     public class CliInstallTest : IDisposable
     {
@@ -19,13 +19,10 @@ namespace DotNet.VersionManager.Test
         [Theory]
         // commented out to improve test time. Each test downloads ~50MB
         // [InlineData("1.0.0-preview2-003121", new [] { "1.0.0" })]
-        // [InlineData("1.0.0-preview2-003131", new [] { "1.0.1" })]
         // [InlineData("1.0.0-preview2-003156", new [] { "1.0.3" })]
         // [InlineData("1.0.0-preview2-1-003177", new [] { "1.1.0" })]
-        // [InlineData("1.0.0-preview3-004056", new [] { "1.0.1" })]
-        // [InlineData("1.0.0-preview4-004233", new [] { "1.0.1" })]
         // [InlineData("1.0.0-rc3-004530", new [] { "1.0.3" })]
-        [InlineData("1.0.0-rc4-004771", new[] { "1.0.3", "1.1.0" })]
+        [InlineData("1.0.1", new[] { "1.0.4", "1.1.1" })]
         public async Task InstallsCliWithSharedFx(string version, string[] runtimes)
         {
             var command = new InstallSdkCommand(version, Architecture.X64);
@@ -34,8 +31,8 @@ namespace DotNet.VersionManager.Test
                 Logger = new TestLogger(_output),
                 Environment = new DotNetEnv("test", new DirectoryInfo(_tempDir.Path))
             };
-            // while (!System.Diagnostics.Debugger.IsAttached);
-            await command.ExecuteAsync(context).OrTimeout(90);
+
+            await command.ExecuteAsync(context).OrTimeout(180);
 
             context.Result.Should().Be(Result.Okay);
 

@@ -9,7 +9,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace DotNet.VersionManager.Test
+namespace DotNet.VersionManager.Tests
 {
     public class SharedRuntimeInstallTest : IDisposable
     {
@@ -20,7 +20,7 @@ namespace DotNet.VersionManager.Test
         // commented out to improve test time. Each test downloads ~50MB
         // [InlineData("1.0.0")]
         // [InlineData("1.0.1")]
-        [InlineData("1.0.3")]
+        [InlineData("1.0.4")]
         [InlineData("1.1.1")]
         public async Task InstallsRuntime(string version)
         {
@@ -31,7 +31,7 @@ namespace DotNet.VersionManager.Test
                 Environment = new DotNetEnv("test", new DirectoryInfo(_tempDir.Path))
             };
 
-            await command.ExecuteAsync(context).OrTimeout(90);
+            await command.ExecuteAsync(context).OrTimeout(180);
 
             context.Result.Should().Be(Result.Okay);
 

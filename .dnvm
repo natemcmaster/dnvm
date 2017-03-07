@@ -1,4 +1,7 @@
 env: default
-sdk: 1.0.0-rc4-004915
+sdk: 1.0.1
+runtime:
+  - 1.0.4
+  - 1.1.1
 tools:
   watch: stable
