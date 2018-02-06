@@ -1,5 +1,6 @@
 using System.IO;
 using DotNet.VersionManager.Files;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace DotNet.VersionManager.Commands
 {
@@ -27,7 +28,7 @@ namespace DotNet.VersionManager.Commands
             context.Console.Write($"Environment name ({defaultName}): ");
 
             var name = context.Console.In.ReadLine()?.Trim();
-            
+
             name = string.IsNullOrEmpty(name)
                 ? defaultName
                 : name;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace DotNet.VersionManager.Files
         public DotNetEnv(string name, DirectoryInfo root)
         {
             Name = Ensure.NotNullOrEmpty(name, nameof(name));
-            _root = Ensure.NotNull(root, nameof(root));
+            _root = root ?? throw new ArgumentNullException(nameof(root));
 
             _binRoot = new DirectoryInfo(Path.Combine(_root.FullName, "bin"));
             _sdkRoot = new DirectoryInfo(Path.Combine(_root.FullName, "sdk"));

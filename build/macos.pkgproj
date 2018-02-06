@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="..\version.props" />
+  <Import Project="..\Directory.Build.props" />
   <Import Project="git.targets" />
 
   <PropertyGroup>
@@ -9,8 +9,8 @@
     <PublishDir>$(ArtifactsDir)$(Configuration)\</PublishDir>
     <Version>$(VersionPrefix)</Version>
     <Version Condition="'$(VersionSuffix)' != ''">$(Version)-$(VersionSuffix)</Version>
-    <RuntimeOs>osx-x64</RuntimeOs>
-    <PackageFile>$(TargetDir)dnvm.$(RuntimeOs).$(Version).tar.gz</PackageFile>
+    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+    <PackageFile>$(TargetDir)dnvm.$(RuntimeIdentifier).$(Version).tar.gz</PackageFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,10 +21,10 @@
     <Content Include="..\packaging\README.md" PackagePath="%(FileName)%(Extension)" />
   </ItemGroup>
 
-  <Target Name="Build" DependsOnTargets="Restore;Compile;VSTest;Pack" />
+  <Target Name="Build" DependsOnTargets="Compile;Pack" />
 
   <Target Name="Restore">
-    <MSBuild Projects="..\dnvm.sln" Targets="Restore" Properties="_Target=_Restore" />
+    <MSBuild Projects="..\dnvm.sln" Targets="Restore" />
   </Target>
 
   <Target Name="Compile">

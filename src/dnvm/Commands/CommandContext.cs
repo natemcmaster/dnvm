@@ -1,6 +1,7 @@
 using System.Threading;
 using DotNet.VersionManager.Files;
 using DotNet.VersionManager.IO;
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 
 namespace DotNet.VersionManager.Commands

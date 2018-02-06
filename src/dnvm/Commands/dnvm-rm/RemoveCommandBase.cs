@@ -2,6 +2,7 @@
 using System.Linq;
 using DotNet.VersionManager.Assets;
 using DotNet.VersionManager.IO;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace DotNet.VersionManager.Commands
 {
@@ -36,8 +37,8 @@ namespace DotNet.VersionManager.Commands
 
             if (!_force)
             {
-                var answer = context.Console.Prompt($"Are you sure you want to proceed? (y/N) ");
-                if (!"y".Equals(answer?.Trim()?.ToLowerInvariant()))
+                var answer = Prompt.GetYesNo($"Are you sure you want to proceed?", defaultAnswer: false);
+                if (!answer)
                 {
                     context.Logger.Output("Cancelled");
                     context.Result = Result.Okay;

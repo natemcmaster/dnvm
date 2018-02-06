@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DotNet.VersionManager.Files;
 using Microsoft.Extensions.Logging;
+using static DotNet.VersionManager.Assets.StableAssetChannel;
 
 namespace DotNet.VersionManager.Assets
 {
@@ -46,7 +47,9 @@ namespace DotNet.VersionManager.Assets
 
         public override IEnumerable<Asset> Dependencies
 #if __MACOS__
-            => new[] { new OpenSslAsset(Log, GetInstallationPath(), _assetInfo.Version) };
+            => (_assetInfo is MacOSRuntimeAssetInfo ma && ma.RequiresOpenSSL)
+                ? new[] { new OpenSslAsset(Log, GetInstallationPath(), _assetInfo.Version) }
+                : Enumerable.Empty<Asset>();
 #else
             => Enumerable.Empty<Asset>();
 #endif
@@ -67,27 +70,34 @@ namespace DotNet.VersionManager.Assets
             var dest = GetInstallationPath();
 
             Directory.CreateDirectory(dest);
-
-            var url = _assetInfo.DownloadUrl;
-
-            Log.Output($"Downloading {DisplayName}");
-            if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
+            try
             {
-                Log.Error($"Failed to install {DisplayName}");
+                var url = _assetInfo.DownloadUrl;
 
-                if (Directory.EnumerateFiles(dest).Any())
+                Log.Output($"Downloading {DisplayName}");
+                if (!await DownloadAndExtractAsync(url, _env.Root, cancellationToken))
                 {
-                    try
-                    {
-                        Directory.Delete(dest, recursive: true);
-                    }
-                    catch
-                    {
-                        Log.Verbose($"Failed to delete {dest}");
-                    }
-                }
+                    Log.Error($"Failed to install {DisplayName}");
 
-                return false;
+                    if (Directory.EnumerateFiles(dest).Any())
+                    {
+                        try
+                        {
+                            Directory.Delete(dest, recursive: true);
+                        }
+                        catch
+                        {
+                            Log.Verbose($"Failed to delete {dest}");
+                        }
+                    }
+
+                    return false;
+                }
+            }
+            catch
+            {
+                Directory.Delete(dest, recursive: true);
+                throw;
             }
 
             Log.Output($"Installed {DisplayName}");

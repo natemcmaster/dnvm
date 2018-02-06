@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <Import Project="build\git.targets" />
+
+  <Target Name="AddCommitHash"
+          DependsOnTargets="ResolveCommitHash"
+          BeforeTargets="GetAssemblyAttributes"
+          Condition=" '$(CommitHash)' != '' ">
+    <ItemGroup>
+      <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+        <_Parameter1>CommitHash</_Parameter1>
+        <_Parameter2>$(CommitHash)</_Parameter2>
+      </AssemblyAttribute>
+    </ItemGroup>
+  </Target>
+</Project>

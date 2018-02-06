@@ -6,25 +6,46 @@ namespace DotNet.VersionManager.Assets
     // TODO make this info available remotely so it can be updated without re-installing dnvm
     partial class StableAssetChannel : IAssetChannel
     {
-        private class RuntimeAssetInfo : AssetInfo
+        public class MacOSRuntimeAssetInfo : AssetInfo
         {
-            public RuntimeAssetInfo(string version, string channel)
+            public MacOSRuntimeAssetInfo(string version, string channel)
+                : this(version, legacy: true)
+            {
+                DownloadUrl = $"https://dotnetcli.azureedge.net/dotnet/{channel}/Binaries/{version}/dotnet-osx-x64.{version}.tar.gz";
+            }
+
+            public MacOSRuntimeAssetInfo(string version)
+                : this(version, legacy: false)
+            {
+                DownloadUrl = $"https://dotnetcli.azureedge.net/dotnet/Runtime/{version}/dotnet-runtime-{version}-osx-x64.tar.gz";
+            }
+
+            private MacOSRuntimeAssetInfo(string version, bool legacy)
             {
                 Version = version;
                 Id = "Microsoft.NETCore.App.osx-x64";
-                DownloadUrl = $"https://dotnetcli.azureedge.net/dotnet/{channel}/Binaries/{version}/dotnet-osx-x64.{version}.tar.gz";
+                RequiresOpenSSL = legacy;
             }
+
+            public bool RequiresOpenSSL { get; }
         }
 
-        private class SdkAssetInfo : AssetInfo
+        private class MacOSSdkAssetInfo : AssetInfo
         {
-            public SdkAssetInfo(string version, string folder, RuntimeAssetInfo[] runtimes)
+            public MacOSSdkAssetInfo(string version, MacOSRuntimeAssetInfo[] runtimes)
+                : this(version, false, runtimes)
+            {
+            }
+
+            public MacOSSdkAssetInfo(string version, bool legacy, MacOSRuntimeAssetInfo[] runtimes)
             {
                 Version = version;
                 Id = "Microsoft.DotNet.Cli.osx-x64";
-                DownloadUrl = $"https://dotnetcli.azureedge.net/dotnet/{folder}/{version}/dotnet-dev-osx-x64.{version}.tar.gz";
+                DownloadUrl = legacy
+                    ? $"https://dotnetcli.azureedge.net/dotnet/Sdk/{version}/dotnet-dev-osx-x64.{version}.tar.gz"
+                    : $"https://dotnetcli.azureedge.net/dotnet/Sdk/{version}/dotnet-sdk-{version}-osx-x64.tar.gz";
 
-                runtimes = runtimes ?? Array.Empty<RuntimeAssetInfo>();
+                runtimes = runtimes ?? Array.Empty<MacOSRuntimeAssetInfo>();
                 foreach (var runtime in runtimes)
                 {
                     Dependencies.Add(runtime);
@@ -37,40 +58,69 @@ namespace DotNet.VersionManager.Assets
             {
                 ["Microsoft.NETCore.App.osx-x64"] = new List<AssetInfo>
                 {
-                    new RuntimeAssetInfo("1.0.0", "preview"),
-                    new RuntimeAssetInfo("1.0.1", "preview"),
-                    new RuntimeAssetInfo("1.0.3", "preview"),
-                    new RuntimeAssetInfo("1.0.4", "preview"),
-                    new RuntimeAssetInfo("1.0.5", "preview"),
-                    new RuntimeAssetInfo("1.0.7", "preview"),
-                    new RuntimeAssetInfo("1.0.8", "preview"),
-                    new RuntimeAssetInfo("1.0.9", "preview"),
-                    new RuntimeAssetInfo("1.1.0", "release/1.1.0"),
-                    new RuntimeAssetInfo("1.1.1", "release/1.1.0"),
-                    new RuntimeAssetInfo("1.1.2", "release/1.1.0"),
-                    new RuntimeAssetInfo("1.1.4", "release/1.1.0"),
-                    new RuntimeAssetInfo("1.1.5", "release/1.1.0"),
-                    new RuntimeAssetInfo("1.1.6", "release/1.1.0"),
+                    new MacOSRuntimeAssetInfo("1.0.0", "preview"),
+                    new MacOSRuntimeAssetInfo("1.0.1", "preview"),
+                    new MacOSRuntimeAssetInfo("1.0.3", "preview"),
+                    new MacOSRuntimeAssetInfo("1.0.4", "preview"),
+                    new MacOSRuntimeAssetInfo("1.0.5", "preview"),
+                    new MacOSRuntimeAssetInfo("1.0.7", "preview"),
+                    new MacOSRuntimeAssetInfo("1.0.8", "preview"),
+                    new MacOSRuntimeAssetInfo("1.0.9", "preview"),
+                    new MacOSRuntimeAssetInfo("1.1.0", "release/1.1.0"),
+                    new MacOSRuntimeAssetInfo("1.1.1", "release/1.1.0"),
+                    new MacOSRuntimeAssetInfo("1.1.2", "release/1.1.0"),
+                    new MacOSRuntimeAssetInfo("1.1.4", "release/1.1.0"),
+                    new MacOSRuntimeAssetInfo("1.1.5", "release/1.1.0"),
+                    new MacOSRuntimeAssetInfo("1.1.6", "release/1.1.0"),
+                    new MacOSRuntimeAssetInfo("2.0.0"),
+                    new MacOSRuntimeAssetInfo("2.0.3"),
+                    new MacOSRuntimeAssetInfo("2.0.4"),
+                    new MacOSRuntimeAssetInfo("2.0.5"),
                 },
                 ["Microsoft.DotNet.Cli.osx-x64"] = new List<AssetInfo>
                 {
-                    new SdkAssetInfo("1.0.0", "Sdk",
+                    new MacOSSdkAssetInfo("1.0.0", true,
                         new[]
                         {
-                            new RuntimeAssetInfo("1.0.4", "preview"),
-                            new RuntimeAssetInfo("1.1.1", "release/1.1.0")
+                            new MacOSRuntimeAssetInfo("1.0.4", "preview"),
+                            new MacOSRuntimeAssetInfo("1.1.1", "release/1.1.0")
                         }),
-                    new SdkAssetInfo("1.0.1", "Sdk",
+                    new MacOSSdkAssetInfo("1.0.1", true,
                         new[]
                         {
-                            new RuntimeAssetInfo("1.0.4", "preview"),
-                            new RuntimeAssetInfo("1.1.1", "release/1.1.0")
+                            new MacOSRuntimeAssetInfo("1.0.4", "preview"),
+                            new MacOSRuntimeAssetInfo("1.1.1", "release/1.1.0")
                         }),
-                    new SdkAssetInfo("1.1.7", "Sdk",
+                    new MacOSSdkAssetInfo("1.1.7", true,
                         new[]
                         {
-                            new RuntimeAssetInfo("1.0.9", "preview"),
-                            new RuntimeAssetInfo("1.1.6", "release/1.1.0")
+                            new MacOSRuntimeAssetInfo("1.0.9", "preview"),
+                            new MacOSRuntimeAssetInfo("1.1.6", "release/1.1.0")
+                        }),
+                    new MacOSSdkAssetInfo("2.0.0",
+                        new[]
+                        {
+                            new MacOSRuntimeAssetInfo("2.0.0"),
+                        }),
+                    new MacOSSdkAssetInfo("2.0.1",
+                        new[]
+                        {
+                            new MacOSRuntimeAssetInfo("2.0.0"),
+                        }),
+                    new MacOSSdkAssetInfo("2.1.2",
+                        new[]
+                        {
+                            new MacOSRuntimeAssetInfo("2.0.3"),
+                        }),
+                    new MacOSSdkAssetInfo("2.1.3",
+                        new[]
+                        {
+                            new MacOSRuntimeAssetInfo("2.0.4"),
+                        }),
+                    new MacOSSdkAssetInfo("2.1.4",
+                        new[]
+                        {
+                            new MacOSRuntimeAssetInfo("2.0.5"),
                         }),
                 },
             };

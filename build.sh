@@ -9,7 +9,7 @@ manual_bootstrap=false
 
 while [ $# -gt 0 ]; do
     case $1 in
-        --bootstrap:manual)
+        --bootstrap:manual|-b:m)
             manual_bootstrap=true
             ;;
         *)
@@ -23,7 +23,7 @@ if [ "$manual_bootstrap" = true ]; then
     if [ ! -x "$DIR/.dotnet/dotnet" ]; then
         mkdir -p $DIR/.dotnet/
         curl -sSL https://dot.net/v1/dotnet-install.sh -o $DIR/.dotnet/dotnet-install.sh
-        bash $DIR/.dotnet/dotnet-install.sh --install-dir $DIR/.dotnet/ --version 1.1.7
+        bash $DIR/.dotnet/dotnet-install.sh --install-dir $DIR/.dotnet/ --version 2.1.4
     fi
 
     export PATH="$DIR/.dotnet:$PATH"

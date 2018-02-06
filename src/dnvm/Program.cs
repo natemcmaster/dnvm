@@ -8,19 +8,18 @@ using DotNet.VersionManager.Commands;
 using DotNet.VersionManager.Files;
 using DotNet.VersionManager.IO;
 using Microsoft.Extensions.Logging;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace DotNet.VersionManager
 {
     class Program
     {
-        static int Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
             try
             {
-                return new Program(PhysicalConsole.Instance, Directory.GetCurrentDirectory())
-                    .RunAsync(args)
-                    .GetAwaiter()
-                    .GetResult();
+                return await new Program(PhysicalConsole.Singleton, Directory.GetCurrentDirectory())
+                    .RunAsync(args);
             }
             catch (Exception ex)
             {

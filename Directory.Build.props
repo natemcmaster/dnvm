@@ -1,10 +1,20 @@
 <Project>
   <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+  </PropertyGroup>
+
+  <Import Project="version.props"/>
+
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory).build\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory).build\bin\$(MSBuildProjectName)\</BaseOutputPath>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <ProjectUrl>https://github.com/natemcmaster/dnvm</ProjectUrl>
+    <Copyright>Copyright Nate McMaster</Copyright>
   </PropertyGroup>
 
   <PropertyGroup>
-    <RuntimeFrameworkVersion>1.1.6</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.0.5</RuntimeFrameworkVersion>
     <XunitVersion>2.3.1</XunitVersion>
   </PropertyGroup>
 </Project>

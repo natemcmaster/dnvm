@@ -1,5 +1,10 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>0.1.2</VersionPrefix>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>0.2.0</VersionPrefix>
+  </PropertyGroup>
+
 </Project>

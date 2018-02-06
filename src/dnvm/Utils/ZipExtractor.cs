@@ -5,17 +5,12 @@ namespace DotNet.VersionManager.Utils
 {
     public class ZipExtractor
     {
-        public static bool Extract(string file, string destination)
+        public static bool Extract(string path, string destination)
         {
-            using (var filestream = new FileStream(file, FileMode.Open))
-            using (var zip = new ZipArchive(filestream))
+            using (var file = File.OpenRead(path))
+            using (var zip = new ZipArchive(file))
             {
-                foreach (var entry in zip.Entries)
-                {
-                    var dest = Path.Combine(destination, entry.FullName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(dest));
-                    entry.ExtractToFile(dest);
-                }
+                zip.ExtractToDirectory(destination);
             }
 
             return true;

@@ -13,6 +13,7 @@ mkdir -p $DIR/../artifacts/log/
 
 __exec dotnet msbuild $DIR/../build/$os.pkgproj \
     -nologo \
+    -restore \
     -m \
     -t:Build \
     -clp:Summary \

@@ -1,5 +1,5 @@
 <Project>
-  <Target Name="ResolveCommitHash">
+  <Target Name="ResolveCommitHash" Condition=" '$(CommitHash)' == '' AND '$(DesignTimeBuild)' != 'true' ">
     <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true" StandardOutputImportance="Low" Condition="'$(CommitHash)'==''">
       <Output TaskParameter="ConsoleOutput" PropertyName="CommitHash" />
     </Exec>

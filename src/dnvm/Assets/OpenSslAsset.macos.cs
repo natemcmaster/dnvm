@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -34,7 +35,7 @@ namespace DotNet.VersionManager.Assets
         /// <param name="netCoreVersion">The version of .NET Core (for display purposes only)</param>
         public OpenSslAsset(ILogger logger, string symlinkDest, string netCoreVersion)
         {
-            _logger = Ensure.NotNull(logger, nameof(logger));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _symlinkDest = Ensure.NotNullOrEmpty(symlinkDest, nameof(symlinkDest));
             _netCoreVersion = Ensure.NotNullOrEmpty(netCoreVersion, nameof(netCoreVersion));
             _dylibs = new[]

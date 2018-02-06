@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DotNet.VersionManager.IO;
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions.Internal;
 
@@ -47,7 +48,13 @@ namespace DotNet.VersionManager
                 color = (ConsoleColor)(eventId.Id & ~ConsoleEventIds.ColorFlag);
             }
 
-            _console.WriteLine(formatter(state, exception), color);
+            if (color.HasValue)
+            {
+                _console.ForegroundColor = color.Value;
+            }
+
+            _console.WriteLine(formatter(state, exception));
+            _console.ResetColor();
         }
     }
 }

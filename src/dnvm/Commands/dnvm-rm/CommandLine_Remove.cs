@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using System.Runtime.InteropServices;
 
 namespace DotNet.VersionManager.Commands

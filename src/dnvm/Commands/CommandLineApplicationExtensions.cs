@@ -1,12 +1,9 @@
 using System;
 
-namespace Microsoft.Extensions.CommandLineUtils
+namespace McMaster.Extensions.CommandLineUtils
 {
     static class CommandLineExtension
     {
-        public static void HelpOption(this CommandLineApplication app)
-            => app.HelpOption("-h|-?|--help");
-
         public static CommandLineApplication Command(this CommandLineApplication app, string name, string description, Action<CommandLineApplication> config)
             => app.Command(name, c =>
                 {
@@ -16,15 +13,6 @@ namespace Microsoft.Extensions.CommandLineUtils
                     c.HelpOption();
                     config(c);
                 });
-
-        public static void OnExecute(this CommandLineApplication app, Action config)
-        {
-            app.OnExecute(() =>
-            {
-                config();
-                return 0;
-            });
-        }
 
         public static string IfNotNull(this CommandArgument arg)
         {
