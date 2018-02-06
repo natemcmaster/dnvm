@@ -1,0 +1,8 @@
+CHANGELOG
+=========
+
+0.1.2
+-----
+Update to .NET Core 1.1.6 to support macOS High Sierra
+
+Known issues: still getting segfaults on macOS High Sierra when downloading files

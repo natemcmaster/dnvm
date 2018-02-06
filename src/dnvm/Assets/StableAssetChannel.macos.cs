@@ -41,35 +41,19 @@ namespace DotNet.VersionManager.Assets
                     new RuntimeAssetInfo("1.0.1", "preview"),
                     new RuntimeAssetInfo("1.0.3", "preview"),
                     new RuntimeAssetInfo("1.0.4", "preview"),
+                    new RuntimeAssetInfo("1.0.5", "preview"),
+                    new RuntimeAssetInfo("1.0.7", "preview"),
+                    new RuntimeAssetInfo("1.0.8", "preview"),
+                    new RuntimeAssetInfo("1.0.9", "preview"),
                     new RuntimeAssetInfo("1.1.0", "release/1.1.0"),
                     new RuntimeAssetInfo("1.1.1", "release/1.1.0"),
+                    new RuntimeAssetInfo("1.1.2", "release/1.1.0"),
+                    new RuntimeAssetInfo("1.1.4", "release/1.1.0"),
+                    new RuntimeAssetInfo("1.1.5", "release/1.1.0"),
+                    new RuntimeAssetInfo("1.1.6", "release/1.1.0"),
                 },
                 ["Microsoft.DotNet.Cli.osx-x64"] = new List<AssetInfo>
                 {
-                    new SdkAssetInfo("1.0.0-preview2-003121", "preview/Binaries",
-                        new[]{ new RuntimeAssetInfo("1.0.0", "preview") }),
-                    new SdkAssetInfo("1.0.0-preview2-003131", "preview/Binaries",
-                        new[]{ new RuntimeAssetInfo("1.0.1", "preview") }),
-                    new SdkAssetInfo("1.0.0-preview2-003156", "preview/Binaries",
-                        new[]{ new RuntimeAssetInfo("1.0.3", "preview") }),
-                    new SdkAssetInfo("1.0.0-preview2-1-003177", "preview/Binaries",
-                        new[]{ new RuntimeAssetInfo("1.1.0", "preview") }),
-                    new SdkAssetInfo("1.0.0-preview3-004056", "Sdk",
-                        new[]{ new RuntimeAssetInfo("1.0.1", "preview") }),
-                    new SdkAssetInfo("1.0.0-preview4-004233", "Sdk",
-                        new[]{ new RuntimeAssetInfo("1.0.1", "preview") }),
-                    new SdkAssetInfo("1.0.0-rc3-004530", "Sdk",
-                        new[]
-                        {
-                            new RuntimeAssetInfo("1.0.3", "preview"),
-                            new RuntimeAssetInfo("1.1.0", "preview"),
-                        }),
-                    new SdkAssetInfo("1.0.0-rc4-004771", "Sdk",
-                        new[]
-                        {
-                            new RuntimeAssetInfo("1.0.3", "preview"),
-                            new RuntimeAssetInfo("1.1.0", "preview"),
-                        }),
                     new SdkAssetInfo("1.0.0", "Sdk",
                         new[]
                         {
@@ -81,6 +65,12 @@ namespace DotNet.VersionManager.Assets
                         {
                             new RuntimeAssetInfo("1.0.4", "preview"),
                             new RuntimeAssetInfo("1.1.1", "release/1.1.0")
+                        }),
+                    new SdkAssetInfo("1.1.7", "Sdk",
+                        new[]
+                        {
+                            new RuntimeAssetInfo("1.0.9", "preview"),
+                            new RuntimeAssetInfo("1.1.6", "release/1.1.0")
                         }),
                 },
             };

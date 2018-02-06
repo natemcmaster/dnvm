@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RuntimeFrameworkVersion>1.1.6</RuntimeFrameworkVersion>
+    <XunitVersion>2.3.1</XunitVersion>
+  </PropertyGroup>
+</Project>

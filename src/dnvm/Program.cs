@@ -15,10 +15,18 @@ namespace DotNet.VersionManager
     {
         static int Main(string[] args)
         {
-            return new Program(PhysicalConsole.Instance, Directory.GetCurrentDirectory())
-                .RunAsync(args)
-                .GetAwaiter()
-                .GetResult();
+            try
+            {
+                return new Program(PhysicalConsole.Instance, Directory.GetCurrentDirectory())
+                    .RunAsync(args)
+                    .GetAwaiter()
+                    .GetResult();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+                return Error;
+            }
         }
 
         private const int OK = 0;

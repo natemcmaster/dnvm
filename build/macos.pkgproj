@@ -21,16 +21,20 @@
     <Content Include="..\packaging\README.md" PackagePath="%(FileName)%(Extension)" />
   </ItemGroup>
 
-  <Target Name="Build" DependsOnTargets="Restore;VSTest;Pack" />
+  <Target Name="Build" DependsOnTargets="Restore;Compile;VSTest;Pack" />
 
   <Target Name="Restore">
-    <MSBuild Projects="..\dnvm.sln" Targets="Restore" />
+    <MSBuild Projects="..\dnvm.sln" Targets="Restore" Properties="_Target=_Restore" />
+  </Target>
+
+  <Target Name="Compile">
+    <MSBuild Projects="..\dnvm.sln" Targets="Build" Properties="Configuration=$(Configuration)"/>
   </Target>
 
   <Target Name="VSTest">
     <MSBuild Projects="@(TestProjects)"
              Targets="VSTest"
-             Properties="Configuration=$(Configuration)" />
+             Properties="Configuration=$(Configuration);VSTestNoBuild=true" />
   </Target>
 
   <Target Name="CleanArtifacts">
@@ -41,7 +45,7 @@
     <MakeDir Directories="$(ArtifactsDir);$(PublishDir)bin\;$(TargetDir);" />
     <MSBuild Targets="Publish"
              Projects="@(SourceProjects)"
-              Properties="Configuration=$(Configuration);PublishDir=$(PublishDir)libexec\" />
+              Properties="Configuration=$(Configuration);PublishDir=$(PublishDir)libexec\;NoBuild=true" />
     <WriteLinesToFile File="$(PublishDir)version" Lines="$(CommitHash);$(Version)" />
 
     <Exec Command="ln -s ../libexec/dotnet ./dotnet"
@@ -57,6 +61,7 @@
     <Exec Command="du -hd 0 &quot;$(PublishDir)&quot; | awk '{print &quot;Uncompressed&quot;, $1}'" />
     <Exec Command="ls -S -lh | grep dnvm.* | awk '{print &quot;Compressed&quot;, $9, $5}'"
           WorkingDirectory="$(TargetDir)" />
+    <Exec Command="shasum -a 256 $(PackageFile) "/>
     <Message Importance="high" Text="Created $(PackageFile)" />
 
   </Target>
