@@ -4,4 +4,4 @@ mono: none
 before_install:
   - brew update
 script:
-  - ./build.sh
+  - ./build.sh --bootstrap:manual

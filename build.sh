@@ -5,7 +5,19 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$DIR/scripts/common.sh"
 
 # True when we need to download dotnet as a script. Set when bootstrapping DNVM
-manual_bootstrap=true
+manual_bootstrap=false
+
+while [ $# -gt 0 ]; do
+    case $1 in
+        --bootstrap:manual)
+            manual_bootstrap=true
+            ;;
+        *)
+            __error "Unknown arg $1"
+            ;;
+    esac
+    shift
+done
 
 if [ "$manual_bootstrap" = true ]; then
     if [ ! -x "$DIR/.dotnet/dotnet" ]; then
