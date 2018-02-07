@@ -11,8 +11,8 @@ namespace DotNet.VersionManager.Tests
         public void MultipleFx()
         {
             var file = Read(@"
-env: myenvname
-runtime:
+envName: myenvname
+runtimes:
  - 1.0.1
  - 1.2.3
  - alpha
@@ -22,8 +22,8 @@ tools:
   watch: stable ");
 
             file.Should().NotBeNull();
-            file.Environment.Should().Equals("myenvname");
-            file.Runtime.Should()
+            file.EnvName.Should().Equals("myenvname");
+            file.Runtimes.Should()
                 .HaveCount(3)
                 .And.Contain(new[] { "1.0.1", "1.2.3", "alpha" });
             file.Sdk.Should().Equals("1.0.0-preview3-003131");
@@ -37,12 +37,12 @@ tools:
         public void SingleFx()
         {
             var file = Read(@"
-env: myenvname
-runtime: 1.1.0");
+envName: myenvname
+runtimes: 1.1.0");
 
             file.Should().NotBeNull();
-            file.Environment.Should().Equals("myenvname");
-            file.Runtime.Should().ContainSingle("1.1.0");
+            file.EnvName.Should().Equals("myenvname");
+            file.Runtimes.Should().ContainSingle("1.1.0");
         }
 
         [Fact]
@@ -50,16 +50,16 @@ runtime: 1.1.0");
         {
             var file = Read(@"
 # comments
-env: myenvname
+envName: myenvname
 # more comments
 
-runtime: 1.1.0 # trailing comments
+runtimes: 1.1.0 # trailing comments
 
 #end comments");
 
             file.Should().NotBeNull();
-            file.Environment.Should().Equals("myenvname");
-            file.Runtime.Should().ContainSingle("1.1.0");
+            file.EnvName.Should().Equals("myenvname");
+            file.Runtimes.Should().ContainSingle("1.1.0");
         }
 
 

@@ -6,12 +6,12 @@ namespace DotNet.VersionManager.Files
     {
         public string FilePath { get; set; }
 
-        public string Environment { get; set; }
+        public string EnvName { get; set; }
 
         public string Sdk { get; set; }
 
         public IDictionary<string, string> Tools { get; } = new Dictionary<string, string>();
 
-        public ISet<string> Runtime { get; } = new HashSet<string>();
+        public ISet<string> Runtimes { get; } = new HashSet<string>();
     }
 }

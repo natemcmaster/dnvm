@@ -111,7 +111,7 @@ bool config_file_t::resolve_env_name()
                     yaml_node_t *key = yaml_document_get_node(&document, node->data.mapping.pairs.start[k].key);
 
                     if (key->data.scalar.length == 3 &&
-                        ::strncmp((char *)key->data.scalar.value, "env", 3) == 0)
+                        ::strncmp((char *)key->data.scalar.value, "envName", 7) == 0)
                     {
                         env_found = true;
                         yaml_node_t *value = yaml_document_get_node(&document, node->data.mapping.pairs.start[k].value);
@@ -119,7 +119,7 @@ bool config_file_t::resolve_env_name()
                         {
                             if (!_hide_warnings)
                             {
-                                trace::error(_YELLOW_X("warn: The value for 'env' must be a single, scalar value."));
+                                trace::error(_YELLOW_X("warn: The value for 'envName' must be a single, scalar value."));
                             }
                             break;
                         }

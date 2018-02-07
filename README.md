@@ -93,11 +93,11 @@ Example:
 
 ```yaml
 # required: specify an environment name
-env: default
+envName: default
 # optional: list the .NET Core SDK to install
 sdk: 1.0.0-rc4-004915
 # optional: list versions of .NET Core to install
-runtime:
+runtimes:
   - 1.0.1
   - 1.1.0
   - stable

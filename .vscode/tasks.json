@@ -2,43 +2,46 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "taskName": "Build solution",
+      "label": "Build solution",
       "command": "dotnet",
       "args": [
         "build",
         "dnvm.sln"
       ],
-      "isBuildCommand": true,
-      "isShellCommand": true,
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "options": {
         "cwd": "${workspaceRoot}"
       }
     },
     {
-      "taskName": "Unit tests",
+      "label": "Unit tests",
       "command": "dotnet",
       "args": [
         "test"
       ],
-      "isShellCommand": true,
-      "isTestCommand": true,
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
       "options": {
         "cwd": "${workspaceRoot}/test/dnvm.Tests/"
       }
     },
     {
-      "taskName": "Functional tests",
+      "label": "Functional tests",
       "command": "dotnet",
       "args": [
         "test"
       ],
-      "isShellCommand": true,
       "options": {
         "cwd": "${workspaceRoot}/test/dnvm.FunctionalTests/"
       }
     },
     {
-      "taskName": "Package",
+      "label": "Package",
       "command": "./scripts/pack.sh",
       "options": {
         "cwd": "${workspaceRoot}"

@@ -14,15 +14,6 @@ namespace McMaster.Extensions.CommandLineUtils
                     config(c);
                 });
 
-        public static string IfNotNull(this CommandArgument arg)
-        {
-            if (arg.Value == null)
-            {
-                throw new CommandParsingException(null, $"Command argument '{arg.Name}' is missing.");
-            }
-            return arg.Value;
-        }
-
         public static string IfNotNullOrEmpty(this CommandArgument arg)
         {
             if (string.IsNullOrWhiteSpace(arg.Value))

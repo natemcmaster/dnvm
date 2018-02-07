@@ -14,15 +14,15 @@ namespace DotNet.VersionManager.Tests
             Write(new ConfigFile
             {
                 Sdk = "1.0.0-preview4",
-                Runtime = { "1.0.1", "1.1.0" },
-                Environment = "default",
+                Runtimes = { "1.0.1", "1.1.0" },
+                EnvName = "default",
                 Tools =
                 {
                     ["prop"] = "1.1.0"
                 }
             })
            .Should()
-           .Be("env: default\nsdk: 1.0.0-preview4\nruntime:\n  - 1.0.1\n  - 1.1.0\ntools:\n  prop: 1.1.0\n");
+           .Be("envName: default\nsdk: 1.0.0-preview4\nruntimes:\n  - 1.0.1\n  - 1.1.0\ntools:\n  prop: 1.1.0\n");
         }
 
         [Fact]
@@ -36,10 +36,10 @@ namespace DotNet.VersionManager.Tests
         {
             Write(new ConfigFile
             {
-                Environment = "default"
+                EnvName = "default"
             })
             .Should()
-            .Be("env: default\n");
+            .Be("envName: default\n");
         }
 
         [Fact]
@@ -58,10 +58,10 @@ namespace DotNet.VersionManager.Tests
         {
             Write(new ConfigFile
             {
-                Runtime = { "1.0.1" }
+                Runtimes = { "1.0.1" }
             })
             .Should()
-            .Be("runtime: 1.0.1\n");
+            .Be("runtimes: 1.0.1\n");
         }
 
         [Fact]
@@ -69,10 +69,10 @@ namespace DotNet.VersionManager.Tests
         {
             Write(new ConfigFile
             {
-                Runtime = { "stable", "1.0.0" }
+                Runtimes = { "stable", "1.0.0" }
             })
             .Should()
-            .Be("runtime:\n  - stable\n  - 1.0.0\n");
+            .Be("runtimes:\n  - stable\n  - 1.0.0\n");
         }
 
 

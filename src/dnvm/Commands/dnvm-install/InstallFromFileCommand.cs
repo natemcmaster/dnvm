@@ -29,7 +29,7 @@ namespace DotNet.VersionManager.Commands
                 yield return new SdkAsset(context.Logger, context.Environment, context.ConfigFile.Sdk, Architecture.X64);
             }
 
-            foreach (var runtime in context.ConfigFile.Runtime)
+            foreach (var runtime in context.ConfigFile.Runtimes)
             {
                 yield return new RuntimeAsset(context.Logger, context.Environment, runtime, Architecture.X64);
             }

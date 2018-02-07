@@ -10,7 +10,7 @@ namespace DotNet.VersionManager.Commands
 {
     partial class CommandLine
     {
-        private static readonly Assembly s_thisAssembly = typeof(Program).GetTypeInfo().Assembly;
+        private static readonly Assembly s_thisAssembly = typeof(Program).Assembly;
         private const string Logo = @"
    ___  _  ___   ____  ___
   / _ \/ |/ / | / /  |/  /

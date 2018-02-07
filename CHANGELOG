@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+0.2.0
+-----
+Update to support .NET Core 2.0
+
 0.1.2
 -----
 Update to .NET Core 1.1.6 to support macOS High Sierra

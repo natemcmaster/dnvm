@@ -31,3 +31,4 @@ fi
 
 $DIR/scripts/install-tools.sh --no-dnvm
 $DIR/scripts/pack.sh
+$DIR/scripts/test.sh

@@ -11,7 +11,7 @@ namespace DotNet.VersionManager.Files
         }
 
         public DotNetEnv CreateFromConfig(ConfigFile file)
-            => Create(file.Environment ?? FileConstants.GlobalEnvName);
+            => Create(file.EnvName ?? FileConstants.GlobalEnvName);
 
         public DotNetEnv CreateDefault()
             => Create(FileConstants.GlobalEnvName);

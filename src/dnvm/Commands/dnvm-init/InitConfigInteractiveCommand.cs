@@ -35,7 +35,7 @@ namespace DotNet.VersionManager.Commands
 
             var config = new ConfigFile
             {
-                Environment = name
+                EnvName = name
             };
 
             using (var file = new FileStream(dest, FileMode.CreateNew))

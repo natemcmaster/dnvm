@@ -11,6 +11,7 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <ProjectUrl>https://github.com/natemcmaster/dnvm</ProjectUrl>
     <Copyright>Copyright Nate McMaster</Copyright>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>

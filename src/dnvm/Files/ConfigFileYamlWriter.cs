@@ -9,9 +9,9 @@ namespace DotNet.VersionManager.Files
         // TODO consider using real yaml serializer. Couldn't figure out how to make YamlDotNet suppress trailing '...' at EOD
         public void Write(TextWriter writer, ConfigFile config)
         {
-            if (!string.IsNullOrEmpty(config.Environment))
+            if (!string.IsNullOrEmpty(config.EnvName))
             {
-                writer.Write($"env: {config.Environment}\n");
+                writer.Write($"envName: {config.EnvName}\n");
             }
 
             if (!string.IsNullOrEmpty(config.Sdk))
@@ -19,17 +19,17 @@ namespace DotNet.VersionManager.Files
                 writer.Write($"sdk: {config.Sdk}\n");
             }
 
-            if (config.Runtime.Count > 0)
+            if (config.Runtimes.Count > 0)
             {
-                writer.Write("runtime:");
-                if (config.Runtime.Count == 1)
+                writer.Write("runtimes:");
+                if (config.Runtimes.Count == 1)
                 {
-                    writer.Write($" {config.Runtime.First()}\n");
+                    writer.Write($" {config.Runtimes.First()}\n");
                 }
                 else
                 {
                     writer.Write("\n");
-                    foreach (var runtime in config.Runtime)
+                    foreach (var runtime in config.Runtimes)
                     {
                         writer.Write($"  - {runtime}\n");
                     }

@@ -56,7 +56,7 @@ Additional Information:
                     install = CommonCommands.Sequence(
                         CommonCommands.EnsureConfigFileExists,
                         install,
-                        new EditConfigCommand(c => c.Runtime.Add(version)));
+                        new EditConfigCommand(c => c.Runtimes.Add(version)));
                 }
 
                 this.Command = install;

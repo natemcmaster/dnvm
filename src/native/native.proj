@@ -1,4 +1,4 @@
-<Project>
+<Project DefaultTargets="Build">
   <Import Project="..\..\version.props" />
   <Import Project="..\..\build\git.targets" />
 

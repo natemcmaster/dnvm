@@ -1,9 +1,9 @@
 {
-    "files.associations": {
-        "*.props": "xml",
-        "*.pkgproj": "xml",
-        ".dnvm": "yaml",
-        "*.h.in": "cpp",
-        "string": "cpp"
-    }
+  "files.associations": {
+    "*.props": "xml",
+    "*.pkgproj": "xml",
+    ".dnvm": "yaml",
+    "*.h.in": "cpp",
+    "string": "cpp"
+  }
 }

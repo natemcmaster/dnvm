@@ -55,8 +55,8 @@ void find_muxer_from_config(config_file_t &config_file, pal::string_t *muxer)
     const pal::string_t env_name = config_file.get_env_name();
     if (env_name.empty())
     {
-        trace::error(_YELLOW_X("warn: Could not resolve environment name from '%s'."), config_file.get_filepath().c_str());
-        trace::error(_YELLOW_X("      Falling back to environment 'default'."));
+        trace::verbose(_X("Could not resolve environment name from '%s'."), config_file.get_filepath().c_str());
+        trace::verbose(_X("Falling back to environment 'default'."));
         find_global_muxer(muxer);
     }
     else

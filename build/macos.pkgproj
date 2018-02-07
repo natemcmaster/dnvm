@@ -5,6 +5,7 @@
   <PropertyGroup>
     <Configuration>Release</Configuration>
     <ArtifactsDir>$(MSBuildThisFileDirectory)..\artifacts\</ArtifactsDir>
+    <ArtifactsDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsDir)'))</ArtifactsDir>
     <TargetDir>$(ArtifactsDir)build\</TargetDir>
     <PublishDir>$(ArtifactsDir)$(Configuration)\</PublishDir>
     <Version>$(VersionPrefix)</Version>
@@ -31,7 +32,7 @@
     <MSBuild Projects="..\dnvm.sln" Targets="Build" Properties="Configuration=$(Configuration)"/>
   </Target>
 
-  <Target Name="VSTest">
+  <Target Name="Test">
     <MSBuild Projects="@(TestProjects)"
              Targets="VSTest"
              Properties="Configuration=$(Configuration);VSTestNoBuild=true" />

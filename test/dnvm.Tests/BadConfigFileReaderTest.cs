@@ -8,22 +8,14 @@ namespace DotNet.VersionManager.Tests
 {
     public class BadConfigFileReaderTest
     {
-        [Fact]
-        public void MissingEnvKey()
-        {
-            Read(@"")
-                .ShouldThrow<FormatException>()
-                .WithMessage(ConfigFileErrors.MissingEnvKey);
-        }
-
         [Theory]
-        [InlineData("env:\n  subkey: 1")]
-        [InlineData("env:\n  - item\n  - item2")]
+        [InlineData("envName:\n  subkey: 1")]
+        [InlineData("envName:\n  - item\n  - item2")]
         public void EnvIsNotScalar(string doc)
         {
             Read(doc)
                 .ShouldThrow<FormatException>()
-                .WithMessage(ConfigFileErrors.EnvIsNotScalar);
+                .WithMessage(ConfigFileErrors.EnvNameIsNotScalar);
         }
 
         [Theory]
@@ -40,8 +32,8 @@ namespace DotNet.VersionManager.Tests
         public void RuntimeIsAMap()
         {
             Read(@"---
-env: value
-runtime:
+envName: value
+runtimes:
   sub: item")
                 .ShouldThrow<FormatException>()
                 .WithMessage(ConfigFileErrors.RuntimeMustBeListOrScalar);
@@ -51,8 +43,8 @@ runtime:
         public void RuntimeItemIsAMap()
         {
             Read(@"---
-env: value
-runtime:
+envName: value
+runtimes:
    - sub: item")
                 .ShouldThrow<FormatException>()
                 .WithMessage(ConfigFileErrors.RuntimeSequenceItemIsNotScalar);
@@ -62,9 +54,9 @@ runtime:
         public void MissingMultipleDoc()
         {
             Read(@"---
-env: value
+envName: value
 ---
-env: value2")
+envName: value2")
                 .ShouldThrow<FormatException>()
                 .WithMessage(ConfigFileErrors.MultipleDocuments);
         }
