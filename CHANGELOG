@@ -4,6 +4,7 @@ CHANGELOG
 0.2.0
 -----
 Update to support .NET Core 2.0
+.dnvm file: Change 'env' to 'envName' and make it optional
 
 0.1.2
 -----

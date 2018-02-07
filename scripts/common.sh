@@ -17,7 +17,5 @@ __exec() {
     local cmd=$1
     shift
     echo -e "${CYAN}> ${cmd} $*${RESET}"
-    if ! $cmd "$@" ; then
-        exit $?
-    fi
+    $cmd "$@"
 }
